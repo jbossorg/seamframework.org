@@ -1,0 +1,593 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <!-- Mirrored from 127.0.0.1:64444/Documentation/CrossSiteRequestForgery by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:46:10 GMT -->
+ <!-- Added by HTTrack -->
+ <head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack -->  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+  <title>Seam Framework - Cross Site Request Forgery</title> 
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/basic_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" rel="stylesheet" type="text/css">
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/extended_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" media="rich-extended-skinning" rel="stylesheet" type="text/css">
+  <script src="../a4j/g/3_3_3.CR1org.ajax4jsf.javascript.AjaxScript" type="text/javascript"></script>
+  <script type="text/javascript">window.RICH_FACES_EXTENDED_SKINNING_ON=true;</script>
+  <script src="../a4j/g/3_3_3.CR1org/richfaces/renderkit/html/scripts/skinning.js" type="text/javascript"></script>
+  <link href="../themes/sfwkorg/css/sfwk.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shCore.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shThemeDefault.css" rel="stylesheet" type="text/css"> 
+  <script type="text/javascript" src="../seam/resource/remoting/resource/remote.js"></script> 
+  <script type="text/javascript" src="../seam/resource/remoting/interface1535.js?httpSessionChecker"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jquery.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jqueryPlugins.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/lacewiki.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shCore.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushBash.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCpp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCSharp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCss.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDelphi.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDiff.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushGroovy.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJava.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJScript.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPhp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPlain.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPython.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushRuby.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushScala.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushSql.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushVb.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushXml.js"></script> 
+  <script type="text/javascript">
+        /* If you really want to load the Flash garbage on every page, go ahead and enable this:
+        SyntaxHighlighter.config.clipboardSwf = '/themes/sfwkorg/js/sh/scripts/clipboard.swf';
+         */
+        SyntaxHighlighter.defaults['gutter'] = false;
+        SyntaxHighlighter.all();
+	</script> 
+  <script type="text/javascript">
+
+        // ###################### Session timeout alert #################################
+
+        var sessionChecker = Seam.Component.getInstance("httpSessionChecker");
+        var timeoutURL = '/Home/JBossSeam';
+        var timeoutMillis = '900'*1000+3000;
+        var sessionTimeoutInterval = null;
+
+        function startSessionTimeoutCheck() {
+            sessionTimeoutInterval = setInterval('sessionChecker.isNewSession(alertTimeout)', timeoutMillis);
+        }
+
+        function stopSessionTimeoutCheck() {
+            if (sessionTimeoutInterval) clearInterval(sessionTimeoutInterval);
+        }
+
+        function resetSessionTimeoutCheck() {
+            if (sessionTimeoutInterval != null) {
+                stopSessionTimeoutCheck();
+                startSessionTimeoutCheck();
+            }
+        }
+
+        function alertTimeout(newSession) {
+            if (newSession) {
+                clearInterval(sessionTimeoutInterval);
+                jQuery(".ajaxSupport")
+                        .removeAttr('onblur')
+                        .removeAttr('onchange')
+                        .removeAttr('onkeyup')
+                        .removeAttr('onclick');
+                jQuery(".sessionEventTrigger").hide();
+                var answer = confirm("Your session has timed out, you will be redirected to the start page.");
+                if (answer) window.location = timeoutURL;
+            }
+        }
+
+        // ###################### Popups #################################
+
+        var fadeInPopupDialog = function(hash) {
+            hash.w.fadeIn('fast',function(){ hash.o.show(); });
+            jQuery(".closeDialog", hash.w).attr("accesskey", "C"); // Dynamically assign accesskey to .closeDialog buttons
+        };
+
+        var fadeOutPopupDialog = function(hash) { hash.w.fadeOut('fast',function(){ hash.o.remove(); }); };
+
+        // ###################### Tabbed Forms #################################
+
+        var formTabErrors = {};
+
+        function formTabRaiseError(tabId, fieldId, message) {
+
+            formTabClearError(tabId, fieldId); // Clear error then re-add
+
+            log("Raise error for tab: '" + tabId + "' field: " + fieldId);
+
+            // Add an error message to the client message box
+            log("Adding error message: " +tabId + fieldId + "ErrorMessage")
+            jQuery("#clientMessageBoxTable").append(
+                '<tr id="' + tabId + fieldId + 'ErrorMessage"><td><img src="/themes/sfwkorg/img/attention.gif" ' +
+                'height="18" width="18" class="clientMessageBoxImage attentionImage"/></td>' +
+                '<td><span id="attentionMessage" class="attentionMessage">'+ message + '</span></td></tr>'
+            );
+            if (formTabErrors[tabId] == null) {
+                formTabErrors[tabId] = 1;
+            } else {
+                formTabErrors[tabId]++;
+            }
+            formTabRenderErrors(tabId);
+        }
+
+        function formTabClearError(tabId, fieldId) {
+            if (document.getElementById(tabId+fieldId+"ErrorMessage") != null) { // This error is displayed
+                log("Clear error for tab: '" + tabId + "' field: " + fieldId);
+                log("Removing error message: " +tabId + fieldId + "ErrorMessage")
+                // Remove the error message on the client message box
+                jQuery("#"+tabId + fieldId + "ErrorMessage").remove();
+
+                formTabErrors[tabId]--;
+                formTabRenderErrors(tabId);
+            }
+        }
+
+        function formTabRenderErrors(tabId) {
+            log("Errors for tab: '" + tabId + "': " + formTabErrors[tabId]);
+
+            if (formTabErrors[tabId] > 0 && document.getElementById(tabId+"InvalidIcon") == null) {
+                log("Showing icon for tab: " + tabId);
+                // Show an icon on the tab and blink it a few times
+                jQuery("#"+tabId)
+                    .prepend('<img id="' + tabId + 'InvalidIcon" ' +
+                            'src="/themes/sfwkorg/img/attention.gif" width="13" height="13" ' +
+                            'alt="!" style="vertical-align:bottom;margin-left:5px;margin-right:5px;"/>');
+                pulsate("#"+tabId);
+            } else if (formTabErrors[tabId] < 1){
+                log("Removing icon of tab: " + tabId);
+                jQuery("#"+tabId + "InvalidIcon").remove();             // Remove the error icon on the tab
+            }
+
+            var tabsHaveErrors = false;
+            for (var tab in formTabErrors) {
+                var numOfErrors = formTabErrors[tab];
+                if (numOfErrors > 0) {
+                    tabsHaveErrors = true;
+                    break;
+                }
+            }
+
+            if (tabsHaveErrors) {
+                log("Hiding save button and showing form message box");
+                jQuery(".saveButton").hide();                       // Hide save button(s)
+                jQuery(".formControls").css("height", "30px");      // Adjust height for missing save button
+                jQuery("#messageBoxContainer").hide();                 // Hide server messages
+                jQuery("#clientMessageBoxContainer").show();           // Show client error messages
+            } else {
+                log("Showing save button and hiding form message box");
+                jQuery(".saveButton").show();                       // Show save button(s)
+                jQuery(".formControls").css("height", "");          // Readjust height for present save button
+                jQuery("#clientMessageBoxContainer").hide();           // Hide client error messages
+            }
+        }
+
+        function formTabClicked() {
+            jQuery("#messageBoxContainer").hide();                 // Hide server messages
+        }
+
+        function log(message) {
+            return; // Remove to enable logging
+            if (!log.window_ || log.window_.closed) {
+                var win = window.open("", null, "width=400,height=200," +
+                                                "scrollbars=yes,resizable=yes,status=no," +
+                                                "location=no,menubar=no,toolbar=no");
+                if (!win) return;
+                var doc = win.document;
+                doc.write("<html><head><title>Debug Log</title></head><body style='font-family: monospace'></body></html>");
+                doc.close();
+                log.window_ = win;
+            }
+            var logLine = log.window_.document.createElement("div");
+            logLine.appendChild(log.window_.document.createTextNode(message));
+            log.window_.document.body.appendChild(logLine);
+        }
+
+        // ###################### Design #################################
+
+        function highlightStars(item, range, end) {
+            for (i = 1; i <= range; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star_grey.gif");
+            }
+            for (i = 1; i <= end; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star.gif");
+            }
+        }
+
+        function pulsate(query) {
+            var blinkCount = 2*2;
+            do {
+                jQuery(query)['fade'+(blinkCount%2==0?'Out':'In')]('fast');
+            } while (--blinkCount);
+        }
+
+        function clearDocumentBackground() {
+            // Noop for this skin
+        }
+
+        // Wrap boxes with border and shadow
+        function wrapBoxes() {
+            // Noop for this skin
+        }
+
+        function initPage() {
+            checkCookieSupport();
+            wrapBoxes();
+        }
+
+        jQuery(function() {
+            initPage();
+        });
+
+    </script> 
+  <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-25106513-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script> 
+ </head> 
+ <body> 
+  <noscript> 
+   <div class="cookieJavaScriptWarning">
+     Please activate JavaScript in your browser. Without it, you will only be able to browse this website but clicking on any advanced feature (any forms or submit buttons) will not work. 
+   </div> 
+  </noscript>
+  <div id="dialogHelp" class="popupDialog">
+   <span id="dialogHelpPopup" title="dialogHelp"></span>
+   <span id="dialogHelpInit"> <script type="text/javascript">
+            function showHelpPopup(width, height, offsetId) {
+                var offset = jQuery("#"+offsetId).offset();
+                jsf('dialogHelpPopup')
+                    .css({width: width+"px", height: height+"px", top: offset.top-100+"px", left: offset.left-150+"px"})
+                    .jqm({
+                        closeClass: "closeDialog",
+                        overlay: 0
+                    });
+
+                jQuery("#dialogHelpContent").css("width", width-20+"px").css("height", height-75+"px");
+                jQuery("#dialogHelpContent").css("overflow", "auto");
+
+                jsf('dialogHelpPopup').jqmShow();
+            }
+        </script></span> 
+   <script type="text/javascript">jQuery(function() {
+        jsf('dialogHelpPopup').Resizable({
+            minTop: 1,
+            dragHandle: "#dialogHelpHead",
+            handlers: { se: "#dialogHelpResizeHandle" }
+        });
+    });</script> 
+   <div class="popupDialogHead" id="dialogHelpHead">
+    Help
+   </div>
+   <div id="dialogHelpContent" class="popupDialogContent"></div>
+   <div id="dialogHelpControls" class="popupDialogControls">
+    <div id="j_id14" style="padding:5px;">
+     <a href="#" class="buttonNonpersistent closeDialog"><span class="buttonLabel">Close Help</span></a>
+    </div>
+   </div>
+  </div> 
+  <div id="wrapper"> 
+   <div id="header">  
+    <div>
+     <a href="http://seamframework.org/"><img src="../themes/sfwkorg/img/blank.gif" height="98" width="210"></a> 
+    </div> 
+   </div>
+   <div id="body"> 
+    <div id="container"> 
+     <div id="leftColumn">
+      <div id="mainMenu" xmlns="http://www.w3.org/1999/xhtml">
+       <div id="j_id121" class="box">
+        <div class="mainMenuContainer"> 
+         <div class="mainMenuHeader"></div> 
+         <div class="mainMenuBody">
+          <div id="j_id125" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Home.html" class="level1Link">Home</a>
+          </div>
+          <div id="j_id132" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Home/WhySeam.html" class="level2Link">Why Seam?</a>
+          </div>
+          <div id="j_id139" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Seam2.html" class="level1Link">Seam 2</a>
+          </div>
+          <div id="j_id146" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/GettingStarted.html" class="level2Link">Getting Started</a>
+          </div>
+          <div id="j_id153" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Downloads.html" class="level2Link">Downloads</a>
+          </div>
+          <div id="j_id160" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Documentation.html" class="level2Link">Documentation</a>
+          </div>
+          <div id="j_id167" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="http://weld.cdi-spec.org/" class="level1Link">Weld</a>
+          </div>
+          <div id="j_id174" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Community.html" class="level1Link">Community</a>
+          </div>
+          <div id="j_id181" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="https://community.jboss.org/" class="level2Link">Forums</a>
+          </div>
+          <div id="j_id188" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/CDIExtensions.html" class="level2Link">CDI Extensions</a>
+          </div>
+          <div id="j_id195" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Contribute.html" class="level2Link">Contribute</a>
+          </div>
+          <div id="j_id202" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/JIRA.html" class="level2Link">JIRA</a>
+          </div>
+          <div id="j_id209" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/MailingLists.html" class="level2Link">Mailing Lists</a>
+          </div>
+          <div id="j_id216" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Events.html" class="level2Link">Events</a>
+          </div>
+          <div id="j_id223" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Links.html" class="level2Link">Links</a>
+          </div>
+          <div id="j_id230" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/SeamInProduction.html" class="level2Link">Seam In Production</a>
+          </div>
+          <div id="j_id237" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Documentation.html" class="level1Link">Documentation</a>
+          </div>
+          <div id="j_id244" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="FAQs.html" class="level2Link">FAQs</a>
+          </div>
+          <div id="j_id251" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="KnowledgeBase.html" class="level2Link">Knowledge Base</a>
+          </div>
+          <div id="j_id258" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="Design.html" class="level2Link">Design</a>
+          </div> 
+         </div> 
+         <div class="mainMenuFooter"></div> 
+        </div>
+       </div> 
+      </div> 
+      <br> 
+      <div style="margin-top: 25px; margin-left: 15px; margin-right: 15px; "> 
+       <h2>Built with Seam</h2> 
+       <p> You can find the full source code for this website in the <a href="/Download.html">Seam package</a> in the directory /examples/wiki. It is licensed under the LGPL. </p> 
+       <div style="text-align:center;">
+        <a href="/Community/GetASeamIcon.html"><img src="../themes/sfwkorg/img/runningon_seamlogo_beige.gif" height="50" width="200"></a> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="rightColumn">
+      <img src="../themes/sfwkorg/img/blank.gif" height="8" width="1">
+      <div id="breadcrumb" class="breadcrumb">
+       <span class="breadcrumbPanel"><a href="../index.html" class="itemLink breadcrumbRoot">Site</a><span class="itemSeparator breadcrumbRoot">·</span><a href="../Documentation.html" class="itemLink">Documentation</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="KnowledgeBase.html" class="itemLink">Knowledge Base</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="Security.html" class="itemLink">Security</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="WebVulnerabilities.html" class="itemLink">Web Vulnerabilities</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="CrossSiteRequestForgery.html" class="itemText">Cross Site Request Forgery</a></span>
+      </div>
+      <div id="messageBoxContainer"></div>
+      <div id="clientMessageBoxContainer" style="display:none;"> 
+       <div id="clientMessageBox" class="messageBox"> 
+        <table id="clientMessageBoxTable" class="messageBoxTable" cellpadding="0" cellspacing="0" border="0"></table> 
+        <script type="text/javascript">jQuery(function() {
+                    jQuery("#clientMessageBoxContainer").css("margin-top", "10px").css("margin-bottom", "10px");
+                    pulsate(".clientMessageBoxImage");
+                });</script> 
+       </div>
+      </div> 
+      <div id="documentDisplayContainer" class="box">
+       <div id="documentDisplay" class="documentDisplay">
+        <div id="j_id362"> 
+         <h1 class="documentTitle"><a href="CrossSiteRequestForgery.html">Cross Site Request Forgery</a> </h1>
+        </div>
+        <p class="wikiPara"> An CSRF/XSRF attack misuses the trust of a site towards a user. An attacker abuses the login state of a user to trigger privileged actions offered by the web site. For this purpose an adversary needs to manipulate the request flow between user and web site with forged requests. </p> 
+        <p class="wikiPara"> A vulnerable web application executes actions that are triggered by requests, with only a trivial check of the current users session and privileges. For example, if an application deletes a row in a database if it receives the GET request <tt>http://example.com/delete.action?rowId=1234</tt>, it is vulnerable to an XSRF attack if it only checks the current users privileges. The current users privileges are present in the current users HTTP session, and the session identifier cookie will automatically be send by the victims web browser with any request. The attacker only needs to trick the victim or the victims browser into executing that request, maybe in a hidden frame or browser window. </p> 
+        <h2 class="wikiHeadline2" id="H-Cause"><a href="CrossSiteRequestForgery.html#H-Cause">Cause</a></h2> 
+        <p class="wikiPara"> Sites that are vulnerable to this problem typically have difficulties to distinguish regular (in-session) requests from one-off requests forged by an attacker. If a web site does not enforce a per-request authentication or authorization (such as context-dependent transaction number) method, an attacker is able to execute privileged actions in the context of the currently logged-in user. </p> 
+        <h2 class="wikiHeadline2" id="H-Exploitability"><a href="CrossSiteRequestForgery.html#H-Exploitability">Exploitability</a></h2> 
+        <p class="wikiPara"> The attack may begin with a social engineering action in order to forge an HTTP request that triggers a privileged action. A typical victim is an administrator using a web-based remote management software. The attacker prepares a link that will trigger the privileged action and may embed it in an email or hide it on his website in an invisible layer on top of an unsuspicious clickable element. Furthermore, this link might be directly injected into the target website if the target is also vulnerable to <a href="CrossSiteScripting.html" target="" class="regularLink">Cross Site Scripting</a>. Malware is an additional source to trigger requests that exploit CSRF vulnerabilities. </p> 
+        <p class="wikiPara"> As an example, the attacker may trick the logged-in user onto a password change field, to replace the current password of the administered application with one of his choosing. An additional scenario seen in practice is to log off the user from his account and silently relogin him to a fake account (known to the attacker) to later harvest the data the user entered. Certain web sites also cache unauthenticated web requests and replay them silently when the user has logged in, which is an additional cause for CSRF to happen. Recent click-jacking attacks are a variant of CSRF, allowing to misuse a vulnerable version of the Flash advertisement player to hijack clicks to other webpages or silently activate web cams and microphones. </p> 
+        <p class="wikiPara"> Unfortunately a lot of web-sites offer a <q>Remember Me on this computer</q> feature, which dramatically increases CSRF exploitability. If, for example, a <q>Remember Me</q> cookie that authenticates the victim automatically will be send with every request, the user is vulnerable even if the target website is not <q>open</q> in her browser. Any malicious website or e-mail can then trick the victim into clicking a link that executes a privileged and automatically authorized action. </p> 
+        <h2 class="wikiHeadline2" id="H-PossibleRemedies"><a href="CrossSiteRequestForgery.html#H-PossibleRemedies">Possible Remedies</a></h2> 
+        <p class="wikiPara"> Users should log off from an application as soon as the privileged actions have been completed. The less time the user spends in “privileged” mode, the less vulnerable the user is. Bookmarkable logoff buttons, or logout keyboard shortcuts increase the usability of this precaution. On the other hand, a <q>Remember Me</q> feature contradicts this goal. Users should be encouraged to utilize the <q>Remember Password</q> feature of their browser instead, so that they can easily log-in with one click, with a pre-filled login form. This provides a balance between security - no fully automated authorization will occur - and convenience. On modern operating systems, login data and passwords remembered by browsers will even be stored encrypted in a central keychain or wallet. </p> 
+        <p class="wikiPara"> On the server side some half-solutions have been proposed, such as allowing POST requests only, to prevent drive-by changes triggered by simple GET link clicks. Of course, POST requests can also be forged, so this solution is not sufficient. Also, referrer checking does not provide a complete solution, as intermediate web proxies or client security products may block certain HTTP headers such as referrers. Referrer checking does also not block attacks which are caused by cross site scripting problems, with malicious links injected directly into the target web site. </p> 
+        <p class="wikiPara"> A valid defense against CSRF is providing web pages that are not vulnerable to <a href="CrossSiteScripting.html" target="" class="regularLink">Cross Site Scripting</a> in combination with a shared secret (optionally per-request individual token) to trigger privileged actions and allow a “NoScript” usage. A web page that works without client side Javascript logic significantly lowers the attack surface. If attackers are able to inject Javascript through a <a href="CrossSiteScripting.html" target="" class="regularLink">Cross Site Scripting</a> vulnerability, they can overwrite certain Javascript handlers with their own setters and getters, which again allows to gain access to the valuable login cookie. </p> 
+        <h2 class="wikiHeadline2" id="H-ImpactFromCrossSiteScripting"><a href="CrossSiteRequestForgery.html#H-ImpactFromCrossSiteScripting">Impact from Cross Site Scripting</a></h2> 
+        <p class="wikiPara"> A <a href="CrossSiteScripting.html" target="" class="regularLink">Cross Site Scripting</a> vulnerability would allow an attacker to circumvent most CSRF protection mechanisms. If you are protecting forms on a web page with a unique transaction token, an attacker can inject Javascript code on that page and read the token value, then forge a valid but malicious request. </p> 
+        <h2 class="wikiHeadline2" id="H-ConsiderationsForSeamFrameworkUsers"><a href="CrossSiteRequestForgery.html#H-ConsiderationsForSeamFrameworkUsers">Considerations for Seam framework users</a></h2> 
+        <p class="wikiPara"> Seam and JSF allow immediate execution of actions triggered by any HTTP request, bet it GET or POST, and even DELETE and PUT. </p> 
+        <h3 class="wikiHeadline3" id="H-ProtectingJSFPostbacks"><a href="CrossSiteRequestForgery.html#H-ProtectingJSFPostbacks">Protecting JSF postbacks</a></h3> 
+        <p class="wikiPara"> JSF tries to ensure that an event is legitimate by requiring a serialized representation of the component tree to be present at the time the form is submitted. Where that component tree is stored depends on the type of state saving that is in use. In client-side state saving, the serialized component tree is stored in the hidden form field <tt>javax.faces.ViewState</tt> and submitted along with the form. In server-side state saving, the serialized component tree is stored in the user's session and an auto-generated identifier token, passed through the hidden form field <tt>javax.faces.ViewState</tt>, is used to identify the component tree object in the users server-side session. </p> 
+        <p class="wikiPara"> Consider the following simple JSF form in an XHTML template: </p> 
+        <pre class="wikiPreformatted">&lt;h:form&gt;
+    &lt;h:commandButton action="#{foo.doStuff}" value="Do Stuff"/&gt;
+&lt;/h:form&gt;</pre> 
+        <p class="wikiPara"> This form will be rendered as HTML: </p> 
+        <pre class="wikiPreformatted">&lt;form id="j_id4" name="j_id4" method="post" action="/myform.seam" enctype="application/x-www-form-urlencoded"&gt;
+    &lt;input type="hidden" name="j_id4" value="j_id4" /&gt;
+    &lt;input type="submit" name="j_id4:j_id8" value="Do Stuff" /&gt;
+    &lt;input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id3"/&gt;
+&lt;/form&gt;</pre> 
+        <p class="wikiPara"> Here we are assuming the use of server-side state saving. The important part - the <q>per-request security token</q> - is the second hidden field: When the form is submitted, the value <tt>j_id3</tt> will be transfered to the server in a POST request. The server will now first validate the users current HTTP session, which has been identified through the automatically transmitted cookie. Inside that session, the <q>view state</q> with the identifier <tt>j_id3</tt> has to be present, or the request will be aborted. This validates that the request originated from the form that has been presented to the user, and has not been forged by an attacker and that the request is not simply <q>riding</q> the existing HTTP session. </p> 
+        <p class="wikiPara"> Unfortunately, the view state identifier is an automatically generated incremented value and quite easy to guess by an attacker. The value is always: </p> 
+        <pre class="wikiPreformatted">'j_id' + a sequential number</pre> 
+        <p class="wikiPara"> where the sequential number is the number of views in the user's session (always starting at 1). Thus, it's possible to coerce an unassuming user with a valid session into submitting a form of the attackers choosing. </p> 
+        <p class="wikiPara"> A better solution would be a <a href="http://en.wikipedia.org/wiki/Cryptographically_secure_pseudorandom_number_generator" target="" class="regularLink">cryptographically secure pseudorandom number</a>. As this is dependent on the JSF implementation (this example was created with the Sun JSF RI), a more secure CSRF protection for POST requests is possible with specification compliance. </p> 
+        <p class="wikiPara"> Going beyond the use of a random number of the view state token, the most appropriate way of securing a postback is to use a public-private key cryptology negotiation. See Seam's <tt>&lt;s:token&gt;</tt> component tag for an explanation of this solution. </p> 
+        <p class="wikiPara"> Even worse, client-side state saving is extremely easy to hijack since the component tree is stored on the client. All the attacker needs to have is the signature of the component tree and he can replay and send a valid POST request to the server. The server will restore the view by deserializing the data sent by the client and execute the action. We recommend that you do not use client-side state saving without additional per-request security tokens, see Seam's <tt>&lt;s:token&gt;</tt> tag. </p> 
+        <h3 class="wikiHeadline3" id="H-BuildOnDemandOfTheJSFComponentTree"><a href="CrossSiteRequestForgery.html#H-BuildOnDemandOfTheJSFComponentTree">Build on demand of the JSF component tree</a></h3> 
+        <p class="wikiPara"> In client-side state saving, the restore view step is independent of the user's session. All the state necessary to rebuild the view and process the user-initiated event is sent along in the form POST request. The user could load the form on one day and submit it days later assuming that other session data isn't required (e.g., a login or comment form usually works without requiring a logged-in session). </p> 
+        <p class="wikiPara"> This portability is not present in server-side state saving. The browser merely sends an identifier for looking up the component tree in the session. Without the session, there is no component tree. When that happens, the only reasonable thing for JSF to do is to throw and <tt>ViewExpiredException</tt> or simply render the page without processing any events. </p> 
+        <p class="wikiPara"> ...that is, until Facelets came along. Facelets offers a <q>solution</q> to the stale form problem. By setting the <tt>facelets.BUILD_BEFORE_RESTORE</tt> context-param to true, you can have Facelets reconstruct the component tree in the RESTORE VIEW phase if the one in the session has expired (or the session as a whole has expired). This would seem to match the behavior of client-side state saving. It does not. The reason is that the contract of requiring an existing view state to exist is now absent and a postback is no different than a GET-requested page action. A form on a plain HTML page can now submit a POST request directly to a JSF application (you do need an empty <tt>javax.faces.ViewState</tt> hidden field for it to work). </p> 
+        <p class="wikiPara"> If you are enabling this global Facelets option, your application is wide open to CSRF attacks. </p> 
+        <p class="wikiPara"> To make things even more troubling, Facelets has become the standard view handler in JSF 2.0 and this behavior of Facelets is now the default. So what do we do? </p> 
+        <p class="wikiPara"> Well, as it turns out, because of a recent specification change, the <q>build before restore</q> feature has been inadvertently disabled in Mojarra (the JSF reference implementation), so we may not have to worry about it after all in JSF 2.0. See <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=1028" target="" class="regularLink">Mojarra Issue 1028</a>. </p> 
+        <p class="wikiPara"> A built-on demand of the component tree on the server is only secure if we can ensure that the request is coming from a valid source. Hence, the Seam <tt>&lt;s:token&gt;</tt> support should always be used if you enable <q>build before restore</q>. </p> 
+        <h3 class="wikiHeadline3" id="H-ConsideringPageActions"><a href="CrossSiteRequestForgery.html#H-ConsideringPageActions">Considering page actions</a></h3> 
+        <p class="wikiPara"> Seam allows actions to be invoked when a page is requested using a feature known as page actions. A page action is a method expression that is tied to a JSF view URI and is invoked before the RENDER RESPONSE phase on an NonFaces (<q>GET</q>) request. A page action in Seam is defined in the <tt>pages.xml</tt> descriptor: </p> 
+        <pre class="wikiPreformatted">&lt;page view-id="/myPage.xhtml"&gt;
+    &lt;action execute="#{myBean.myAction}"/&gt;
+&lt;/page&gt;</pre> 
+        <p class="wikiPara"> When a GET request is processed for the URL <tt>http://example.com/myPage.seam</tt>, the action will be executed. Page actions are both a blessing and a curse. They are a better substitutes for filters since they can be associated with a view URI regardless of the request life cycle leading up to it being requested (bookmarkable). They can also be tied into the declarative JSF navigation system. However, their downfall is that they can be easily abused. Unlike a JSF POSTback, they do not require a page to have been viewed previously (i.e., an established javax.faces.ViewState). A page action is an CSRF attack vector if: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> The action only validates permissions of the current user based on the users HTTP session. A session cookie will be automatically transmitted by the browser and authorization will be granted.</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> The action is not idempotent, that is, if it modifies resource state such as writing to the database. If the action only retrieves data from the database and doesn't have any persistent or potentially dangerous side effects, an attacker might execute the request but it won't do any harm.</li> 
+        </ul> 
+        <p class="wikiPara"> In general, GET requests should not trigger unsafe actions. It's reasonable to use a page action to preload data but it's inappropriate to use a page action for operations that manipulate sensitive or secure data, such as transfer money between accounts. Whenever sensitive data is involved, it's important to provide a <q>splash page</q> that confirms the action and the user's intent to perform it. </p> 
+        <p class="wikiPara"> A GET request should be idempotent and repeatable and it should not make changes to persistent (database) state. If you absolutely can not avoid assigning an unsafe action to a view URI, you need to add an additional random token as a parameter and validate it against the value stored in the users session. This is effectively a secondary session identifier which is, unlike the session cookie, not transmitted automatically by the browser and hence needs to be obtained by an attacker to forge a valid malicious request. </p> 
+        <p class="wikiPara"> Seam itself does not offer you any tools or functions to do this, and you should consider this is a bad practices that is best avoided entirely. </p> 
+        <h3 class="wikiHeadline3" id="H-ExposingJavaScriptActionsThroughWebRemote"><a href="CrossSiteRequestForgery.html#H-ExposingJavaScriptActionsThroughWebRemote">Exposing JavaScript actions through @WebRemote</a></h3> 
+        <p class="wikiPara"> If you annotate a Seam component method with <tt>@WebRemote</tt>, Seam will generate a JavaScript interface that you can use to call that method directly from the client. This method call is wrapped in an HTTP POST request. The session identifier cookie will be transmitted automatically to the server. </p> 
+        <p class="wikiPara"> An attacker can forge a call to any method you annotate with <tt>@WebRemote</tt>, with the privileges of the currently logged-in user. In general, these methods are required to be safe and idempotent - you should only read and not write data. </p> 
+        <p class="wikiPara"> Seam Remoting with JavaScript currently offers no automatic protection against CSRF! </p> 
+        <h3 class="wikiHeadline3" id="H-SeamsTtltstokengtttProtectionFeature"><a href="CrossSiteRequestForgery.html#H-SeamsTtltstokengtttProtectionFeature">Seam's <tt>&lt;s:token&gt;</tt> protection feature</a></h3> 
+        <p class="wikiPara"> Seam (starting with 2.1.2RC1) introduces the UI component tag <tt>&lt;s:token&gt;</tt> to secure JSF form POST requests against CSRF attacks. (NOTE: If the solution below is implemented in JSF 2, then Seam does not need to provide a custom solution and we'll remove <tt>&lt;s:token&gt;</tt> from Seam. However, we still need to implement something equivalent for Seam Remoting.) </p> 
+        <p class="wikiPara"> The <tt>&lt;s:token&gt;</tt> UI component performs validation in two steps: </p> 
+        <p class="wikiPara"> 1. When rendered, it assigns a unique identifier to the browser using a cookie that lives until the end of the browser session. This is roughly the browser's private key. The <tt>&lt;s:token&gt;</tt> tag is used inside of an <tt>&lt;h:form&gt;</tt> and generates a hidden form field named <tt>javax.faces.FormSignature.</tt> The form signature is calculated as follows: </p> 
+        <pre class="wikiPreformatted">sha1( signature = viewId + "," + formClientId, salt = clientUid )</pre> 
+        <p class="wikiPara"> The developer can also choose to incorporate the session identifier into this hash for a more secure token (at the cost of binding it to the session): </p> 
+        <pre class="wikiPreformatted">sha1( signature = viewId + "," + formClientId + "," + sessionId, salt = clientUid )</pre> 
+        <p class="wikiPara"> 2. When the form is submitted, the hash is recreated on the server and compared against the value of the <tt>javax.faces.FormSignature</tt> parameter. If validation fails, an <tt>org.jboss.seam.ui.UnauthorizedCommandException</tt> will be thrown. </p> 
+        <p class="wikiPara"> When a form with <tt>&lt;s:token&gt;</tt> is rendered, a JavaScript check is used to validate cookie support in the browser. If cookies are disabled, a warning is presented to the user. This warning will let the user know that the form POSTback will fail if cookies are not enabled. </p> 
+        <p class="wikiPara"> See the <a href="/Community/NewComponentTagStokenAimedToGuardAgainstCSRF.html" target="" class="regularLink">forum discussion thread</a> for usage and caveats. </p> 
+        <h2 class="wikiHeadline2" id="H-FurtherReading"><a href="CrossSiteRequestForgery.html#H-FurtherReading">Further Reading</a></h2> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <a href="https://www.owasp.org/images/8/89/OWASP_Top_10_2007_for_JEE.pdf" target="" class="regularLink">OWASP Top 10 for Java EE</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="http://www.securenet.de/papers/Session_Riding.pdf" target="" class="regularLink">Session Riding</a> by Thomas Schreiber - <i class="wikiEmphasis">a must read!</i></li> 
+         <li class="wikiUnorderedListItem"> <a href="http://www.isecpartners.com/files/XSRF_Paper_0.pdf" target="" class="regularLink">Cross Site Reference Forgery</a> by Jesse Burns</li> 
+         <li class="wikiUnorderedListItem"> <a href="http://www.owasp.org/index.php/Cross-Site_Request_Forgery" target="" class="regularLink">http://www.owasp.org/index.php/Cross-Site_Request_Forgery</a> is OWASP's description of CSRF, illustrating how images can be used to conduct CSRF attacks</li> 
+         <li class="wikiUnorderedListItem"> <a href="http://en.wikipedia.org/wiki/Csrf" target="" class="regularLink">Wikipedia article on CSRF</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="http://cwe.mitre.org/data/definitions/352.html" target="" class="regularLink">http://cwe.mitre.org/data/definitions/352.html</a> describes the classification of XSS within the Common Weakness Enumeration System of the National Vulnerability Database (NVD)</li> 
+         <li class="wikiUnorderedListItem"> <a href="http://www.cgisecurity.com/articles/csrf-faq.shtml" target="" class="regularLink">http://www.cgisecurity.com/articles/csrf-faq.shtml</a> answers typical CSRF related questions</li> 
+         <li class="wikiUnorderedListItem"> <a href="http://www.owasp.org/index.php/CSRF_Guard" target="" class="regularLink">http://www.owasp.org/index.php/CSRF_Guard</a> is a server side framework to prevent CSRF within JEE applications</li> 
+         <li class="wikiUnorderedListItem"> <a href="http://directwebremoting.org/blog/joe/2007/10/29/web_application_security.html" target="" class="regularLink">http://directwebremoting.org/blog/joe/2007/10/29/web_application_security.html</a> is an illustrative talk that will help you to get familiar with CSRF</li> 
+        </ul> 
+       </div>
+       <div id="j_id374" class="documentCreatorHistory undecoratedLink smallFont">
+        <div id="j_id375">
+          Created:&nbsp;26. Feb 2009, 05:06&nbsp;America/New_York&nbsp;(Christian Bauer)
+        </div>
+        <div id="j_id383">
+          Last Modified:&nbsp;04. Oct 2011, 02:05&nbsp;America/New_York&nbsp;(Shane Bryzak)
+        </div>
+       </div> 
+      </div>
+      <div id="commentDisplayForm">
+       <div id="comments" class="commentsDisplay"></div>
+      </div> 
+     </div> 
+     <div class="clear" style="padding-top:15px;"></div> 
+    </div>
+   </div> 
+  </div> 
+  <div id="footer" class="undecoratedLink"> 
+   <p> © Copyright 2009, Red Hat Middleware, LLC. All rights reserved. JBoss and Seam are registered trademarks and servicemarks of <a href="http://www.redhat.com/">Red Hat, Inc</a>. [<a href="http://www.redhat.com/legal/privacy_statement.html">Privacy Policy</a>]</p> 
+  </div>
+  <div id="status">
+   <span id="globalStatus"><span id="globalStatus.start" style="display: none">
+     <div id="j_id608" class="statusStart">
+      <img src="../themes/sfwkorg/img/statusindicator.gif" height="25" width="20">
+     </div></span><span id="globalStatus.stop">
+     <div id="j_id610" class="statusStop">
+      <img src="../themes/sfwkorg/img/blank.gif" height="25" width="20">
+     </div></span></span>
+  </div>  
+  <!-- Mirrored from 127.0.0.1:64444/Documentation/CrossSiteRequestForgery by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:46:10 GMT --> 
+  <!-- Added by HTTrack -->
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack --> 
+ </body>
+</html>

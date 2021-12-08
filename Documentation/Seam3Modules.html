@@ -1,0 +1,633 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <!-- Mirrored from 127.0.0.1:64444/Documentation/Seam3Modules by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:54:30 GMT -->
+ <!-- Added by HTTrack -->
+ <head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack -->  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+  <title>Seam Framework - Seam 3 Modules</title> 
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/basic_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" rel="stylesheet" type="text/css">
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/extended_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" media="rich-extended-skinning" rel="stylesheet" type="text/css">
+  <script src="../a4j/g/3_3_3.CR1org.ajax4jsf.javascript.AjaxScript" type="text/javascript"></script>
+  <script type="text/javascript">window.RICH_FACES_EXTENDED_SKINNING_ON=true;</script>
+  <script src="../a4j/g/3_3_3.CR1org/richfaces/renderkit/html/scripts/skinning.js" type="text/javascript"></script>
+  <link href="../themes/sfwkorg/css/sfwk.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shCore.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shThemeDefault.css" rel="stylesheet" type="text/css"> 
+  <link rel="alternate" type="application/atom+xml" title="Design" href="../service/Feed/atom/Area/Documentation/Node/Designhtml.html"> 
+  <script type="text/javascript" src="../seam/resource/remoting/resource/remote.js"></script> 
+  <script type="text/javascript" src="../seam/resource/remoting/interface1535.js?httpSessionChecker"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jquery.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jqueryPlugins.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/lacewiki.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shCore.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushBash.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCpp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCSharp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCss.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDelphi.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDiff.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushGroovy.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJava.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJScript.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPhp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPlain.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPython.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushRuby.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushScala.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushSql.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushVb.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushXml.js"></script> 
+  <script type="text/javascript">
+        /* If you really want to load the Flash garbage on every page, go ahead and enable this:
+        SyntaxHighlighter.config.clipboardSwf = '/themes/sfwkorg/js/sh/scripts/clipboard.swf';
+         */
+        SyntaxHighlighter.defaults['gutter'] = false;
+        SyntaxHighlighter.all();
+	</script> 
+  <script type="text/javascript">
+
+        // ###################### Session timeout alert #################################
+
+        var sessionChecker = Seam.Component.getInstance("httpSessionChecker");
+        var timeoutURL = '/Home/JBossSeam';
+        var timeoutMillis = '900'*1000+3000;
+        var sessionTimeoutInterval = null;
+
+        function startSessionTimeoutCheck() {
+            sessionTimeoutInterval = setInterval('sessionChecker.isNewSession(alertTimeout)', timeoutMillis);
+        }
+
+        function stopSessionTimeoutCheck() {
+            if (sessionTimeoutInterval) clearInterval(sessionTimeoutInterval);
+        }
+
+        function resetSessionTimeoutCheck() {
+            if (sessionTimeoutInterval != null) {
+                stopSessionTimeoutCheck();
+                startSessionTimeoutCheck();
+            }
+        }
+
+        function alertTimeout(newSession) {
+            if (newSession) {
+                clearInterval(sessionTimeoutInterval);
+                jQuery(".ajaxSupport")
+                        .removeAttr('onblur')
+                        .removeAttr('onchange')
+                        .removeAttr('onkeyup')
+                        .removeAttr('onclick');
+                jQuery(".sessionEventTrigger").hide();
+                var answer = confirm("Your session has timed out, you will be redirected to the start page.");
+                if (answer) window.location = timeoutURL;
+            }
+        }
+
+        // ###################### Popups #################################
+
+        var fadeInPopupDialog = function(hash) {
+            hash.w.fadeIn('fast',function(){ hash.o.show(); });
+            jQuery(".closeDialog", hash.w).attr("accesskey", "C"); // Dynamically assign accesskey to .closeDialog buttons
+        };
+
+        var fadeOutPopupDialog = function(hash) { hash.w.fadeOut('fast',function(){ hash.o.remove(); }); };
+
+        // ###################### Tabbed Forms #################################
+
+        var formTabErrors = {};
+
+        function formTabRaiseError(tabId, fieldId, message) {
+
+            formTabClearError(tabId, fieldId); // Clear error then re-add
+
+            log("Raise error for tab: '" + tabId + "' field: " + fieldId);
+
+            // Add an error message to the client message box
+            log("Adding error message: " +tabId + fieldId + "ErrorMessage")
+            jQuery("#clientMessageBoxTable").append(
+                '<tr id="' + tabId + fieldId + 'ErrorMessage"><td><img src="/themes/sfwkorg/img/attention.gif" ' +
+                'height="18" width="18" class="clientMessageBoxImage attentionImage"/></td>' +
+                '<td><span id="attentionMessage" class="attentionMessage">'+ message + '</span></td></tr>'
+            );
+            if (formTabErrors[tabId] == null) {
+                formTabErrors[tabId] = 1;
+            } else {
+                formTabErrors[tabId]++;
+            }
+            formTabRenderErrors(tabId);
+        }
+
+        function formTabClearError(tabId, fieldId) {
+            if (document.getElementById(tabId+fieldId+"ErrorMessage") != null) { // This error is displayed
+                log("Clear error for tab: '" + tabId + "' field: " + fieldId);
+                log("Removing error message: " +tabId + fieldId + "ErrorMessage")
+                // Remove the error message on the client message box
+                jQuery("#"+tabId + fieldId + "ErrorMessage").remove();
+
+                formTabErrors[tabId]--;
+                formTabRenderErrors(tabId);
+            }
+        }
+
+        function formTabRenderErrors(tabId) {
+            log("Errors for tab: '" + tabId + "': " + formTabErrors[tabId]);
+
+            if (formTabErrors[tabId] > 0 && document.getElementById(tabId+"InvalidIcon") == null) {
+                log("Showing icon for tab: " + tabId);
+                // Show an icon on the tab and blink it a few times
+                jQuery("#"+tabId)
+                    .prepend('<img id="' + tabId + 'InvalidIcon" ' +
+                            'src="/themes/sfwkorg/img/attention.gif" width="13" height="13" ' +
+                            'alt="!" style="vertical-align:bottom;margin-left:5px;margin-right:5px;"/>');
+                pulsate("#"+tabId);
+            } else if (formTabErrors[tabId] < 1){
+                log("Removing icon of tab: " + tabId);
+                jQuery("#"+tabId + "InvalidIcon").remove();             // Remove the error icon on the tab
+            }
+
+            var tabsHaveErrors = false;
+            for (var tab in formTabErrors) {
+                var numOfErrors = formTabErrors[tab];
+                if (numOfErrors > 0) {
+                    tabsHaveErrors = true;
+                    break;
+                }
+            }
+
+            if (tabsHaveErrors) {
+                log("Hiding save button and showing form message box");
+                jQuery(".saveButton").hide();                       // Hide save button(s)
+                jQuery(".formControls").css("height", "30px");      // Adjust height for missing save button
+                jQuery("#messageBoxContainer").hide();                 // Hide server messages
+                jQuery("#clientMessageBoxContainer").show();           // Show client error messages
+            } else {
+                log("Showing save button and hiding form message box");
+                jQuery(".saveButton").show();                       // Show save button(s)
+                jQuery(".formControls").css("height", "");          // Readjust height for present save button
+                jQuery("#clientMessageBoxContainer").hide();           // Hide client error messages
+            }
+        }
+
+        function formTabClicked() {
+            jQuery("#messageBoxContainer").hide();                 // Hide server messages
+        }
+
+        function log(message) {
+            return; // Remove to enable logging
+            if (!log.window_ || log.window_.closed) {
+                var win = window.open("", null, "width=400,height=200," +
+                                                "scrollbars=yes,resizable=yes,status=no," +
+                                                "location=no,menubar=no,toolbar=no");
+                if (!win) return;
+                var doc = win.document;
+                doc.write("<html><head><title>Debug Log</title></head><body style='font-family: monospace'></body></html>");
+                doc.close();
+                log.window_ = win;
+            }
+            var logLine = log.window_.document.createElement("div");
+            logLine.appendChild(log.window_.document.createTextNode(message));
+            log.window_.document.body.appendChild(logLine);
+        }
+
+        // ###################### Design #################################
+
+        function highlightStars(item, range, end) {
+            for (i = 1; i <= range; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star_grey.gif");
+            }
+            for (i = 1; i <= end; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star.gif");
+            }
+        }
+
+        function pulsate(query) {
+            var blinkCount = 2*2;
+            do {
+                jQuery(query)['fade'+(blinkCount%2==0?'Out':'In')]('fast');
+            } while (--blinkCount);
+        }
+
+        function clearDocumentBackground() {
+            // Noop for this skin
+        }
+
+        // Wrap boxes with border and shadow
+        function wrapBoxes() {
+            // Noop for this skin
+        }
+
+        function initPage() {
+            checkCookieSupport();
+            wrapBoxes();
+        }
+
+        jQuery(function() {
+            initPage();
+        });
+
+    </script> 
+  <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-25106513-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script> 
+ </head> 
+ <body> 
+  <noscript> 
+   <div class="cookieJavaScriptWarning">
+     Please activate JavaScript in your browser. Without it, you will only be able to browse this website but clicking on any advanced feature (any forms or submit buttons) will not work. 
+   </div> 
+  </noscript>
+  <div id="dialogHelp" class="popupDialog">
+   <span id="dialogHelpPopup" title="dialogHelp"></span>
+   <span id="dialogHelpInit"> <script type="text/javascript">
+            function showHelpPopup(width, height, offsetId) {
+                var offset = jQuery("#"+offsetId).offset();
+                jsf('dialogHelpPopup')
+                    .css({width: width+"px", height: height+"px", top: offset.top-100+"px", left: offset.left-150+"px"})
+                    .jqm({
+                        closeClass: "closeDialog",
+                        overlay: 0
+                    });
+
+                jQuery("#dialogHelpContent").css("width", width-20+"px").css("height", height-75+"px");
+                jQuery("#dialogHelpContent").css("overflow", "auto");
+
+                jsf('dialogHelpPopup').jqmShow();
+            }
+        </script></span> 
+   <script type="text/javascript">jQuery(function() {
+        jsf('dialogHelpPopup').Resizable({
+            minTop: 1,
+            dragHandle: "#dialogHelpHead",
+            handlers: { se: "#dialogHelpResizeHandle" }
+        });
+    });</script> 
+   <div class="popupDialogHead" id="dialogHelpHead">
+    Help
+   </div>
+   <div id="dialogHelpContent" class="popupDialogContent"></div>
+   <div id="dialogHelpControls" class="popupDialogControls">
+    <div id="j_id14" style="padding:5px;">
+     <a href="#" class="buttonNonpersistent closeDialog"><span class="buttonLabel">Close Help</span></a>
+    </div>
+   </div>
+  </div> 
+  <div id="wrapper"> 
+   <div id="header">  
+    <div>
+     <a href="http://seamframework.org/"><img src="../themes/sfwkorg/img/blank.gif" height="98" width="210"></a> 
+    </div> 
+   </div>
+   <div id="body"> 
+    <div id="container"> 
+     <div id="leftColumn">
+      <div id="mainMenu" xmlns="http://www.w3.org/1999/xhtml">
+       <div id="j_id121" class="box">
+        <div class="mainMenuContainer"> 
+         <div class="mainMenuHeader"></div> 
+         <div class="mainMenuBody">
+          <div id="j_id125" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Home.html" class="level1Link">Home</a>
+          </div>
+          <div id="j_id132" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Home/WhySeam.html" class="level2Link">Why Seam?</a>
+          </div>
+          <div id="j_id139" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Seam2.html" class="level1Link">Seam 2</a>
+          </div>
+          <div id="j_id146" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/GettingStarted.html" class="level2Link">Getting Started</a>
+          </div>
+          <div id="j_id153" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Downloads.html" class="level2Link">Downloads</a>
+          </div>
+          <div id="j_id160" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Documentation.html" class="level2Link">Documentation</a>
+          </div>
+          <div id="j_id167" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="http://weld.cdi-spec.org/" class="level1Link">Weld</a>
+          </div>
+          <div id="j_id174" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Community.html" class="level1Link">Community</a>
+          </div>
+          <div id="j_id181" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="https://community.jboss.org/" class="level2Link">Forums</a>
+          </div>
+          <div id="j_id188" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/CDIExtensions.html" class="level2Link">CDI Extensions</a>
+          </div>
+          <div id="j_id195" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Contribute.html" class="level2Link">Contribute</a>
+          </div>
+          <div id="j_id202" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/JIRA.html" class="level2Link">JIRA</a>
+          </div>
+          <div id="j_id209" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/MailingLists.html" class="level2Link">Mailing Lists</a>
+          </div>
+          <div id="j_id216" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Events.html" class="level2Link">Events</a>
+          </div>
+          <div id="j_id223" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Links.html" class="level2Link">Links</a>
+          </div>
+          <div id="j_id230" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/SeamInProduction.html" class="level2Link">Seam In Production</a>
+          </div>
+          <div id="j_id237" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Documentation.html" class="level1Link">Documentation</a>
+          </div>
+          <div id="j_id244" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="FAQs.html" class="level2Link">FAQs</a>
+          </div>
+          <div id="j_id251" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="KnowledgeBase.html" class="level2Link">Knowledge Base</a>
+          </div>
+          <div id="j_id258" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="Design.html" class="level2Link">Design</a>
+          </div> 
+         </div> 
+         <div class="mainMenuFooter"></div> 
+        </div>
+       </div> 
+      </div> 
+      <br> 
+      <div style="margin-top: 25px; margin-left: 15px; margin-right: 15px; "> 
+       <h2>Built with Seam</h2> 
+       <p> You can find the full source code for this website in the <a href="/Download.html">Seam package</a> in the directory /examples/wiki. It is licensed under the LGPL. </p> 
+       <div style="text-align:center;">
+        <a href="/Community/GetASeamIcon.html"><img src="../themes/sfwkorg/img/runningon_seamlogo_beige.gif" height="50" width="200"></a> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="rightColumn">
+      <img src="../themes/sfwkorg/img/blank.gif" height="8" width="1">
+      <div id="breadcrumb" class="breadcrumb">
+       <span class="breadcrumbPanel"><a href="../index.html" class="itemLink breadcrumbRoot">Site</a><span class="itemSeparator breadcrumbRoot">·</span><a href="../Documentation.html" class="itemLink">Documentation</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="Design.html" class="itemLink">Design</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="Seam3Modules.html" class="itemText">Seam 3 Modules</a></span>
+      </div>
+      <div id="messageBoxContainer"></div>
+      <div id="clientMessageBoxContainer" style="display:none;"> 
+       <div id="clientMessageBox" class="messageBox"> 
+        <table id="clientMessageBoxTable" class="messageBoxTable" cellpadding="0" cellspacing="0" border="0"></table> 
+        <script type="text/javascript">jQuery(function() {
+                    jQuery("#clientMessageBoxContainer").css("margin-top", "10px").css("margin-bottom", "10px");
+                    pulsate(".clientMessageBoxImage");
+                });</script> 
+       </div>
+      </div> 
+      <div id="documentDisplayContainer" class="box">
+       <div id="documentDisplay" class="documentDisplay">
+        <div id="j_id362"> 
+         <h1 class="documentTitle"><a href="Seam3Modules.html">Seam 3 Modules</a> </h1>
+        </div>
+        <div style="color: rgb(255,0,0); font-weight: bold;">
+         This page is deprecated. Please refer to the the 
+         <a href="../Seam3/Home.html" target="" class="regularLink">Seam 3 project page</a> for a complete list of modules.
+        </div> 
+        <p class="wikiPara"> <a href="../Seam3/Home.html" target="" class="regularLink">Seam 3</a> modules are Portable Extensions to CDI, which integrate CDI with other frameworks. The modules include: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"><a href="Seam3Modules.html#H-DroolsLedByTihomirSurdilovic" target="" class="regularLink">Drools</a></li> 
+         <li class="wikiUnorderedListItem"><a href="../Seam3/FacesModuleHome.html" target="" class="regularLink">Faces (JSF)</a></li> 
+         <li class="wikiUnorderedListItem"><a href="../Seam3/InternationalModuleHome.html" target="" class="regularLink">International</a></li> 
+         <li class="wikiUnorderedListItem"><a href="../Seam3/SecurityModuleHome.html" target="" class="regularLink">Security</a></li> 
+         <li class="wikiUnorderedListItem"><a href="../Seam3/ConfigModuleHome.html" target="" class="regularLink">XML Bean Config</a></li> 
+         <li class="wikiUnorderedListItem"><a href="Seam3Modules.html#H-Seam2BackwardsCompatibilityLeadNeeded" target="" class="regularLink">Seam 2 Backwards Compatiblity</a></li> 
+         <li class="wikiUnorderedListItem"><a href="Seam3Modules.html#H-SpringIntegrationLedByMariusBogoevici" target="" class="regularLink">Spring Intergration</a></li> 
+         <li class="wikiUnorderedListItem"><a href="Seam3Modules.html#H-JBPMSupportLedByPiotrSteiningerWithJoramBarezAndPeteMuir" target="" class="regularLink">jBPM</a></li> 
+         <li class="wikiUnorderedListItem"><a href="Seam3Modules.html#H-JAXRSIntegrationLedByJozefHartinger" target="" class="regularLink">JAX-RS</a></li> 
+         <li class="wikiUnorderedListItem"><a href="../Seam3/ServletModuleHome.html" target="" class="regularLink">Servlet</a></li> 
+         <li class="wikiUnorderedListItem"><a href="../Seam3/PersistenceModuleHome.html" target="" class="regularLink">Transactions and Persistence</a></li> 
+         <li class="wikiUnorderedListItem"><a href="Seam3Modules.html#H-DocumentManagementLedByNicklasKarlssonWithNormanRichardsTomazCerarAndDanielRoth" target="" class="regularLink">Document Management</a></li> 
+         <li class="wikiUnorderedListItem"><a href="Seam3Modules.html#H-SeamApplicationFrameworkLedByGavinKing" target="" class="regularLink">Seam Application Framework</a></li> 
+         <li class="wikiUnorderedListItem"><a href="../Seam3/JMSModuleHome.html" target="" class="regularLink">JMS</a></li> 
+         <li class="wikiUnorderedListItem"><a href="Seam3Modules.html#H-JBossESB5IntegrationLedByKevConnorAndPeteMuir" target="" class="regularLink">JBoss ESB</a></li> 
+         <li class="wikiUnorderedListItem"><a href="Seam3Modules.html#H-GWTViaErraiBusLedByHeikoBraunAndPeteMuir" target="" class="regularLink">Errai/GWT</a></li> 
+         <li class="wikiUnorderedListItem"><a href="../Seam3/RemotingModuleHome.html" target="" class="regularLink">Remoting</a></li> 
+         <li class="wikiUnorderedListItem"><a href="Seam3Modules.html#H-SchedulingLedByPeteRoyle" target="" class="regularLink">Scheduling</a></li> 
+         <li class="wikiUnorderedListItem"><a href="Seam3Modules.html#H-EnvironmentConfigurationLedByMattCorey" target="" class="regularLink">Environment Configuration</a></li> 
+        </ul> 
+        <h2 class="wikiHeadline2" id="H-APICompatibility"><a href="Seam3Modules.html#H-APICompatibility">API compatibility</a></h2> 
+        <p class="wikiPara"> We also need to decide which pluggable Java EE 6 APIs (JSF 2, JPA 2, JAX-WS, JAX-RS, Bean Validation, etc) Seam 3 will support in Servlet/Java SE/J2EE/Java EE 5 environments. </p> 
+        <h2 class="wikiHeadline2" id="H-PrerequisiteInfrastructure"><a href="Seam3Modules.html#H-PrerequisiteInfrastructure">Prerequisite infrastructure</a></h2> 
+        <p class="wikiPara"> There is a core set of infrastructure that modules will need to be completed and consistent. We want to keep this set of functionality to a minimum, but without it, modules may either providing the same solution to a problem over and over again, or worse, solving the problem differently. Here is a list of the APIs or best practices that are required: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Resource loading API - Any time a module needs to load a class or classpath resource, this API should be used</li> 
+         <li class="wikiUnorderedListItem"> BeanManager in servlet context - Putting the BeanManager into the servlet context would be much more portable than having to rely on JNDI.</li> 
+        </ul> 
+        <h2 class="wikiHeadline2" id="H-DeveloperExperience"><a href="Seam3Modules.html#H-DeveloperExperience">Developer experience</a></h2> 
+        <p class="wikiPara"> Seam doesn't have to solve every problem in the world. Some of what Seam offers could be a collection of existing productivity-enhancing libraries (that we hand select). One example is <a href="http://projectlombok.org/" target="" class="regularLink">project Lompok</a>, which relieves the developer from having to write getters and setters by using annotation and an annotation processor. Another is a hot class reloader, which may come from another JBoss.org project. Yet another is <a href="http://community.jboss.org/en/arquillian" target="" class="regularLink">Arquillian</a> the test harness for Seam 3 modules and applications. These tools would be used/advocated in Seam examples. </p> 
+        <h3 class="wikiHeadline3" id="H-DroolsLedByTihomirSurdilovic"><a href="Seam3Modules.html#H-DroolsLedByTihomirSurdilovic">Drools (led by Tihomir Surdilovic)</a></h3> 
+        <p class="wikiPara"> Drools is a state of the art rules engine. Using a rules engine you are able to decouple your application code from business rules: </p> 
+        <ol class="wikiOrderedList"> 
+         <li class="wikiOrderedListItem"> Simplify the development of complex use cases</li> 
+         <li class="wikiOrderedListItem"> Improve business rules maintainability</li> 
+         <li class="wikiOrderedListItem"> Decrease turn-around times for business changes</li> 
+         <li class="wikiOrderedListItem"> Improve performance for complex set of rules</li> 
+         <li class="wikiOrderedListItem"> Close the gap between Business Users and IT</li> 
+        </ol> 
+        <p class="wikiPara"> Drools provides: </p> 
+        <ol class="wikiOrderedList"> 
+         <li class="wikiOrderedListItem"> Full Forward Chaining ReteOO algorithm</li> 
+         <li class="wikiOrderedListItem"> Multiple execution modes</li> 
+         <li class="wikiOrderedListItem"> Completely dynamic Knowledge Base management</li> 
+         <li class="wikiOrderedListItem"> Full support for Predicate Logic and First Order Logic</li> 
+         <li class="wikiOrderedListItem"> Complete set of flow control features</li> 
+         <li class="wikiOrderedListItem"> POJOs as facts (no mapping/data copy required)</li> 
+        </ol> 
+        <p class="wikiPara"> The entire Drools API is available to you in a Seam application, however Seam allows you to easily and conveniently configure all major aspects of Drools: </p> 
+        <p class="wikiPara"> <a href="http://downloads.jboss.com/drools/docs/5.0.1.26597.FINAL/drools-expert/html_single/index.html" target="" class="regularLink">Drools Expert</a> is the core rules engine. Seam allows you to easily build <a href="http://downloads.jboss.com/drools/docs/5.0.1.26597.FINAL/drools-expert/html_single/index.html#d0e843" target="" class="regularLink">Knowledge Packages</a>, configure the <tt>KnowledgeBuilder</tt> and supports all Rule Resource Formats such as DRL (native), DSLs and spreadsheets. Having built your rules, you can easily deploy them (for example, via a Knowledge Agent providing automatic loading, caching and re-loading of resources). At runtime, you can access and query the Knowledge Session, modify facts in the working memory, access the Drools Pipeline (allow Drools to work with non Java data sources), or perform batch executions. </p> 
+        <p class="wikiPara"> <a href="http://downloads.jboss.com/drools/docs/5.0.1.26597.FINAL/drools-flow/html_single/index.html" target="" class="regularLink">Drools Flow</a> is a workflow engine that provides integrated of processes and rules. Seam gives you easy access to the build and execute work flows, as well as query the execution log. </p> 
+        <p class="wikiPara"> <a href="http://downloads.jboss.com/drools/docs/5.0.1.26597.FINAL/drools-fusion/html_single/index.html" target="" class="regularLink">Drools Fusion</a> is a complex event processing engine. CE deals with the task of processing multiple events with the goal of identifying the meaningful events within a cloud of events. CEP employs techniques such as detection of complex patterns of many events, event correlation and abstraction, event hierarchies, and relationships between events such as causality, membership, and timing, and event-driven processes. </p> 
+        <p class="wikiPara"> Using Seam with Drools fusion allows easy configuration of the clock, and TODO. </p> 
+        <p class="wikiPara"> <a href="http://downloads.jboss.com/drools/docs/5.0.1.26597.FINAL/drools-guvnor/html_single/index.html" target="" class="regularLink">Drools Guvnor</a> is a business rules management system, allows developer and business analysts to manage rules in a multi user environment, it is a single point of truth for your business rules, allowing change in a controlled fashion, with user friendly interfaces. </p> 
+        <p class="wikiPara"> TODO what does Seam add? </p> 
+        <h3 class="wikiHeadline3" id="H-Seam2BackwardsCompatibilityLeadNeeded"><a href="Seam3Modules.html#H-Seam2BackwardsCompatibilityLeadNeeded">Seam 2 backwards compatibility (lead needed)</a></h3> 
+        <p class="wikiPara"> The Seam 2 backward compatibility module enables CDI applications to consume legacy Seam components, allowing you to reuse application components written for the Seam 1 and Seam 2. </p> 
+        <h3 class="wikiHeadline3" id="H-SpringIntegrationLedByMariusBogoevici"><a href="Seam3Modules.html#H-SpringIntegrationLedByMariusBogoevici">Spring integration (led by Marius Bogoevici)</a></h3> 
+        <p class="wikiPara"> Seam's Spring integration enables CDI applications to consume beans managed by a Spring IOC container, allowing you to reuse application components written for the Spring IOC framework. </p> 
+        <p class="wikiPara"> Major themes will be: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> injection support</li> 
+         <li class="wikiUnorderedListItem"> native qualifier handling</li> 
+         <li class="wikiUnorderedListItem"> scope/context interoperability</li> 
+         <li class="wikiUnorderedListItem"> ability to work with Spring Transactions</li> 
+         <li class="wikiUnorderedListItem"> ability to share persistence contexts between the containers</li> 
+        </ul> 
+        <h3 class="wikiHeadline3" id="H-JBPMSupportLedByPiotrSteiningerWithJoramBarezAndPeteMuir"><a href="Seam3Modules.html#H-JBPMSupportLedByPiotrSteiningerWithJoramBarezAndPeteMuir">jBPM support (led by Piotr Steininger with Joram Barez and Pete Muir)</a></h3> 
+        <p class="wikiPara"> Today's enterprise world rely on often large and complex sets of business processes to sustain and grow. These processes have traditionally been captured in visually (using diagrams of various styles) for comprehension and visibility. Several standards have evolved for process documentation however until several years ago, the ability to take the diagrams from the analysts' desk to developers' IDEs was missing. With the introduction of BPM tools such as jBPM and standardized process definition semantics such as jPDL, it has finally became possible to bridge that gap. </p> 
+        <p class="wikiPara"> Some of the advantages of using jBPM and jPDL include: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem">integrated development environment for both process modelers and developers</li> 
+         <li class="wikiUnorderedListItem">separation of the <q>what to do</q> and <q>how to do it</q> concerns</li> 
+         <li class="wikiUnorderedListItem">reduction of errors and defects arising from miscommunication or lack of up-to-date information (now code IS the documentation)</li> 
+         <li class="wikiUnorderedListItem">higher adaptability to change (the ubiquitous constant in business)</li> 
+         <li class="wikiUnorderedListItem">independence from the vendors and implementation</li> 
+         <li class="wikiUnorderedListItem">suitability for agile development with blended and distributed teams</li> 
+        </ul> 
+        <p class="wikiPara"> Many organizations have already taken advantage of the power and flexibility provided by jBPM. However, the integration of jBPM into many popular frameworks like Spring and EJB, has often proven challenging and cumbersome. </p> 
+        <p class="wikiPara"> Seam offers substantial gains with built-in support for jBPM. The portable extension provides a set of annotation to declaratively demarcate events such as: creating of process instances, starting and resuming the execution or advancing execution through transitions. These operations typically involved writing many lines of boiler-plate code to handle references to the Process Virtual Machine. Now, with CDI programming model and Seam-BPM, one can create any POJO and let the container do the heavy lifting. </p> 
+        <h3 class="wikiHeadline3" id="H-JAXRSIntegrationLedByJozefHartinger"><a href="Seam3Modules.html#H-JAXRSIntegrationLedByJozefHartinger">JAX-RS integration (led by Jozef Hartinger)</a></h3> 
+        <p class="wikiPara"> Seam integrates the RESTEasy implementation of the JAX-RS specification (JSR 311). You can decide how <q>deep</q> the integration into your Seam application is going to be: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem">Seamless integration of RESTEasy bootstrap and configuration, automatic detection of resources and providers.</li> 
+         <li class="wikiUnorderedListItem">Serving HTTP/REST requests with the SeamResourceServlet, no external servlet or configuration in <tt>web.xml</tt> required.</li> 
+         <li class="wikiUnorderedListItem">Writing resources as Seam components, with full Seam lifecycle management and interception (bijection). </li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"><a href="http://seamframework.org/Documentation/RESTEasyIntegrationInSeam3" target="" class="regularLink">Design notes</a></li> 
+        </ul> 
+        <h3 class="wikiHeadline3" id="H-DocumentManagementLedByNicklasKarlssonWithNormanRichardsTomazCerarAndDanielRoth"><a href="Seam3Modules.html#H-DocumentManagementLedByNicklasKarlssonWithNormanRichardsTomazCerarAndDanielRoth">Document management (led by Nicklas Karlsson, with Norman Richards, Tomaz Cerar and Daniel Roth)</a></h3> 
+        <p class="wikiPara"> Seam offers various document management and reporting options based around JSF templates. Seam uses it's own copy of JSF, meaning you don't need to be inside the JSF lifecycle to render your documents. </p> 
+        <p class="wikiPara"> Seam's Excel support allows for easy data-exporting through feature and formatting rich generation of Excel spreadsheets from xhtml templates or JSF datatables. </p> 
+        <p class="wikiPara"> Seam's PDF support gives easy layout of PDF documents with JSF templates. Included is support for barcode generation. </p> 
+        <p class="wikiPara"> Closely related is Seam Mail, allowing creation of JavaMail based emails from JSF templates. </p> 
+        <h3 class="wikiHeadline3" id="H-SeamApplicationFrameworkLedByGavinKing"><a href="Seam3Modules.html#H-SeamApplicationFrameworkLedByGavinKing">Seam application framework (led by Gavin King)</a></h3> 
+        <p class="wikiPara"> Seam makes it really easy to create applications by writing plain Java classes with annotations, which don't need to extend any special interfaces or superclasses. But we can simplify some common programming tasks even further, by providing a set of pre-built components which can be re-used either by configuration in components.xml (for very simple cases) or extension. </p> 
+        <p class="wikiPara"> The Seam Application Framework can reduce the amount of code you need to write when doing basic database access in a web application, using either Hibernate or JPA. </p> 
+        <p class="wikiPara"> We should emphasize that the framework is extremely simple, just a handful of simple classes that are easy to understand and extend. The <q>magic</q> is in Seam itself — the same magic you use when creating any Seam application even without using this framework. </p> 
+        <h3 class="wikiHeadline3" id="H-JBossESB5IntegrationLedByKevConnorAndPeteMuir"><a href="Seam3Modules.html#H-JBossESB5IntegrationLedByKevConnorAndPeteMuir">JBoss ESB 5 integration (led by Kev Connor and Pete Muir)</a></h3> 
+        <p class="wikiPara"> JBoss ESB integration is an oft-discussed goal for the medium term (we are waiting on JBoss ESB 5). Plans include the ability to use CDI beans as ESB components (or endpoints), as well as being able to send events CDI-style over the ESB. </p> 
+        <p class="wikiPara"> Watch this space! </p> 
+        <h3 class="wikiHeadline3" id="H-GWTViaErraiBusLedByHeikoBraunAndPeteMuir"><a href="Seam3Modules.html#H-GWTViaErraiBusLedByHeikoBraunAndPeteMuir">GWT via ErraiBus (led by Heiko Braun and Pete Muir)</a></h3> 
+        <p class="wikiPara"> Built on top of The Google Web Toolkit (GWT), Errai offers a seamless programming model that permeates across the client and server, and creates a whole new approach to thinking about web-based applications. ErraiBus provides common APIs across the client and server, using an event bus to communicate. </p> 
+        <p class="wikiPara"> The CDI integration offers you the ability to use CDI beans as your server side components (allowing you access to aspects of the CDI's contextual dependency injection). Furthermore we aim to offer the ability to use CDI-style events inside the ErraiBus. </p> 
+        <h3 class="wikiHeadline3" id="H-SchedulingLedByPeteRoyle"><a href="Seam3Modules.html#H-SchedulingLedByPeteRoyle">Scheduling (led by Pete Royle)</a></h3> 
+        <p class="wikiPara"> Seam's scheduling support allows easy job management through integration with Quartz allowing detection of already scheduled jobs, rescheduling and more. JDK timers and EJB timers are also supported for jobs requiring less options. </p> 
+        <p class="wikiPara"> In the future, support for Drools timers may be added. </p> 
+        <h3 class="wikiHeadline3" id="H-EnvironmentConfigurationLedByMattCorey"><a href="Seam3Modules.html#H-EnvironmentConfigurationLedByMattCorey">Environment configuration (led by Matt Corey)</a></h3> 
+        <p class="wikiPara"> Environment configuration provides ways to configure the Java EE environment by leveraging type-safe Java code rather than XML. It also allows you to leverage contextual information provided by the bean container to help influence configuration. </p> 
+        <p class="wikiPara"> The first example of configuration is JNDI binding. Using this module, you can designate a field value that should be bound to JNDI under the provided name, the complement to the <tt>@Resource(lookup = "...")</tt> annotation in Java EE. You could put this bean in a separate archive from the production deployment, separating the production code from the configuration without leaving Java.</p> 
+       </div>
+       <div id="j_id367" class="documentTags undecoratedLink smallFont">
+        <div id="j_id368">
+          Tags:&nbsp;
+         <a href="https://community.jboss.org/tags?recursive=true#/?tags=Seam+3">Seam 3</a>
+        </div>
+       </div>
+       <div id="j_id374" class="documentCreatorHistory undecoratedLink smallFont">
+        <div id="j_id375">
+          Created:&nbsp;01. May 2009, 23:54&nbsp;America/New_York&nbsp;(Dan Allen)
+        </div>
+        <div id="j_id383">
+          Last Modified:&nbsp;08. Jun 2011, 07:01&nbsp;America/New_York&nbsp;(Ken Finnigan)
+        </div>
+       </div> 
+      </div>
+      <div id="commentDisplayForm">
+       <div id="comments" class="commentsDisplay"></div>
+      </div> 
+     </div> 
+     <div class="clear" style="padding-top:15px;"></div> 
+    </div>
+   </div> 
+  </div> 
+  <div id="footer" class="undecoratedLink"> 
+   <p> © Copyright 2009, Red Hat Middleware, LLC. All rights reserved. JBoss and Seam are registered trademarks and servicemarks of <a href="http://www.redhat.com/">Red Hat, Inc</a>. [<a href="http://www.redhat.com/legal/privacy_statement.html">Privacy Policy</a>]</p> 
+  </div>
+  <div id="status">
+   <span id="globalStatus"><span id="globalStatus.start" style="display: none">
+     <div id="j_id608" class="statusStart">
+      <img src="../themes/sfwkorg/img/statusindicator.gif" height="25" width="20">
+     </div></span><span id="globalStatus.stop">
+     <div id="j_id610" class="statusStop">
+      <img src="../themes/sfwkorg/img/blank.gif" height="25" width="20">
+     </div></span></span>
+  </div>  
+  <!-- Mirrored from 127.0.0.1:64444/Documentation/Seam3Modules by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:54:34 GMT --> 
+  <!-- Added by HTTrack -->
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack --> 
+ </body>
+</html>

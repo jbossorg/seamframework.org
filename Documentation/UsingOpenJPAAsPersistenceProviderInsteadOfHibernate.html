@@ -1,0 +1,626 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <!-- Mirrored from 127.0.0.1:64444/Documentation/UsingOpenJPAAsPersistenceProviderInsteadOfHibernate by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:49:59 GMT -->
+ <!-- Added by HTTrack -->
+ <head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack -->  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+  <title>Seam Framework - Using OpenJPA as persistence provider instead of Hibernate</title> 
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/basic_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" rel="stylesheet" type="text/css">
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/extended_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" media="rich-extended-skinning" rel="stylesheet" type="text/css">
+  <script src="../a4j/g/3_3_3.CR1org.ajax4jsf.javascript.AjaxScript" type="text/javascript"></script>
+  <script type="text/javascript">window.RICH_FACES_EXTENDED_SKINNING_ON=true;</script>
+  <script src="../a4j/g/3_3_3.CR1org/richfaces/renderkit/html/scripts/skinning.js" type="text/javascript"></script>
+  <link href="../themes/sfwkorg/css/sfwk.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shCore.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shThemeDefault.css" rel="stylesheet" type="text/css"> 
+  <script type="text/javascript" src="../seam/resource/remoting/resource/remote.js"></script> 
+  <script type="text/javascript" src="../seam/resource/remoting/interface1535.js?httpSessionChecker"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jquery.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jqueryPlugins.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/lacewiki.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shCore.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushBash.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCpp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCSharp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCss.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDelphi.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDiff.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushGroovy.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJava.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJScript.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPhp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPlain.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPython.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushRuby.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushScala.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushSql.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushVb.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushXml.js"></script> 
+  <script type="text/javascript">
+        /* If you really want to load the Flash garbage on every page, go ahead and enable this:
+        SyntaxHighlighter.config.clipboardSwf = '/themes/sfwkorg/js/sh/scripts/clipboard.swf';
+         */
+        SyntaxHighlighter.defaults['gutter'] = false;
+        SyntaxHighlighter.all();
+	</script> 
+  <script type="text/javascript">
+
+        // ###################### Session timeout alert #################################
+
+        var sessionChecker = Seam.Component.getInstance("httpSessionChecker");
+        var timeoutURL = '/Home/JBossSeam';
+        var timeoutMillis = '900'*1000+3000;
+        var sessionTimeoutInterval = null;
+
+        function startSessionTimeoutCheck() {
+            sessionTimeoutInterval = setInterval('sessionChecker.isNewSession(alertTimeout)', timeoutMillis);
+        }
+
+        function stopSessionTimeoutCheck() {
+            if (sessionTimeoutInterval) clearInterval(sessionTimeoutInterval);
+        }
+
+        function resetSessionTimeoutCheck() {
+            if (sessionTimeoutInterval != null) {
+                stopSessionTimeoutCheck();
+                startSessionTimeoutCheck();
+            }
+        }
+
+        function alertTimeout(newSession) {
+            if (newSession) {
+                clearInterval(sessionTimeoutInterval);
+                jQuery(".ajaxSupport")
+                        .removeAttr('onblur')
+                        .removeAttr('onchange')
+                        .removeAttr('onkeyup')
+                        .removeAttr('onclick');
+                jQuery(".sessionEventTrigger").hide();
+                var answer = confirm("Your session has timed out, you will be redirected to the start page.");
+                if (answer) window.location = timeoutURL;
+            }
+        }
+
+        // ###################### Popups #################################
+
+        var fadeInPopupDialog = function(hash) {
+            hash.w.fadeIn('fast',function(){ hash.o.show(); });
+            jQuery(".closeDialog", hash.w).attr("accesskey", "C"); // Dynamically assign accesskey to .closeDialog buttons
+        };
+
+        var fadeOutPopupDialog = function(hash) { hash.w.fadeOut('fast',function(){ hash.o.remove(); }); };
+
+        // ###################### Tabbed Forms #################################
+
+        var formTabErrors = {};
+
+        function formTabRaiseError(tabId, fieldId, message) {
+
+            formTabClearError(tabId, fieldId); // Clear error then re-add
+
+            log("Raise error for tab: '" + tabId + "' field: " + fieldId);
+
+            // Add an error message to the client message box
+            log("Adding error message: " +tabId + fieldId + "ErrorMessage")
+            jQuery("#clientMessageBoxTable").append(
+                '<tr id="' + tabId + fieldId + 'ErrorMessage"><td><img src="/themes/sfwkorg/img/attention.gif" ' +
+                'height="18" width="18" class="clientMessageBoxImage attentionImage"/></td>' +
+                '<td><span id="attentionMessage" class="attentionMessage">'+ message + '</span></td></tr>'
+            );
+            if (formTabErrors[tabId] == null) {
+                formTabErrors[tabId] = 1;
+            } else {
+                formTabErrors[tabId]++;
+            }
+            formTabRenderErrors(tabId);
+        }
+
+        function formTabClearError(tabId, fieldId) {
+            if (document.getElementById(tabId+fieldId+"ErrorMessage") != null) { // This error is displayed
+                log("Clear error for tab: '" + tabId + "' field: " + fieldId);
+                log("Removing error message: " +tabId + fieldId + "ErrorMessage")
+                // Remove the error message on the client message box
+                jQuery("#"+tabId + fieldId + "ErrorMessage").remove();
+
+                formTabErrors[tabId]--;
+                formTabRenderErrors(tabId);
+            }
+        }
+
+        function formTabRenderErrors(tabId) {
+            log("Errors for tab: '" + tabId + "': " + formTabErrors[tabId]);
+
+            if (formTabErrors[tabId] > 0 && document.getElementById(tabId+"InvalidIcon") == null) {
+                log("Showing icon for tab: " + tabId);
+                // Show an icon on the tab and blink it a few times
+                jQuery("#"+tabId)
+                    .prepend('<img id="' + tabId + 'InvalidIcon" ' +
+                            'src="/themes/sfwkorg/img/attention.gif" width="13" height="13" ' +
+                            'alt="!" style="vertical-align:bottom;margin-left:5px;margin-right:5px;"/>');
+                pulsate("#"+tabId);
+            } else if (formTabErrors[tabId] < 1){
+                log("Removing icon of tab: " + tabId);
+                jQuery("#"+tabId + "InvalidIcon").remove();             // Remove the error icon on the tab
+            }
+
+            var tabsHaveErrors = false;
+            for (var tab in formTabErrors) {
+                var numOfErrors = formTabErrors[tab];
+                if (numOfErrors > 0) {
+                    tabsHaveErrors = true;
+                    break;
+                }
+            }
+
+            if (tabsHaveErrors) {
+                log("Hiding save button and showing form message box");
+                jQuery(".saveButton").hide();                       // Hide save button(s)
+                jQuery(".formControls").css("height", "30px");      // Adjust height for missing save button
+                jQuery("#messageBoxContainer").hide();                 // Hide server messages
+                jQuery("#clientMessageBoxContainer").show();           // Show client error messages
+            } else {
+                log("Showing save button and hiding form message box");
+                jQuery(".saveButton").show();                       // Show save button(s)
+                jQuery(".formControls").css("height", "");          // Readjust height for present save button
+                jQuery("#clientMessageBoxContainer").hide();           // Hide client error messages
+            }
+        }
+
+        function formTabClicked() {
+            jQuery("#messageBoxContainer").hide();                 // Hide server messages
+        }
+
+        function log(message) {
+            return; // Remove to enable logging
+            if (!log.window_ || log.window_.closed) {
+                var win = window.open("", null, "width=400,height=200," +
+                                                "scrollbars=yes,resizable=yes,status=no," +
+                                                "location=no,menubar=no,toolbar=no");
+                if (!win) return;
+                var doc = win.document;
+                doc.write("<html><head><title>Debug Log</title></head><body style='font-family: monospace'></body></html>");
+                doc.close();
+                log.window_ = win;
+            }
+            var logLine = log.window_.document.createElement("div");
+            logLine.appendChild(log.window_.document.createTextNode(message));
+            log.window_.document.body.appendChild(logLine);
+        }
+
+        // ###################### Design #################################
+
+        function highlightStars(item, range, end) {
+            for (i = 1; i <= range; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star_grey.gif");
+            }
+            for (i = 1; i <= end; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star.gif");
+            }
+        }
+
+        function pulsate(query) {
+            var blinkCount = 2*2;
+            do {
+                jQuery(query)['fade'+(blinkCount%2==0?'Out':'In')]('fast');
+            } while (--blinkCount);
+        }
+
+        function clearDocumentBackground() {
+            // Noop for this skin
+        }
+
+        // Wrap boxes with border and shadow
+        function wrapBoxes() {
+            // Noop for this skin
+        }
+
+        function initPage() {
+            checkCookieSupport();
+            wrapBoxes();
+        }
+
+        jQuery(function() {
+            initPage();
+        });
+
+    </script> 
+  <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-25106513-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script> 
+ </head> 
+ <body> 
+  <noscript> 
+   <div class="cookieJavaScriptWarning">
+     Please activate JavaScript in your browser. Without it, you will only be able to browse this website but clicking on any advanced feature (any forms or submit buttons) will not work. 
+   </div> 
+  </noscript>
+  <div id="dialogHelp" class="popupDialog">
+   <span id="dialogHelpPopup" title="dialogHelp"></span>
+   <span id="dialogHelpInit"> <script type="text/javascript">
+            function showHelpPopup(width, height, offsetId) {
+                var offset = jQuery("#"+offsetId).offset();
+                jsf('dialogHelpPopup')
+                    .css({width: width+"px", height: height+"px", top: offset.top-100+"px", left: offset.left-150+"px"})
+                    .jqm({
+                        closeClass: "closeDialog",
+                        overlay: 0
+                    });
+
+                jQuery("#dialogHelpContent").css("width", width-20+"px").css("height", height-75+"px");
+                jQuery("#dialogHelpContent").css("overflow", "auto");
+
+                jsf('dialogHelpPopup').jqmShow();
+            }
+        </script></span> 
+   <script type="text/javascript">jQuery(function() {
+        jsf('dialogHelpPopup').Resizable({
+            minTop: 1,
+            dragHandle: "#dialogHelpHead",
+            handlers: { se: "#dialogHelpResizeHandle" }
+        });
+    });</script> 
+   <div class="popupDialogHead" id="dialogHelpHead">
+    Help
+   </div>
+   <div id="dialogHelpContent" class="popupDialogContent"></div>
+   <div id="dialogHelpControls" class="popupDialogControls">
+    <div id="j_id14" style="padding:5px;">
+     <a href="#" class="buttonNonpersistent closeDialog"><span class="buttonLabel">Close Help</span></a>
+    </div>
+   </div>
+  </div> 
+  <div id="wrapper"> 
+   <div id="header">  
+    <div>
+     <a href="http://seamframework.org/"><img src="../themes/sfwkorg/img/blank.gif" height="98" width="210"></a> 
+    </div> 
+   </div>
+   <div id="body"> 
+    <div id="container"> 
+     <div id="leftColumn">
+      <div id="mainMenu" xmlns="http://www.w3.org/1999/xhtml">
+       <div id="j_id121" class="box">
+        <div class="mainMenuContainer"> 
+         <div class="mainMenuHeader"></div> 
+         <div class="mainMenuBody">
+          <div id="j_id125" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Home.html" class="level1Link">Home</a>
+          </div>
+          <div id="j_id132" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Home/WhySeam.html" class="level2Link">Why Seam?</a>
+          </div>
+          <div id="j_id139" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Seam2.html" class="level1Link">Seam 2</a>
+          </div>
+          <div id="j_id146" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/GettingStarted.html" class="level2Link">Getting Started</a>
+          </div>
+          <div id="j_id153" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Downloads.html" class="level2Link">Downloads</a>
+          </div>
+          <div id="j_id160" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Documentation.html" class="level2Link">Documentation</a>
+          </div>
+          <div id="j_id167" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="http://weld.cdi-spec.org/" class="level1Link">Weld</a>
+          </div>
+          <div id="j_id174" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Community.html" class="level1Link">Community</a>
+          </div>
+          <div id="j_id181" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="https://community.jboss.org/" class="level2Link">Forums</a>
+          </div>
+          <div id="j_id188" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/CDIExtensions.html" class="level2Link">CDI Extensions</a>
+          </div>
+          <div id="j_id195" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Contribute.html" class="level2Link">Contribute</a>
+          </div>
+          <div id="j_id202" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/JIRA.html" class="level2Link">JIRA</a>
+          </div>
+          <div id="j_id209" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/MailingLists.html" class="level2Link">Mailing Lists</a>
+          </div>
+          <div id="j_id216" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Events.html" class="level2Link">Events</a>
+          </div>
+          <div id="j_id223" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Links.html" class="level2Link">Links</a>
+          </div>
+          <div id="j_id230" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/SeamInProduction.html" class="level2Link">Seam In Production</a>
+          </div>
+          <div id="j_id237" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Documentation.html" class="level1Link">Documentation</a>
+          </div>
+          <div id="j_id244" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="FAQs.html" class="level2Link">FAQs</a>
+          </div>
+          <div id="j_id251" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="KnowledgeBase.html" class="level2Link">Knowledge Base</a>
+          </div>
+          <div id="j_id258" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="Design.html" class="level2Link">Design</a>
+          </div> 
+         </div> 
+         <div class="mainMenuFooter"></div> 
+        </div>
+       </div> 
+      </div> 
+      <br> 
+      <div style="margin-top: 25px; margin-left: 15px; margin-right: 15px; "> 
+       <h2>Built with Seam</h2> 
+       <p> You can find the full source code for this website in the <a href="/Download.html">Seam package</a> in the directory /examples/wiki. It is licensed under the LGPL. </p> 
+       <div style="text-align:center;">
+        <a href="/Community/GetASeamIcon.html"><img src="../themes/sfwkorg/img/runningon_seamlogo_beige.gif" height="50" width="200"></a> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="rightColumn">
+      <img src="../themes/sfwkorg/img/blank.gif" height="8" width="1">
+      <div id="breadcrumb" class="breadcrumb">
+       <span class="breadcrumbPanel"><a href="../index.html" class="itemLink breadcrumbRoot">Site</a><span class="itemSeparator breadcrumbRoot">·</span><a href="../Documentation.html" class="itemLink">Documentation</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="KnowledgeBase.html" class="itemLink">Knowledge Base</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="Persistence.html" class="itemLink">Persistence</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="UsingOpenJPAAsPersistenceProviderInsteadOfHibernate.html" class="itemText">Using OpenJPA as persistence provi...</a></span>
+      </div>
+      <div id="messageBoxContainer"></div>
+      <div id="clientMessageBoxContainer" style="display:none;"> 
+       <div id="clientMessageBox" class="messageBox"> 
+        <table id="clientMessageBoxTable" class="messageBoxTable" cellpadding="0" cellspacing="0" border="0"></table> 
+        <script type="text/javascript">jQuery(function() {
+                    jQuery("#clientMessageBoxContainer").css("margin-top", "10px").css("margin-bottom", "10px");
+                    pulsate(".clientMessageBoxImage");
+                });</script> 
+       </div>
+      </div> 
+      <div id="documentDisplayContainer" class="box">
+       <div id="documentDisplay" class="documentDisplay">
+        <div id="j_id362"> 
+         <h1 class="documentTitle"><a href="UsingOpenJPAAsPersistenceProviderInsteadOfHibernate.html">Using OpenJPA as persistence provider instead of Hibernate</a> </h1>
+        </div>
+        <p class="wikiPara"> Hibernate is the default persistence provider in Seam but it is <i class="wikiEmphasis">theoretically</i> possible use other persistence provider. <a href="http://docs.jboss.com/seam/2.1.1.GA/reference/en-US/html_single/#alt-jpa-providers" target="" class="regularLink">Seam 2.1.1.GA documentation</a> states that in the future, this will be easier. </p> 
+        <p class="wikiPara"> If you cannot wait the future, this walkthrough describes the changes required to switch a CRUD application from Hibernate to OpenJPA. </p> 
+        <p class="wikiPara"> <u>Requirements</u>: in order to use OpenJPA as an alternate JPA provider, you will need: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Seam 2.1.2-SNAPSHOT (at least, but using the latest snapshot is recommended)</li> 
+         <li class="wikiUnorderedListItem"> Open JPA 1.2.1 SNAPSHOT (at least, but using the latest snapshot is recommended)</li> 
+        </ul> 
+        <p class="wikiPara"> First, let's see the <i class="wikiEmphasis">functionality</i> differences between Hibernate and OpenJPA: </p> 
+        <table border="1" cellspacing="0" cellpadding="2"> 
+         <tbody>
+          <tr> 
+           <th>Functionality</th> 
+           <th>Hibernate</th> 
+           <th>OpenJPA</th> 
+          </tr> 
+          <tr> 
+           <td>Query result pagination</td> 
+           <td>Yes</td> 
+           <td>No (see <a href="http://issues.apache.org/jira/browse/OPENJPA-759" target="" class="regularLink">OPENJPA-759</a>)</td> 
+          </tr> 
+          <tr> 
+           <td>Identifier alias 'id'</td> 
+           <td>Yes</td> 
+           <td>No</td> 
+          </tr> 
+          <tr> 
+           <td>Expression in LIKE query parameter</td> 
+           <td>Yes</td> 
+           <td>No (see <a href="https://issues.apache.org/jira/browse/OPENJPA-920" target="" class="regularLink">OPENJPA-920</a>)</td> 
+          </tr> 
+          <tr> 
+           <td>Auditing</td> 
+           <td>1) JPA-standard<br> 2) <tt>HibernateInterceptor</tt></td> 
+           <td>1) JPA-standard</td> 
+          </tr> 
+         </tbody>
+        </table> 
+        <p class="wikiPara"> Note: JPA-standard Auditing is done via <tt>@EntityListeners</tt>, <tt>@PrePersist</tt>, <tt>@PreUpdate</tt>, ... </p> 
+        <p class="wikiPara"> There is also <i class="wikiEmphasis">syntax</i> differences between these two persistence providers: </p> 
+        <table border="1" cellspacing="0" cellpadding="2"> 
+         <tbody>
+          <tr> 
+           <th>Functionality</th> 
+           <th>Hibernate</th> 
+           <th>OpenJPA</th> 
+          </tr> 
+          <tr> 
+           <td>Key generator interface</td> 
+           <td><tt>org.hibernate.id.IdentifierGenerator</tt></td> 
+           <td><tt>org.apache.openjpa.kernel.Seq</tt></td> 
+          </tr> 
+          <tr> 
+           <td>Key generator annotation</td> 
+           <td><tt>@GenericGenerator</tt></td> 
+           <td><tt>@SequenceGenerator</tt> with specific name</td> 
+          </tr> 
+          <tr> 
+           <td>Yes/No type</td> 
+           <td><tt>@org.hibernate.annotations.Type("yes_no")</tt></td> 
+           <td><tt>@ExternalValues("true=Y", "false=N") @org.apache.openjpa.persistence.Type(char.class)</tt></td> 
+          </tr> 
+          <tr> 
+           <td>Logging</td> 
+           <td>proprietary Hibernate format</td> 
+           <td>proprietary OpenJPA format</td> 
+          </tr> 
+         </tbody>
+        </table> 
+        <h1 class="wikiHeadline1" id="H-Walkthrough"><a href="UsingOpenJPAAsPersistenceProviderInsteadOfHibernate.html#H-Walkthrough">Walkthrough</a></h1> 
+        <ol class="wikiOrderedList"> 
+         <li class="wikiOrderedListItem"> Create a new PersistenceProvider for OpenJPA (note: this is a light implementation which may be improved) <pre class="wikiPreformatted">//@Name("org.jboss.seam.persistence.persistenceProvider") // see next step
+@Scope(ScopeType.STATELESS)
+@BypassInterceptors
+@Install(precedence=FRAMEWORK, classDependencies={"javax.persistence.EntityManager"})
+public class OpenJpaPersistenceProvider extends PersistenceProvider {
+  Log log = Logging.getLog(OpenJpaPersistenceProvider.class);
+
+  @Override
+  public void setFlushModeManual(EntityManager entityManager) {
+    // see also https://jira.jboss.org/jira/browse/JBSEAM-3030
+    log.warn("setFlushModeManual is not supported by OpenJPA");
+  }
+}</pre> </li> 
+         <li class="wikiOrderedListItem"> Register the new PersistenceProvider in <tt>components.xml</tt> <pre class="wikiPreformatted">&lt;!--
+the persistence provider cannot be a named Seam component with the @Name annotation,
+otherwise Seam raises an error because HibernatePersistenceProvider already define
+this name (duplicate component). Thus, we are defining the component here
+(see http://docs.jboss.com/seam/2.1.1.GA/reference/en-US/html_single/#alt-jpa-providers for details)
+--&gt;
+&lt;component name="org.jboss.seam.persistence.persistenceProvider" 
+           class="org.your.package.OpenJpaPersistenceProvider"&gt;
+&lt;/component&gt;</pre> Note: in the future, this should be easier, see <a href="https://jira.jboss.org/jira/browse/JBSEAM-2785" target="" class="regularLink">JBSEAM-2785</a></li> 
+         <li class="wikiOrderedListItem"> If you get any, convert your <tt>HibernateInterceptor</tt> to JPA-standard <tt>@EntityListeners</tt>.<br>Each entity must be annotated by <tt>@EntityListeners</tt> (this can be done in <tt>seam-gen/pojo/Ejb3TypeDeclaration.ftl</tt>, extracted and customized from <tt>hibernate-tools.jar/pojo/Ejb3TypeDeclaration.ftl</tt>).<br>You may hit the following issues: <del><a href="https://issues.apache.org/jira/browse/OPENJPA-754" target="" class="regularLink">OPENJPA-754</a></del>, <a href="https://issues.apache.org/jira/browse/OPENJPA-1018" target="" class="regularLink">OPENJPA-1018</a> (if you use Runtime Unenhanced Subclassing), <a href="http://opensource.atlassian.com/projects/hibernate/browse/HV-138" target="" class="regularLink">HV-138</a> (if you use Hibernate Validator)<br>See also: <a href="http://webspherepersistence.blogspot.com/2009/01/auditing-with-openjpa.html" target="" class="regularLink">http://webspherepersistence.blogspot.com/2009/01/auditing-with-openjpa.html</a></li> 
+         <li class="wikiOrderedListItem"> If you get any, convert your Hibernate Yes/No type to OpenJPA Yes/No type<br>You should change <tt>seam-gen/pojo/GetPropertyAnnotation.ftl</tt> as described in <a href="https://jira.jboss.org/jira/browse/JBSEAM-4088" target="" class="regularLink">JBSEAM-4088</a>:<pre class="wikiPreformatted">//replace: 
+//@${pojo.importType("org.hibernate.annotations.Type")}(type="yes_no")}
+
+// by:
+@${pojo.importType("org.apache.openjpa.persistence.ExternalValues")}({"true=Y", "false=N"})
+@${pojo.importType("org.apache.openjpa.persistence.Type")}(char.class)</pre> Note: you may hit the following issue: <del><a href="https://issues.apache.org/jira/browse/OPENJPA-828" target="" class="regularLink">OPENJPA-828</a></del></li> 
+         <li class="wikiOrderedListItem"> If you get any, convert you Hibernate <tt>GenericGenerator</tt> to OpenJPA custom <tt>SequenceGenerator</tt><br>Note: the best is to add this annotation for all required entities in the <tt>seam-gen/pojo/GetPropertyAnnotation.ftl</tt></li> 
+         <li class="wikiOrderedListItem"> Modify your <tt>persistence.xml</tt> for OpenJPA:
+          <ul> 
+           <li>Change the persistence provider (<tt>&lt;provider&gt;</tt> tag)</li> 
+           <li>If you use runtime enhancement, add each entity class (<tt>&lt;class&gt;</tt> tag)</li> 
+           <li>You should keep Hibernate and OpenJpa properties in the same file so that you can swith between them easily later</li>
+          </ul></li> 
+         <li class="wikiOrderedListItem"> Patch Seam for <del><a href="https://jira.jboss.org/jira/browse/JBSEAM-4093" target="" class="regularLink">JBSEAM-4093</a></del> and <a href="https://jira.jboss.org/jira/browse/JBSEAM-4117" target="" class="regularLink">JBSEAM-4117</a> if not yet included in your Seam version</li> 
+         <li class="wikiOrderedListItem"> Deploy your application<br>Note: if you run under Websphere 6.1, you may hit <del><a href="https://jira.jboss.org/jira/browse/JBSEAM-4093" target="" class="regularLink">JBSEAM-4093</a></del></li> 
+         <li class="wikiOrderedListItem"> Test the CRUD application<br>Note: you may hit the following issue: <del><a href="https://issues.apache.org/jira/browse/OPENJPA-1025" target="" class="regularLink">OPENJPA-1025</a></del></li> 
+        </ol> 
+        <p class="wikiPara"> Using the walkthrough above, you will be able to switch from Hibernate to OpenJPA (and vice-versa) just by doing the following operations: </p> 
+        <ol class="wikiOrderedList"> 
+         <li class="wikiOrderedListItem"> Generate entities using seam-gen by changing the annotation mode (Hibernate/OpenJPA)</li> 
+         <li class="wikiOrderedListItem"> Change the <tt>&lt;provider&gt;</tt> in <tt>persistence.xml</tt></li> 
+         <li class="wikiOrderedListItem"> Change the <tt>PersistenceProvider</tt> in <tt>components.xml</tt> (comment/uncomment the component named <q>org.jboss.seam.persistence.persistenceProvider</q>)</li> 
+        </ol> 
+        <p class="wikiPara"> Convenient, isn't?</p> 
+       </div>
+       <div id="j_id374" class="documentCreatorHistory undecoratedLink smallFont">
+        <div id="j_id375">
+          Created:&nbsp;15. Apr 2009, 04:53&nbsp;America/New_York&nbsp;(Julien Kronegg)
+        </div>
+        <div id="j_id383">
+          Last Modified:&nbsp;22. May 2009, 08:17&nbsp;America/New_York&nbsp;(Julien Kronegg)
+        </div>
+       </div> 
+      </div>
+      <div id="commentDisplayForm">
+       <div id="comments" class="commentsDisplay"></div>
+      </div> 
+     </div> 
+     <div class="clear" style="padding-top:15px;"></div> 
+    </div>
+   </div> 
+  </div> 
+  <div id="footer" class="undecoratedLink"> 
+   <p> © Copyright 2009, Red Hat Middleware, LLC. All rights reserved. JBoss and Seam are registered trademarks and servicemarks of <a href="http://www.redhat.com/">Red Hat, Inc</a>. [<a href="http://www.redhat.com/legal/privacy_statement.html">Privacy Policy</a>]</p> 
+  </div>
+  <div id="status">
+   <span id="globalStatus"><span id="globalStatus.start" style="display: none">
+     <div id="j_id608" class="statusStart">
+      <img src="../themes/sfwkorg/img/statusindicator.gif" height="25" width="20">
+     </div></span><span id="globalStatus.stop">
+     <div id="j_id610" class="statusStop">
+      <img src="../themes/sfwkorg/img/blank.gif" height="25" width="20">
+     </div></span></span>
+  </div>  
+  <!-- Mirrored from 127.0.0.1:64444/Documentation/UsingOpenJPAAsPersistenceProviderInsteadOfHibernate by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:50:03 GMT --> 
+  <!-- Added by HTTrack -->
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack --> 
+ </body>
+</html>

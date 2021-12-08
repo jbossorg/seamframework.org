@@ -1,0 +1,573 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <!-- Mirrored from 127.0.0.1:64444/Community/StudentProjects by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:52:34 GMT -->
+ <!-- Added by HTTrack -->
+ <head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack -->  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+  <title>Seam Framework - Student Projects</title> 
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/basic_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" rel="stylesheet" type="text/css">
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/extended_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" media="rich-extended-skinning" rel="stylesheet" type="text/css">
+  <script src="../a4j/g/3_3_3.CR1org.ajax4jsf.javascript.AjaxScript" type="text/javascript"></script>
+  <script type="text/javascript">window.RICH_FACES_EXTENDED_SKINNING_ON=true;</script>
+  <script src="../a4j/g/3_3_3.CR1org/richfaces/renderkit/html/scripts/skinning.js" type="text/javascript"></script>
+  <link href="../themes/sfwkorg/css/sfwk.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shCore.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shThemeDefault.css" rel="stylesheet" type="text/css"> 
+  <script type="text/javascript" src="../seam/resource/remoting/resource/remote.js"></script> 
+  <script type="text/javascript" src="../seam/resource/remoting/interface1535.js?httpSessionChecker"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jquery.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jqueryPlugins.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/lacewiki.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shCore.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushBash.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCpp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCSharp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCss.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDelphi.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDiff.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushGroovy.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJava.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJScript.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPhp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPlain.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPython.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushRuby.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushScala.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushSql.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushVb.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushXml.js"></script> 
+  <script type="text/javascript">
+        /* If you really want to load the Flash garbage on every page, go ahead and enable this:
+        SyntaxHighlighter.config.clipboardSwf = '/themes/sfwkorg/js/sh/scripts/clipboard.swf';
+         */
+        SyntaxHighlighter.defaults['gutter'] = false;
+        SyntaxHighlighter.all();
+	</script> 
+  <script type="text/javascript">
+
+        // ###################### Session timeout alert #################################
+
+        var sessionChecker = Seam.Component.getInstance("httpSessionChecker");
+        var timeoutURL = '/Home/JBossSeam';
+        var timeoutMillis = '900'*1000+3000;
+        var sessionTimeoutInterval = null;
+
+        function startSessionTimeoutCheck() {
+            sessionTimeoutInterval = setInterval('sessionChecker.isNewSession(alertTimeout)', timeoutMillis);
+        }
+
+        function stopSessionTimeoutCheck() {
+            if (sessionTimeoutInterval) clearInterval(sessionTimeoutInterval);
+        }
+
+        function resetSessionTimeoutCheck() {
+            if (sessionTimeoutInterval != null) {
+                stopSessionTimeoutCheck();
+                startSessionTimeoutCheck();
+            }
+        }
+
+        function alertTimeout(newSession) {
+            if (newSession) {
+                clearInterval(sessionTimeoutInterval);
+                jQuery(".ajaxSupport")
+                        .removeAttr('onblur')
+                        .removeAttr('onchange')
+                        .removeAttr('onkeyup')
+                        .removeAttr('onclick');
+                jQuery(".sessionEventTrigger").hide();
+                var answer = confirm("Your session has timed out, you will be redirected to the start page.");
+                if (answer) window.location = timeoutURL;
+            }
+        }
+
+        // ###################### Popups #################################
+
+        var fadeInPopupDialog = function(hash) {
+            hash.w.fadeIn('fast',function(){ hash.o.show(); });
+            jQuery(".closeDialog", hash.w).attr("accesskey", "C"); // Dynamically assign accesskey to .closeDialog buttons
+        };
+
+        var fadeOutPopupDialog = function(hash) { hash.w.fadeOut('fast',function(){ hash.o.remove(); }); };
+
+        // ###################### Tabbed Forms #################################
+
+        var formTabErrors = {};
+
+        function formTabRaiseError(tabId, fieldId, message) {
+
+            formTabClearError(tabId, fieldId); // Clear error then re-add
+
+            log("Raise error for tab: '" + tabId + "' field: " + fieldId);
+
+            // Add an error message to the client message box
+            log("Adding error message: " +tabId + fieldId + "ErrorMessage")
+            jQuery("#clientMessageBoxTable").append(
+                '<tr id="' + tabId + fieldId + 'ErrorMessage"><td><img src="/themes/sfwkorg/img/attention.gif" ' +
+                'height="18" width="18" class="clientMessageBoxImage attentionImage"/></td>' +
+                '<td><span id="attentionMessage" class="attentionMessage">'+ message + '</span></td></tr>'
+            );
+            if (formTabErrors[tabId] == null) {
+                formTabErrors[tabId] = 1;
+            } else {
+                formTabErrors[tabId]++;
+            }
+            formTabRenderErrors(tabId);
+        }
+
+        function formTabClearError(tabId, fieldId) {
+            if (document.getElementById(tabId+fieldId+"ErrorMessage") != null) { // This error is displayed
+                log("Clear error for tab: '" + tabId + "' field: " + fieldId);
+                log("Removing error message: " +tabId + fieldId + "ErrorMessage")
+                // Remove the error message on the client message box
+                jQuery("#"+tabId + fieldId + "ErrorMessage").remove();
+
+                formTabErrors[tabId]--;
+                formTabRenderErrors(tabId);
+            }
+        }
+
+        function formTabRenderErrors(tabId) {
+            log("Errors for tab: '" + tabId + "': " + formTabErrors[tabId]);
+
+            if (formTabErrors[tabId] > 0 && document.getElementById(tabId+"InvalidIcon") == null) {
+                log("Showing icon for tab: " + tabId);
+                // Show an icon on the tab and blink it a few times
+                jQuery("#"+tabId)
+                    .prepend('<img id="' + tabId + 'InvalidIcon" ' +
+                            'src="/themes/sfwkorg/img/attention.gif" width="13" height="13" ' +
+                            'alt="!" style="vertical-align:bottom;margin-left:5px;margin-right:5px;"/>');
+                pulsate("#"+tabId);
+            } else if (formTabErrors[tabId] < 1){
+                log("Removing icon of tab: " + tabId);
+                jQuery("#"+tabId + "InvalidIcon").remove();             // Remove the error icon on the tab
+            }
+
+            var tabsHaveErrors = false;
+            for (var tab in formTabErrors) {
+                var numOfErrors = formTabErrors[tab];
+                if (numOfErrors > 0) {
+                    tabsHaveErrors = true;
+                    break;
+                }
+            }
+
+            if (tabsHaveErrors) {
+                log("Hiding save button and showing form message box");
+                jQuery(".saveButton").hide();                       // Hide save button(s)
+                jQuery(".formControls").css("height", "30px");      // Adjust height for missing save button
+                jQuery("#messageBoxContainer").hide();                 // Hide server messages
+                jQuery("#clientMessageBoxContainer").show();           // Show client error messages
+            } else {
+                log("Showing save button and hiding form message box");
+                jQuery(".saveButton").show();                       // Show save button(s)
+                jQuery(".formControls").css("height", "");          // Readjust height for present save button
+                jQuery("#clientMessageBoxContainer").hide();           // Hide client error messages
+            }
+        }
+
+        function formTabClicked() {
+            jQuery("#messageBoxContainer").hide();                 // Hide server messages
+        }
+
+        function log(message) {
+            return; // Remove to enable logging
+            if (!log.window_ || log.window_.closed) {
+                var win = window.open("", null, "width=400,height=200," +
+                                                "scrollbars=yes,resizable=yes,status=no," +
+                                                "location=no,menubar=no,toolbar=no");
+                if (!win) return;
+                var doc = win.document;
+                doc.write("<html><head><title>Debug Log</title></head><body style='font-family: monospace'></body></html>");
+                doc.close();
+                log.window_ = win;
+            }
+            var logLine = log.window_.document.createElement("div");
+            logLine.appendChild(log.window_.document.createTextNode(message));
+            log.window_.document.body.appendChild(logLine);
+        }
+
+        // ###################### Design #################################
+
+        function highlightStars(item, range, end) {
+            for (i = 1; i <= range; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star_grey.gif");
+            }
+            for (i = 1; i <= end; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star.gif");
+            }
+        }
+
+        function pulsate(query) {
+            var blinkCount = 2*2;
+            do {
+                jQuery(query)['fade'+(blinkCount%2==0?'Out':'In')]('fast');
+            } while (--blinkCount);
+        }
+
+        function clearDocumentBackground() {
+            // Noop for this skin
+        }
+
+        // Wrap boxes with border and shadow
+        function wrapBoxes() {
+            // Noop for this skin
+        }
+
+        function initPage() {
+            checkCookieSupport();
+            wrapBoxes();
+        }
+
+        jQuery(function() {
+            initPage();
+        });
+
+    </script> 
+  <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-25106513-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script> 
+ </head> 
+ <body> 
+  <noscript> 
+   <div class="cookieJavaScriptWarning">
+     Please activate JavaScript in your browser. Without it, you will only be able to browse this website but clicking on any advanced feature (any forms or submit buttons) will not work. 
+   </div> 
+  </noscript>
+  <div id="dialogHelp" class="popupDialog">
+   <span id="dialogHelpPopup" title="dialogHelp"></span>
+   <span id="dialogHelpInit"> <script type="text/javascript">
+            function showHelpPopup(width, height, offsetId) {
+                var offset = jQuery("#"+offsetId).offset();
+                jsf('dialogHelpPopup')
+                    .css({width: width+"px", height: height+"px", top: offset.top-100+"px", left: offset.left-150+"px"})
+                    .jqm({
+                        closeClass: "closeDialog",
+                        overlay: 0
+                    });
+
+                jQuery("#dialogHelpContent").css("width", width-20+"px").css("height", height-75+"px");
+                jQuery("#dialogHelpContent").css("overflow", "auto");
+
+                jsf('dialogHelpPopup').jqmShow();
+            }
+        </script></span> 
+   <script type="text/javascript">jQuery(function() {
+        jsf('dialogHelpPopup').Resizable({
+            minTop: 1,
+            dragHandle: "#dialogHelpHead",
+            handlers: { se: "#dialogHelpResizeHandle" }
+        });
+    });</script> 
+   <div class="popupDialogHead" id="dialogHelpHead">
+    Help
+   </div>
+   <div id="dialogHelpContent" class="popupDialogContent"></div>
+   <div id="dialogHelpControls" class="popupDialogControls">
+    <div id="j_id14" style="padding:5px;">
+     <a href="#" class="buttonNonpersistent closeDialog"><span class="buttonLabel">Close Help</span></a>
+    </div>
+   </div>
+  </div> 
+  <div id="wrapper"> 
+   <div id="header">  
+    <div>
+     <a href="http://seamframework.org/"><img src="../themes/sfwkorg/img/blank.gif" height="98" width="210"></a> 
+    </div> 
+   </div>
+   <div id="body"> 
+    <div id="container"> 
+     <div id="leftColumn">
+      <div id="mainMenu" xmlns="http://www.w3.org/1999/xhtml">
+       <div id="j_id121" class="box">
+        <div class="mainMenuContainer"> 
+         <div class="mainMenuHeader"></div> 
+         <div class="mainMenuBody">
+          <div id="j_id125" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Home.html" class="level1Link">Home</a>
+          </div>
+          <div id="j_id132" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Home/WhySeam.html" class="level2Link">Why Seam?</a>
+          </div>
+          <div id="j_id139" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Seam2.html" class="level1Link">Seam 2</a>
+          </div>
+          <div id="j_id146" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/GettingStarted.html" class="level2Link">Getting Started</a>
+          </div>
+          <div id="j_id153" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Downloads.html" class="level2Link">Downloads</a>
+          </div>
+          <div id="j_id160" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Documentation.html" class="level2Link">Documentation</a>
+          </div>
+          <div id="j_id167" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="http://weld.cdi-spec.org/" class="level1Link">Weld</a>
+          </div>
+          <div id="j_id174" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Community.html" class="level1Link">Community</a>
+          </div>
+          <div id="j_id181" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="https://community.jboss.org/" class="level2Link">Forums</a>
+          </div>
+          <div id="j_id188" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="CDIExtensions.html" class="level2Link">CDI Extensions</a>
+          </div>
+          <div id="j_id195" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="Contribute.html" class="level2Link">Contribute</a>
+          </div>
+          <div id="j_id202" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="JIRA.html" class="level2Link">JIRA</a>
+          </div>
+          <div id="j_id209" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="MailingLists.html" class="level2Link">Mailing Lists</a>
+          </div>
+          <div id="j_id216" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="Events.html" class="level2Link">Events</a>
+          </div>
+          <div id="j_id223" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="Links.html" class="level2Link">Links</a>
+          </div>
+          <div id="j_id230" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="SeamInProduction.html" class="level2Link">Seam In Production</a>
+          </div>
+          <div id="j_id237" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Documentation.html" class="level1Link">Documentation</a>
+          </div>
+          <div id="j_id244" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Documentation/FAQs.html" class="level2Link">FAQs</a>
+          </div>
+          <div id="j_id251" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Documentation/KnowledgeBase.html" class="level2Link">Knowledge Base</a>
+          </div>
+          <div id="j_id258" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Documentation/Design.html" class="level2Link">Design</a>
+          </div> 
+         </div> 
+         <div class="mainMenuFooter"></div> 
+        </div>
+       </div> 
+      </div> 
+      <br> 
+      <div style="margin-top: 25px; margin-left: 15px; margin-right: 15px; "> 
+       <h2>Built with Seam</h2> 
+       <p> You can find the full source code for this website in the <a href="/Download.html">Seam package</a> in the directory /examples/wiki. It is licensed under the LGPL. </p> 
+       <div style="text-align:center;">
+        <a href="/Community/GetASeamIcon.html"><img src="../themes/sfwkorg/img/runningon_seamlogo_beige.gif" height="50" width="200"></a> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="rightColumn">
+      <img src="../themes/sfwkorg/img/blank.gif" height="8" width="1">
+      <div id="breadcrumb" class="breadcrumb">
+       <span class="breadcrumbPanel"><a href="../index.html" class="itemLink breadcrumbRoot">Site</a><span class="itemSeparator breadcrumbRoot">·</span><a href="../Community.html" class="itemLink">Community</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="StudentProjects.html" class="itemText">Student Projects</a></span>
+      </div>
+      <div id="messageBoxContainer"></div>
+      <div id="clientMessageBoxContainer" style="display:none;"> 
+       <div id="clientMessageBox" class="messageBox"> 
+        <table id="clientMessageBoxTable" class="messageBoxTable" cellpadding="0" cellspacing="0" border="0"></table> 
+        <script type="text/javascript">jQuery(function() {
+                    jQuery("#clientMessageBoxContainer").css("margin-top", "10px").css("margin-bottom", "10px");
+                    pulsate(".clientMessageBoxImage");
+                });</script> 
+       </div>
+      </div> 
+      <div id="documentDisplayContainer" class="box">
+       <div id="documentDisplay" class="documentDisplay">
+        <div id="j_id362"> 
+         <h1 class="documentTitle"><a href="StudentProjects.html">Student Projects</a> </h1>
+        </div>
+        <h2 class="wikiHeadline2" id="H-Projects"><a href="StudentProjects.html#H-Projects">Projects</a></h2> 
+        <p class="wikiPara"> Here are a few ideas we have for self-contained, greenfield development within Seam. These projects are ideal for students looking for a dissertation/thesis topic, or for interns. If you interested in a project, please get in contact with <a href="http://community.jboss.org/people/shane.bryzak" target="" class="regularLink">Shane Bryzak</a> or <a href="http://community.jboss.org/people/dan.j.allen" target="" class="regularLink">Dan Allen</a> </p> 
+        <h3 class="wikiHeadline3" id="H-SpringModuleForSeam3"><a href="StudentProjects.html#H-SpringModuleForSeam3">Spring module for Seam 3</a></h3> 
+        <p class="wikiPara"> <a href="http://springframework.org/" target="" class="regularLink">Spring</a> is a popular bean container and dependency injection framework. Developers interested in adopting CDI, the standard dependency injection facility in Java EE 6, may need to integrate with existing business logic contained within Spring beans. Fortunately, CDI supports alternative bean metadata sources, one of which can be the Spring container. This project would leverage the CDI extension SPI to register Spring beans as CDI beans so that they can be injected directly into other CDI beans. It could build on the work done in <a href="http://seamframework.org/Seam3/Solder" target="" class="regularLink">Seam Solder</a> and <a href="http://seamframework.org/Seam3/Config" target="" class="regularLink">Seam Config</a>. </p> 
+        <h3 class="wikiHeadline3" id="H-JavabasedConfigurationProviderForSeamConfig"><a href="StudentProjects.html#H-JavabasedConfigurationProviderForSeamConfig">Java-based configuration provider for Seam Config</a></h3> 
+        <p class="wikiPara"> One of the compelling features of Guice, another dependency injection framework for Java, is its Java-based bean configuration and wiring. <a href="http://seamframework.org/Seam3/Config" target="" class="regularLink">Seam Config</a> currently provides the option to configure beans using XML as an alternative, or supplement, to annotation-based configuration. This student project would introduce an additional configuration provider to the Seam Config module that would allow beans to be wired using a Java-based API. </p> 
+        <h3 class="wikiHeadline3" id="H-CDIForAndroidDalvik"><a href="StudentProjects.html#H-CDIForAndroidDalvik">CDI for Android/Dalvik</a></h3> 
+        <p class="wikiPara"> <a href="http://seamframework.org/Weld" target="" class="regularLink">Weld</a> extends CDI outside of Java EE 6 to Servlet and Java SE environments. One place it hasn't ventured yet is Android. Android developers have to instantiate services the old-fashioned way, using the new operator. This student project would focus on getting Weld to run inside of Android/Dalvik as a way to bring CDI to Android. Once Weld is running, the next step is to research building custom scopes for a single activity, nested activities (conversation) and for sessions that span multiple passivations of an application. Not only will developers benefit from having dependency injection, but also simplified state management. </p> 
+        <h3 class="wikiHeadline3" id="H-ConversationsAndWorkspaceManagementForCDI"><a href="StudentProjects.html#H-ConversationsAndWorkspaceManagementForCDI">Conversations and workspace management for CDI</a></h3> 
+        <p class="wikiPara"> CDI provides a conversation scope, but it's much more simplistic than what Seam 2 offers. In particular, there is no facility for switching between parallel conversations, a feature labeled workspace management. This student project would introduce a custom conversation scope that would allow conversations to be switched. This includes having both a Java API and UI controls. Conversations should also support a name and a description. The project can also research natural conversations--conversations that are identified by a business key--so that conversations can be switched implicitly by navigating to a previously visited resource. </p> 
+        <h3 class="wikiHeadline3" id="H-IntegrationWithAdditionalNetworksInSeamSocial"><a href="StudentProjects.html#H-IntegrationWithAdditionalNetworksInSeamSocial">Integration with additional networks in Seam Social</a></h3> 
+        <p class="wikiPara"> Social networking is exploding and there is an ever increasing demand for applications to participate in those networks. A recent addition to the Seam family of modules, <a href="http://seamframework.org/Seam3/SocialModule" target="" class="regularLink">Seam Social</a> provides integration with several well-known social networks (Twitter, LinkedIn, etc). However, there is still much work to be done. This student project would introduce additional adapters and perhaps explore different ways for an application to interact with social networks. One area to focus on is security integration. The goal is to make it as simple as possible for an application developer to post and read information via a social network. </p> 
+        <h3 class="wikiHeadline3" id="H-JBossESBIntegrationWithCDI"><a href="StudentProjects.html#H-JBossESBIntegrationWithCDI">JBoss ESB integration with CDI</a></h3> 
+        <p class="wikiPara"> <a href="http://jboss.org/jbossesb" target="" class="regularLink">JBoss ESB</a> is used as part of the JBoss SOA offering as the core infrastructure logic provider via processes orchestration, protocol translation, change management, quality of service and service management. However you still need to write your services, and the business logic they encapsulate. CDI's services (and the integrations it offers with Java EE technologies as well as it's extension ecosystem) should be available for use here. </p> 
+        <h3 class="wikiHeadline3" id="H-ErraiGWTIntegrationWithSeamSecurity"><a href="StudentProjects.html#H-ErraiGWTIntegrationWithSeamSecurity">Errai (GWT) integration with Seam Security</a></h3> 
+        <p class="wikiPara"> (<q>Errai (GWT) integration with CDI</q> is a prerequiste for this project). Seam security offers a rich, extensible model for providing authentication, authorization and identity management for your project in a declarative, type safe fashion. It has strong integration with JBoss AS, reusing many of the services JBoss AS has to offer. </p> 
+        <p class="wikiPara"> GWT applications also need security, and providing an elegant mapping between the two will produce a compelling story. </p> 
+        <h3 class="wikiHeadline3" id="H-SeamImageModule"><a href="StudentProjects.html#H-SeamImageModule">Seam Image module</a></h3> 
+        <p class="wikiPara"> Support for image storage and caching, basic image manipulation such as resize, crop, rotate, brightness and contrast, etc. </p> 
+        <h3 class="wikiHeadline3" id="H-ConversationsWithRemoteEJBs"><a href="StudentProjects.html#H-ConversationsWithRemoteEJBs">Conversations with remote EJBs</a></h3> 
+        <p class="wikiPara"> Investigate how the conversation scope works with remote EJBs. </p> 
+        <h3 class="wikiHeadline3" id="H-JMXSupportForCDIAndCommonMonitoringOperationsForAppsUsingCDI"><a href="StudentProjects.html#H-JMXSupportForCDIAndCommonMonitoringOperationsForAppsUsingCDI">JMX Support for CDI and Common monitoring operations for apps using CDI</a></h3> 
+        <p class="wikiPara"> Take the <a href="http://fisheye.jboss.org/browse/Infinispan/trunk/core/src/main/java/org/infinispan/jmx/annotations" target="" class="regularLink">JMX annotations from Infinispan</a> or <a href="http://code.google.com/p/jmx-annotations/" target="" class="regularLink">CDI JMX support written by German Escobar</a> and create a shared project with annotations and base classes to implement. Add the ability to expose CDI beans as MBeans via a CDI extension. Additionally add in docs and examples using the <a href="http://git.fedorahosted.org/git/?p=rhq/rhq.git;a=tree;f=modules/helpers/pluginAnnotations;h=d5f0e3ff169f739fcf7a8fc4af09e20a1259c7d1;hb=HEAD" target="" class="regularLink">RHQ Annotations for plugin generation</a> and the <a href="http://fisheye.jboss.org/browse/Infinispan/trunk/tools" target="" class="regularLink">tool for creating plugins</a>. </p> 
+        <p class="wikiPara"> Add some common interceptors and statistics MBeans to the extension, that support operations such as: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Method call timing </li> 
+         <li class="wikiUnorderedListItem"> Method call counting</li> 
+         <li class="wikiUnorderedListItem"> Exceptions thrown by methods</li> 
+         <li class="wikiUnorderedListItem"> Others, as use cases come in</li> 
+        </ul> 
+        <h3 class="wikiHeadline3" id="H-MonitoringAndManagementForAppsUsingWeld"><a href="StudentProjects.html#H-MonitoringAndManagementForAppsUsingWeld">Monitoring and Management for apps using Weld</a></h3> 
+        <p class="wikiPara"> Write some MBeans that expose monitoring and management for the Weld core, as well as an RHQ plugin to produce a nice GUI. For example </p> 
+        <b>Conversation management -- stats</b> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> how may times was a lock requested and not given</li> 
+         <li class="wikiUnorderedListItem"> how long are locks held for on average</li> 
+         <li class="wikiUnorderedListItem"> active conversations</li> 
+         <li class="wikiUnorderedListItem"> memory usage of conversations</li> 
+         <li class="wikiUnorderedListItem"> how many conversations expire</li> 
+         <li class="wikiUnorderedListItem"> contents</li> 
+         <li class="wikiUnorderedListItem"> how many are actively ended</li> 
+        </ul> 
+        <b>Session Context</b> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> memory usage</li> 
+         <li class="wikiUnorderedListItem"> existing sessions</li> 
+         <li class="wikiUnorderedListItem"> contents</li> 
+        </ul> 
+        <b>App Context</b> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> mem usage</li> 
+         <li class="wikiUnorderedListItem"> contents</li> 
+        </ul> 
+        <b>Conversation management</b> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> configure conversation defaults (expiration/lock timeout)</li> 
+        </ul> 
+        <b>Traits/operations</b> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> CDI - interceptors/decorators/alternatives/beans in a deployment</li> 
+         <li class="wikiUnorderedListItem"> what beans are installed and drill down into them (inc. ability to enter type and qualifiers and see what is resolved)</li> 
+        </ul> 
+        <h2 class="wikiHeadline2" id="H-ProposingAProject"><a href="StudentProjects.html#H-ProposingAProject">Proposing a project</a></h2> 
+        <p class="wikiPara"> If you are proposing a project, please remember that the project needs to have some element of research (into a previously unexplored area) - this can be looking at how two projects can work together, or looking at a new feature.</p> 
+       </div>
+       <div id="j_id374" class="documentCreatorHistory undecoratedLink smallFont">
+        <div id="j_id375">
+          Created:&nbsp;23. Feb 2010, 05:57&nbsp;America/New_York&nbsp;(Pete Muir)
+        </div>
+        <div id="j_id383">
+          Last Modified:&nbsp;17. Sep 2011, 02:51&nbsp;America/New_York&nbsp;(Shane Bryzak)
+        </div>
+       </div> 
+      </div>
+      <div id="commentDisplayForm">
+       <div id="comments" class="commentsDisplay"></div>
+      </div> 
+     </div> 
+     <div class="clear" style="padding-top:15px;"></div> 
+    </div>
+   </div> 
+  </div> 
+  <div id="footer" class="undecoratedLink"> 
+   <p> © Copyright 2009, Red Hat Middleware, LLC. All rights reserved. JBoss and Seam are registered trademarks and servicemarks of <a href="http://www.redhat.com/">Red Hat, Inc</a>. [<a href="http://www.redhat.com/legal/privacy_statement.html">Privacy Policy</a>]</p> 
+  </div>
+  <div id="status">
+   <span id="globalStatus"><span id="globalStatus.start" style="display: none">
+     <div id="j_id608" class="statusStart">
+      <img src="../themes/sfwkorg/img/statusindicator.gif" height="25" width="20">
+     </div></span><span id="globalStatus.stop">
+     <div id="j_id610" class="statusStop">
+      <img src="../themes/sfwkorg/img/blank.gif" height="25" width="20">
+     </div></span></span>
+  </div>  
+  <!-- Mirrored from 127.0.0.1:64444/Community/StudentProjects by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:52:35 GMT --> 
+  <!-- Added by HTTrack -->
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack --> 
+ </body>
+</html>

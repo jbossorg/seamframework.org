@@ -1,0 +1,632 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <!-- Mirrored from 127.0.0.1:64444/Documentation/ELWishList by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:50:31 GMT -->
+ <!-- Added by HTTrack -->
+ <head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack -->  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+  <title>Seam Framework - ELWishList</title> 
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/basic_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" rel="stylesheet" type="text/css">
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/extended_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" media="rich-extended-skinning" rel="stylesheet" type="text/css">
+  <script src="../a4j/g/3_3_3.CR1org.ajax4jsf.javascript.AjaxScript" type="text/javascript"></script>
+  <script type="text/javascript">window.RICH_FACES_EXTENDED_SKINNING_ON=true;</script>
+  <script src="../a4j/g/3_3_3.CR1org/richfaces/renderkit/html/scripts/skinning.js" type="text/javascript"></script>
+  <link href="../themes/sfwkorg/css/sfwk.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shCore.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shThemeDefault.css" rel="stylesheet" type="text/css"> 
+  <script type="text/javascript" src="../seam/resource/remoting/resource/remote.js"></script> 
+  <script type="text/javascript" src="../seam/resource/remoting/interface1535.js?httpSessionChecker"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jquery.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jqueryPlugins.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/lacewiki.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shCore.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushBash.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCpp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCSharp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCss.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDelphi.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDiff.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushGroovy.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJava.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJScript.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPhp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPlain.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPython.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushRuby.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushScala.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushSql.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushVb.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushXml.js"></script> 
+  <script type="text/javascript">
+        /* If you really want to load the Flash garbage on every page, go ahead and enable this:
+        SyntaxHighlighter.config.clipboardSwf = '/themes/sfwkorg/js/sh/scripts/clipboard.swf';
+         */
+        SyntaxHighlighter.defaults['gutter'] = false;
+        SyntaxHighlighter.all();
+	</script> 
+  <script type="text/javascript">
+
+        // ###################### Session timeout alert #################################
+
+        var sessionChecker = Seam.Component.getInstance("httpSessionChecker");
+        var timeoutURL = '/Home/JBossSeam';
+        var timeoutMillis = '900'*1000+3000;
+        var sessionTimeoutInterval = null;
+
+        function startSessionTimeoutCheck() {
+            sessionTimeoutInterval = setInterval('sessionChecker.isNewSession(alertTimeout)', timeoutMillis);
+        }
+
+        function stopSessionTimeoutCheck() {
+            if (sessionTimeoutInterval) clearInterval(sessionTimeoutInterval);
+        }
+
+        function resetSessionTimeoutCheck() {
+            if (sessionTimeoutInterval != null) {
+                stopSessionTimeoutCheck();
+                startSessionTimeoutCheck();
+            }
+        }
+
+        function alertTimeout(newSession) {
+            if (newSession) {
+                clearInterval(sessionTimeoutInterval);
+                jQuery(".ajaxSupport")
+                        .removeAttr('onblur')
+                        .removeAttr('onchange')
+                        .removeAttr('onkeyup')
+                        .removeAttr('onclick');
+                jQuery(".sessionEventTrigger").hide();
+                var answer = confirm("Your session has timed out, you will be redirected to the start page.");
+                if (answer) window.location = timeoutURL;
+            }
+        }
+
+        // ###################### Popups #################################
+
+        var fadeInPopupDialog = function(hash) {
+            hash.w.fadeIn('fast',function(){ hash.o.show(); });
+            jQuery(".closeDialog", hash.w).attr("accesskey", "C"); // Dynamically assign accesskey to .closeDialog buttons
+        };
+
+        var fadeOutPopupDialog = function(hash) { hash.w.fadeOut('fast',function(){ hash.o.remove(); }); };
+
+        // ###################### Tabbed Forms #################################
+
+        var formTabErrors = {};
+
+        function formTabRaiseError(tabId, fieldId, message) {
+
+            formTabClearError(tabId, fieldId); // Clear error then re-add
+
+            log("Raise error for tab: '" + tabId + "' field: " + fieldId);
+
+            // Add an error message to the client message box
+            log("Adding error message: " +tabId + fieldId + "ErrorMessage")
+            jQuery("#clientMessageBoxTable").append(
+                '<tr id="' + tabId + fieldId + 'ErrorMessage"><td><img src="/themes/sfwkorg/img/attention.gif" ' +
+                'height="18" width="18" class="clientMessageBoxImage attentionImage"/></td>' +
+                '<td><span id="attentionMessage" class="attentionMessage">'+ message + '</span></td></tr>'
+            );
+            if (formTabErrors[tabId] == null) {
+                formTabErrors[tabId] = 1;
+            } else {
+                formTabErrors[tabId]++;
+            }
+            formTabRenderErrors(tabId);
+        }
+
+        function formTabClearError(tabId, fieldId) {
+            if (document.getElementById(tabId+fieldId+"ErrorMessage") != null) { // This error is displayed
+                log("Clear error for tab: '" + tabId + "' field: " + fieldId);
+                log("Removing error message: " +tabId + fieldId + "ErrorMessage")
+                // Remove the error message on the client message box
+                jQuery("#"+tabId + fieldId + "ErrorMessage").remove();
+
+                formTabErrors[tabId]--;
+                formTabRenderErrors(tabId);
+            }
+        }
+
+        function formTabRenderErrors(tabId) {
+            log("Errors for tab: '" + tabId + "': " + formTabErrors[tabId]);
+
+            if (formTabErrors[tabId] > 0 && document.getElementById(tabId+"InvalidIcon") == null) {
+                log("Showing icon for tab: " + tabId);
+                // Show an icon on the tab and blink it a few times
+                jQuery("#"+tabId)
+                    .prepend('<img id="' + tabId + 'InvalidIcon" ' +
+                            'src="/themes/sfwkorg/img/attention.gif" width="13" height="13" ' +
+                            'alt="!" style="vertical-align:bottom;margin-left:5px;margin-right:5px;"/>');
+                pulsate("#"+tabId);
+            } else if (formTabErrors[tabId] < 1){
+                log("Removing icon of tab: " + tabId);
+                jQuery("#"+tabId + "InvalidIcon").remove();             // Remove the error icon on the tab
+            }
+
+            var tabsHaveErrors = false;
+            for (var tab in formTabErrors) {
+                var numOfErrors = formTabErrors[tab];
+                if (numOfErrors > 0) {
+                    tabsHaveErrors = true;
+                    break;
+                }
+            }
+
+            if (tabsHaveErrors) {
+                log("Hiding save button and showing form message box");
+                jQuery(".saveButton").hide();                       // Hide save button(s)
+                jQuery(".formControls").css("height", "30px");      // Adjust height for missing save button
+                jQuery("#messageBoxContainer").hide();                 // Hide server messages
+                jQuery("#clientMessageBoxContainer").show();           // Show client error messages
+            } else {
+                log("Showing save button and hiding form message box");
+                jQuery(".saveButton").show();                       // Show save button(s)
+                jQuery(".formControls").css("height", "");          // Readjust height for present save button
+                jQuery("#clientMessageBoxContainer").hide();           // Hide client error messages
+            }
+        }
+
+        function formTabClicked() {
+            jQuery("#messageBoxContainer").hide();                 // Hide server messages
+        }
+
+        function log(message) {
+            return; // Remove to enable logging
+            if (!log.window_ || log.window_.closed) {
+                var win = window.open("", null, "width=400,height=200," +
+                                                "scrollbars=yes,resizable=yes,status=no," +
+                                                "location=no,menubar=no,toolbar=no");
+                if (!win) return;
+                var doc = win.document;
+                doc.write("<html><head><title>Debug Log</title></head><body style='font-family: monospace'></body></html>");
+                doc.close();
+                log.window_ = win;
+            }
+            var logLine = log.window_.document.createElement("div");
+            logLine.appendChild(log.window_.document.createTextNode(message));
+            log.window_.document.body.appendChild(logLine);
+        }
+
+        // ###################### Design #################################
+
+        function highlightStars(item, range, end) {
+            for (i = 1; i <= range; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star_grey.gif");
+            }
+            for (i = 1; i <= end; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star.gif");
+            }
+        }
+
+        function pulsate(query) {
+            var blinkCount = 2*2;
+            do {
+                jQuery(query)['fade'+(blinkCount%2==0?'Out':'In')]('fast');
+            } while (--blinkCount);
+        }
+
+        function clearDocumentBackground() {
+            // Noop for this skin
+        }
+
+        // Wrap boxes with border and shadow
+        function wrapBoxes() {
+            // Noop for this skin
+        }
+
+        function initPage() {
+            checkCookieSupport();
+            wrapBoxes();
+        }
+
+        jQuery(function() {
+            initPage();
+        });
+
+    </script> 
+  <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-25106513-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script> 
+ </head> 
+ <body> 
+  <noscript> 
+   <div class="cookieJavaScriptWarning">
+     Please activate JavaScript in your browser. Without it, you will only be able to browse this website but clicking on any advanced feature (any forms or submit buttons) will not work. 
+   </div> 
+  </noscript>
+  <div id="dialogHelp" class="popupDialog">
+   <span id="dialogHelpPopup" title="dialogHelp"></span>
+   <span id="dialogHelpInit"> <script type="text/javascript">
+            function showHelpPopup(width, height, offsetId) {
+                var offset = jQuery("#"+offsetId).offset();
+                jsf('dialogHelpPopup')
+                    .css({width: width+"px", height: height+"px", top: offset.top-100+"px", left: offset.left-150+"px"})
+                    .jqm({
+                        closeClass: "closeDialog",
+                        overlay: 0
+                    });
+
+                jQuery("#dialogHelpContent").css("width", width-20+"px").css("height", height-75+"px");
+                jQuery("#dialogHelpContent").css("overflow", "auto");
+
+                jsf('dialogHelpPopup').jqmShow();
+            }
+        </script></span> 
+   <script type="text/javascript">jQuery(function() {
+        jsf('dialogHelpPopup').Resizable({
+            minTop: 1,
+            dragHandle: "#dialogHelpHead",
+            handlers: { se: "#dialogHelpResizeHandle" }
+        });
+    });</script> 
+   <div class="popupDialogHead" id="dialogHelpHead">
+    Help
+   </div>
+   <div id="dialogHelpContent" class="popupDialogContent"></div>
+   <div id="dialogHelpControls" class="popupDialogControls">
+    <div id="j_id14" style="padding:5px;">
+     <a href="#" class="buttonNonpersistent closeDialog"><span class="buttonLabel">Close Help</span></a>
+    </div>
+   </div>
+  </div> 
+  <div id="wrapper"> 
+   <div id="header">  
+    <div>
+     <a href="http://seamframework.org/"><img src="../themes/sfwkorg/img/blank.gif" height="98" width="210"></a> 
+    </div> 
+   </div>
+   <div id="body"> 
+    <div id="container"> 
+     <div id="leftColumn">
+      <div id="mainMenu" xmlns="http://www.w3.org/1999/xhtml">
+       <div id="j_id121" class="box">
+        <div class="mainMenuContainer"> 
+         <div class="mainMenuHeader"></div> 
+         <div class="mainMenuBody">
+          <div id="j_id125" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Home.html" class="level1Link">Home</a>
+          </div>
+          <div id="j_id132" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Home/WhySeam.html" class="level2Link">Why Seam?</a>
+          </div>
+          <div id="j_id139" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Seam2.html" class="level1Link">Seam 2</a>
+          </div>
+          <div id="j_id146" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/GettingStarted.html" class="level2Link">Getting Started</a>
+          </div>
+          <div id="j_id153" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Downloads.html" class="level2Link">Downloads</a>
+          </div>
+          <div id="j_id160" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Documentation.html" class="level2Link">Documentation</a>
+          </div>
+          <div id="j_id167" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="http://weld.cdi-spec.org/" class="level1Link">Weld</a>
+          </div>
+          <div id="j_id174" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Community.html" class="level1Link">Community</a>
+          </div>
+          <div id="j_id181" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="https://community.jboss.org/" class="level2Link">Forums</a>
+          </div>
+          <div id="j_id188" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/CDIExtensions.html" class="level2Link">CDI Extensions</a>
+          </div>
+          <div id="j_id195" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Contribute.html" class="level2Link">Contribute</a>
+          </div>
+          <div id="j_id202" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/JIRA.html" class="level2Link">JIRA</a>
+          </div>
+          <div id="j_id209" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/MailingLists.html" class="level2Link">Mailing Lists</a>
+          </div>
+          <div id="j_id216" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Events.html" class="level2Link">Events</a>
+          </div>
+          <div id="j_id223" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Links.html" class="level2Link">Links</a>
+          </div>
+          <div id="j_id230" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/SeamInProduction.html" class="level2Link">Seam In Production</a>
+          </div>
+          <div id="j_id237" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Documentation.html" class="level1Link">Documentation</a>
+          </div>
+          <div id="j_id244" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="FAQs.html" class="level2Link">FAQs</a>
+          </div>
+          <div id="j_id251" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="KnowledgeBase.html" class="level2Link">Knowledge Base</a>
+          </div>
+          <div id="j_id258" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="Design.html" class="level2Link">Design</a>
+          </div> 
+         </div> 
+         <div class="mainMenuFooter"></div> 
+        </div>
+       </div> 
+      </div> 
+      <br> 
+      <div style="margin-top: 25px; margin-left: 15px; margin-right: 15px; "> 
+       <h2>Built with Seam</h2> 
+       <p> You can find the full source code for this website in the <a href="/Download.html">Seam package</a> in the directory /examples/wiki. It is licensed under the LGPL. </p> 
+       <div style="text-align:center;">
+        <a href="/Community/GetASeamIcon.html"><img src="../themes/sfwkorg/img/runningon_seamlogo_beige.gif" height="50" width="200"></a> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="rightColumn">
+      <img src="../themes/sfwkorg/img/blank.gif" height="8" width="1">
+      <div id="breadcrumb" class="breadcrumb">
+       <span class="breadcrumbPanel"><a href="../index.html" class="itemLink breadcrumbRoot">Site</a><span class="itemSeparator breadcrumbRoot">·</span><a href="../Documentation.html" class="itemLink">Documentation</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="ELWishList.html" class="itemText">ELWishList</a></span>
+      </div>
+      <div id="messageBoxContainer"></div>
+      <div id="clientMessageBoxContainer" style="display:none;"> 
+       <div id="clientMessageBox" class="messageBox"> 
+        <table id="clientMessageBoxTable" class="messageBoxTable" cellpadding="0" cellspacing="0" border="0"></table> 
+        <script type="text/javascript">jQuery(function() {
+                    jQuery("#clientMessageBoxContainer").css("margin-top", "10px").css("margin-bottom", "10px");
+                    pulsate(".clientMessageBoxImage");
+                });</script> 
+       </div>
+      </div> 
+      <div id="documentDisplayContainer" class="box">
+       <div id="documentDisplay" class="documentDisplay">
+        <h1 class="wikiHeadline1" id="H-ProposedEnhancementsToUnifiedEL"><a href="ELWishList.html#H-ProposedEnhancementsToUnifiedEL">Proposed enhancements to Unified EL</a></h1> 
+        <p class="wikiPara"> This page consists of an agenda and proposals put forth by Red Hat and its community for the (planned) Unified EL JSR. Each issue is prioritized by importance, P1 being the highest and P3 the lowest. </p> 
+        <h2 class="wikiHeadline2" id="H-CurrentStatus"><a href="ELWishList.html#H-CurrentStatus">Current status</a></h2> 
+        <p class="wikiPara"> Previously, the Unified EL specification existed as Part II of <a href="http://jcp.org/en/jsr/detail?id=245" target="" class="regularLink">JSR-245: JavaServer Pages 2.1</a>. The last maintenance release (Dec 2009) covers the specification for EL 2.2. </p> 
+        <h2 class="wikiHeadline2" id="H-TableOfContents"><a href="ELWishList.html#H-TableOfContents">Table of contents</a></h2> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <a href="ELWishList.html#H-BootstrappingTheELContextP1" target="" class="regularLink">Bootstrapping the EL Context (P1)</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="ELWishList.html#H-SimplifyingTheExpressionEvaluatorAPIP1" target="" class="regularLink">Simplifying the expression evaluator API (P1)</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="ELWishList.html#H-APIForRegisteringFunctionsP1" target="" class="regularLink">API for registering functions (P1)</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="ELWishList.html#H-Java5EnumSupportP1" target="" class="regularLink">Java 5 Enum support (P1)</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="ELWishList.html#H-EvaluationOfStaticMembersP1" target="" class="regularLink">Evaluation of static members (P1)</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="ELWishList.html#H-ProperCoercionP2" target="" class="regularLink">Proper coercion (P2)</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="ELWishList.html#H-ELNamespacesP2" target="" class="regularLink">EL namespaces (P2)</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="ELWishList.html#H-CollectionSizeOperatorP2" target="" class="regularLink">Collection size operator (P2)</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="ELWishList.html#H-DateAndTimeSupportP2" target="" class="regularLink">Date and time support (P2)</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="ELWishList.html#H-StringConcatenationP2" target="" class="regularLink">String concatenation (P2)</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="ELWishList.html#H-ObjectEqualityOperatorP2" target="" class="regularLink">Object equality operator (P2)</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="ELWishList.html#H-ELInterceptorsP2" target="" class="regularLink">EL interceptors (P2)</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="ELWishList.html#H-CachingP2" target="" class="regularLink">Caching (P2)</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="ELWishList.html#H-ProjectionsCollectionIterationP3" target="" class="regularLink">Projections / Collection iteration (P3)</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="ELWishList.html#H-SwitchStatementsP3" target="" class="regularLink">Switch statements (P3)</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="ELWishList.html#H-CollectionConstructorsP3" target="" class="regularLink">Collection constructors (P3)</a></li> 
+        </ul> 
+        <h3 class="wikiHeadline3" id="H-BootstrappingTheELContextP1"><a href="ELWishList.html#H-BootstrappingTheELContextP1">Bootstrapping the ELContext (P1)</a></h3> 
+        <p class="wikiPara"> Current the ELContext is created in the UI layer, either by JavaServer Faces or JSP. However, EL is an essential part of the Java EE programming model. It would make a lot more sense if the ELContext would be created at the start of the request so that components such as filters, custom servlets and third-party frameworks could access the EL. Currently, it's necessary to manually construct an EL context if an expression needs to be resolved outside of JSF or JSP. </p> 
+        <p class="wikiPara"> What we are looking for is something similar to the bootstrap that was introduced for Bean Validation. Like Bean Validation, EL transcends the layers of the programming model and should therefore be universally accessible. </p> 
+        <h3 class="wikiHeadline3" id="H-SimplifyingTheExpressionEvaluatorAPIP1"><a href="ELWishList.html#H-SimplifyingTheExpressionEvaluatorAPIP1">Simplifying the expression evaluator API (P1)</a></h3> 
+        <p class="wikiPara"> It's way too complicated to resolve an EL expression. If you think about it, the task is quite simple. Take an expression string and get a result. We need to make the API as simple as the task. </p> 
+        <p class="wikiPara"> Part of the problem with the Unified EL is that just trying to figure out what you need to actually resolve an expression is a nightmare. It breaks down into three parts: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> ELContext - Simply put, <q>To evaluate an Expression, an ELContext must be provided.</q> A real bitch.</li> 
+         <li class="wikiUnorderedListItem"> ExpressionFactory - Needed to create a ValueExpression or MethodExpression from a string</li> 
+         <li class="wikiUnorderedListItem"> ELResolver - The thing that actually parses the expression and deferences its parts; each job is handled by a different resolver (one being to find CDI beans by name) and those resolvers are wrapped in a resolver which is a chain of resolver</li> 
+        </ul> 
+        <p class="wikiPara"> What isn't provided is a simple API to just take an expression and get a result from it. </p> 
+        <h3 class="wikiHeadline3" id="H-APIForRegisteringFunctionsP1"><a href="ELWishList.html#H-APIForRegisteringFunctionsP1">API for registering functions (P1)</a></h3> 
+        <p class="wikiPara"> There are currently two options for registering a function. You can either introduce your own <tt>FunctionMapper</tt> into the <tt>ELContext</tt> or you can register a function using a UI-specific configuration file (Facelets, JSP). There should be a way to associate a function with a namespace using a Java API and an alternate UI-agnostic configuration format. </p> 
+        <h3 class="wikiHeadline3" id="H-Java5EnumSupportP1"><a href="ELWishList.html#H-Java5EnumSupportP1">Java 5 Enum support (P1)</a></h3> 
+        <p class="wikiPara"> Need first class support for Java 5 Enums constants. Either the constants should be allowed to be referenced from a base that resolves to the Enum: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> days.MONDAY -&gt; <tt>com.acme.Days.MONDAY</tt></li> 
+        </ul> 
+        <p class="wikiPara"> or the EL should allow the fully qualified Enum class to be referenced: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> com.acme.Days.MONDAY -&gt; <tt>com.acme.Days.MONDAY</tt></li> 
+        </ul> 
+        <p class="wikiPara"> The second option may be better because it doesn't require a context variable to resolve to an Enum instance just to access the other constants. </p> 
+        <h3 class="wikiHeadline3" id="H-EvaluationOfStaticMembersP1"><a href="ELWishList.html#H-EvaluationOfStaticMembersP1">Evaluation of static members (P1)</a></h3> 
+        <p class="wikiPara"> The EL has always dealt with instance methods, but there is no reason why static methods--or even static members in general--cannot be supported. In this case, both non-static and static members are searched when resolving a method. </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> person.formatName(person, formatType) -&gt; <tt>formatName(com.acme.Person, java.lang.String)</tt> static method on the com.acme.Person class, passing the value of the person and formatType instance variables as arguments</li> 
+        </ul> 
+        <p class="wikiPara"> It would also be convenient to support direct access of public static fields as well </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> registration.DEFAULT_ROLE -&gt; <tt>DEFAULT_ROLE</tt> static field on the com.acme.Registration class</li> 
+        </ul> 
+        <p class="wikiPara"> In both cases, the resolved base serves only to determine the class to search (rather than a specific instance). </p> 
+        <h3 class="wikiHeadline3" id="H-ProperCoercionP2"><a href="ELWishList.html#H-ProperCoercionP2">Proper coercion (P2)</a></h3> 
+        <p class="wikiPara"> EL tries to coerce a null-value to the expected type. </p> 
+        <p class="wikiPara"> An example: you bind the collapsed property of a container to a backing-bean property, and return null, to indicate that this container should not be collapsible at all - the specified EL conversion will create <q>false</q> out of this value. </p> 
+        <p class="wikiPara"> This could be an issue which is specific to an EL consumer, such as Facelets, but there are some concerns over the way that values are coerced by the EL. The issue is described in the following blog entry: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <a href="http://irian.at/blog/blogid/unifiedElCoercion" target="" class="regularLink">Coercion in the Unified EL</a></li> 
+        </ul> 
+        <h3 class="wikiHeadline3" id="H-ELNamespacesP2"><a href="ELWishList.html#H-ELNamespacesP2">EL namespaces (P2)</a></h3> 
+        <p class="wikiPara"> JSR-299 is introducing several standard EL names, one of which is javax.enterprise.conversation. As you can see, the name uses the familiar namespace syntax from Java. Therefore, it would be ideal if EL could formally recognize the use of namespaces for two reasons: </p> 
+        <ol class="wikiOrderedList"> 
+         <li class="wikiOrderedListItem"> Efficiency in resolving</li> 
+         <li class="wikiOrderedListItem"> Namespace imports</li> 
+        </ol> 
+        <p class="wikiPara"> Importing namespaces would allow for libraries to define standard EL names with namespace prefixes, but allow the page author the convince of using the unqualified name. The import mechanism should be a feature of the EL API and the declaration of the import be left up to the EL environment (e.g., JSF template). </p> 
+        <h3 class="wikiHeadline3" id="H-CollectionSizeOperatorP2"><a href="ELWishList.html#H-CollectionSizeOperatorP2">Collection size operator (P2)</a></h3> 
+        <p class="wikiPara"> Amazingly, there is no simple way to determine the size of a collection in EL! Literal methods in EL 2.2 get you part of the way there: </p> 
+        <pre class="wikiPreformatted">#{collection.size()}</pre> 
+        <p class="wikiPara"> But that only works for collections that have a size method. Remaining consist with the <tt>empty</tt> operator, we should offer a <tt>sizeof</tt> (or <tt>size</tt>) operator as well. </p> 
+        <pre class="wikiPreformatted">#{sizeof collection}</pre> 
+        <p class="wikiPara"> This operator should work for any Collection, Map, String or Iterable. Furthermore, the empty operator should be extended to support Map and Iterable. </p> 
+        <h3 class="wikiHeadline3" id="H-DateAndTimeSupportP2"><a href="ELWishList.html#H-DateAndTimeSupportP2">Date and time support (P2)</a></h3> 
+        <p class="wikiPara"> Currently, there is no way to compare dates and times in EL. The <tt>&lt;</tt>, <tt>&gt;</tt>, <tt>&lt;=</tt> and <tt>&gt;=</tt> operators should be extended to support <tt>java.util.Date</tt>. It may also be worth introducing a syntax for date/time literals. </p> 
+        <h3 class="wikiHeadline3" id="H-StringConcatenationP2"><a href="ELWishList.html#H-StringConcatenationP2">String concatenation (P2)</a></h3> 
+        <pre class="wikiPreformatted">#{query.order == property + ' asc' ? ' desc' : ' asc'}</pre> 
+        <h3 class="wikiHeadline3" id="H-ObjectEqualityOperatorP2"><a href="ELWishList.html#H-ObjectEqualityOperatorP2">Object equality operator (P2)</a></h3> 
+        <p class="wikiPara"> Introduce the <tt>===</tt> operator to test for object identity (the reserved word for this could be <q>is</q> to complement <q>eq</q>) </p> 
+        <h3 class="wikiHeadline3" id="H-ELInterceptorsP2"><a href="ELWishList.html#H-ELInterceptorsP2">EL interceptors (P2)</a></h3> 
+        <p class="wikiPara"> e.g., for timing </p> 
+        <h3 class="wikiHeadline3" id="H-CachingP2"><a href="ELWishList.html#H-CachingP2">Caching (P2)</a></h3> 
+        <p class="wikiPara"> EL Cache scoped to the request, for larger pages this provides an immediate sizable speed increase. </p> 
+        <h3 class="wikiHeadline3" id="H-ProjectionsCollectionIterationP3"><a href="ELWishList.html#H-ProjectionsCollectionIterationP3">Projections / Collection iteration (P3)</a></h3> 
+        <p class="wikiPara"> This feature is a kind of poor-man's closure support. It should work for all instances of Iterable. </p> 
+        <p class="wikiPara"> The following suggested syntax returns the list {2, 3, 4}: </p> 
+        <pre class="wikiPreformatted">#{{1, 2, 3} collect { x -&gt; x+1 }}</pre> 
+        <p class="wikiPara"> The following returns {2, 3}: </p> 
+        <pre class="wikiPreformatted">#{{1, 2, 3} select { x -&gt; x&gt;1 }}</pre> 
+        <p class="wikiPara"> The following returns the object 2: </p> 
+        <pre class="wikiPreformatted">#{{1, 2, 3} detect { x -&gt; x&gt;1 }}</pre> 
+        <p class="wikiPara"> The following returns the object 3: </p> 
+        <pre class="wikiPreformatted">#{{1, 2, 3} detect { max, x -&gt; max&gt;=x }}</pre> 
+        <p class="wikiPara"> The following returns {3, 2, 1}: </p> 
+        <pre class="wikiPreformatted">#{{1, 2, 3} desc}#</pre> 
+        <p class="wikiPara"> The following sorts the customers by name: </p> 
+        <pre class="wikiPreformatted">#{{customers asc { c -&gt; customer.name }}</pre> 
+        <p class="wikiPara"> An alternative approach might be to copy Python's list comprehensions: </p> 
+        <pre class="wikiPreformatted">#{[ x+1 for x in {1, 2, 3} where x&gt;1 ]}</pre> 
+        <p class="wikiPara"> which results in {3, 4}. </p> 
+        <p class="wikiPara"> JBoss EL supports a feature known as projections, which is similar to this request. Projections are rudimentary closures that allow the dynamic creation of collections from properties of child elements: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> blocks.{b|b.color} -&gt; a collection (java.util.List) of colors read from each block in the collection resolved from the instance variable named blocks</li> 
+        </ul> 
+        <h3 class="wikiHeadline3" id="H-SwitchStatementsP3"><a href="ELWishList.html#H-SwitchStatementsP3">Switch statements (P3)</a></h3> 
+        <p class="wikiPara"> In JSP or JSF pages it's very useful to be able to handle multiple cases in a single expression. </p> 
+        <p class="wikiPara"> Suggested syntax: </p> 
+        <pre class="wikiPreformatted">#{switch (order.status) { case OPEN: 'Open' case CLOSED: 'Closed' else '' }}</pre> 
+        <h3 class="wikiHeadline3" id="H-CollectionConstructorsP3"><a href="ELWishList.html#H-CollectionConstructorsP3">Collection constructors (P3)</a></h3> 
+        <p class="wikiPara"> When defining pages, it is useful to be able to iterate over collection literals. </p> 
+        <p class="wikiPara"> Suggested syntax for creating a <tt>java.util.List</tt> instance: </p> 
+        <pre class="wikiPreformatted">#{{'foo', 'bar', 'baz'}}</pre> 
+        <p class="wikiPara"> Suggested syntax for creating a <tt>java.util.Map</tt> instance: </p> 
+        <pre class="wikiPreformatted">#{{'foo'-&gt;1, 'bar'-&gt;3}}</pre> 
+        <p class="wikiPara"> Suggested syntax for creating a <tt>java.util.List</tt> instance with for a specified range of integers: </p> 
+        <pre class="wikiPreformatted">#{{1...100}}</pre> 
+        <h2 class="wikiHeadline2" id="H-Resources"><a href="ELWishList.html#H-Resources">Resources</a></h2> 
+        <p class="wikiPara"> Below are links to sources of ideas for EL features. </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <a href="http://docs.jboss.com/seam/2.2.0.GA/reference/en-US/html/elenhancements.html" target="" class="regularLink">JBoss EL documentation</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="http://www.theserverside.com/news/thread.tss?thread_id=46083" target="" class="regularLink">Discussion following Evaluating OGNL 2.7 vs. MVEL 1.2pre0</a></li>
+        </ul> 
+       </div>
+       <div id="j_id374" class="documentCreatorHistory undecoratedLink smallFont">
+        <div id="j_id375">
+          Created:&nbsp;20. Feb 2010, 14:25&nbsp;America/New_York&nbsp;(Dan Allen)
+        </div>
+        <div id="j_id383">
+          Last Modified:&nbsp;15. Sep 2011, 19:48&nbsp;America/New_York&nbsp;(Shane Bryzak)
+        </div>
+       </div> 
+      </div>
+      <div id="commentDisplayForm">
+       <div id="comments" class="commentsDisplay"></div>
+      </div> 
+     </div> 
+     <div class="clear" style="padding-top:15px;"></div> 
+    </div>
+   </div> 
+  </div> 
+  <div id="footer" class="undecoratedLink"> 
+   <p> © Copyright 2009, Red Hat Middleware, LLC. All rights reserved. JBoss and Seam are registered trademarks and servicemarks of <a href="http://www.redhat.com/">Red Hat, Inc</a>. [<a href="http://www.redhat.com/legal/privacy_statement.html">Privacy Policy</a>]</p> 
+  </div>
+  <div id="status">
+   <span id="globalStatus"><span id="globalStatus.start" style="display: none">
+     <div id="j_id608" class="statusStart">
+      <img src="../themes/sfwkorg/img/statusindicator.gif" height="25" width="20">
+     </div></span><span id="globalStatus.stop">
+     <div id="j_id610" class="statusStop">
+      <img src="../themes/sfwkorg/img/blank.gif" height="25" width="20">
+     </div></span></span>
+  </div>  
+  <!-- Mirrored from 127.0.0.1:64444/Documentation/ELWishList by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:50:31 GMT --> 
+  <!-- Added by HTTrack -->
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack --> 
+ </body>
+</html>

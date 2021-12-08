@@ -1,0 +1,633 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <!-- Mirrored from 127.0.0.1:64444/Seam3/CheckOutAndBuildSeam by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:40:24 GMT -->
+ <!-- Added by HTTrack -->
+ <head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack -->  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+  <title>Seam Framework - Check Out and Build Seam</title> 
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/basic_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" rel="stylesheet" type="text/css">
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/extended_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" media="rich-extended-skinning" rel="stylesheet" type="text/css">
+  <script src="../a4j/g/3_3_3.CR1org.ajax4jsf.javascript.AjaxScript" type="text/javascript"></script>
+  <script type="text/javascript">window.RICH_FACES_EXTENDED_SKINNING_ON=true;</script>
+  <script src="../a4j/g/3_3_3.CR1org/richfaces/renderkit/html/scripts/skinning.js" type="text/javascript"></script>
+  <link href="../themes/sfwkorg/css/sfwk.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shCore.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shThemeDefault.css" rel="stylesheet" type="text/css"> 
+  <link rel="alternate" type="application/atom+xml" title="Seam 3" href="../service/Feed/atom/Area/Seam3html.html"> 
+  <script type="text/javascript" src="../seam/resource/remoting/resource/remote.js"></script> 
+  <script type="text/javascript" src="../seam/resource/remoting/interface1535.js?httpSessionChecker"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jquery.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jqueryPlugins.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/lacewiki.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shCore.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushBash.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCpp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCSharp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCss.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDelphi.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDiff.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushGroovy.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJava.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJScript.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPhp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPlain.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPython.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushRuby.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushScala.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushSql.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushVb.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushXml.js"></script> 
+  <script type="text/javascript">
+        /* If you really want to load the Flash garbage on every page, go ahead and enable this:
+        SyntaxHighlighter.config.clipboardSwf = '/themes/sfwkorg/js/sh/scripts/clipboard.swf';
+         */
+        SyntaxHighlighter.defaults['gutter'] = false;
+        SyntaxHighlighter.all();
+	</script> 
+  <script type="text/javascript">
+
+        // ###################### Session timeout alert #################################
+
+        var sessionChecker = Seam.Component.getInstance("httpSessionChecker");
+        var timeoutURL = '/Home/JBossSeam';
+        var timeoutMillis = '900'*1000+3000;
+        var sessionTimeoutInterval = null;
+
+        function startSessionTimeoutCheck() {
+            sessionTimeoutInterval = setInterval('sessionChecker.isNewSession(alertTimeout)', timeoutMillis);
+        }
+
+        function stopSessionTimeoutCheck() {
+            if (sessionTimeoutInterval) clearInterval(sessionTimeoutInterval);
+        }
+
+        function resetSessionTimeoutCheck() {
+            if (sessionTimeoutInterval != null) {
+                stopSessionTimeoutCheck();
+                startSessionTimeoutCheck();
+            }
+        }
+
+        function alertTimeout(newSession) {
+            if (newSession) {
+                clearInterval(sessionTimeoutInterval);
+                jQuery(".ajaxSupport")
+                        .removeAttr('onblur')
+                        .removeAttr('onchange')
+                        .removeAttr('onkeyup')
+                        .removeAttr('onclick');
+                jQuery(".sessionEventTrigger").hide();
+                var answer = confirm("Your session has timed out, you will be redirected to the start page.");
+                if (answer) window.location = timeoutURL;
+            }
+        }
+
+        // ###################### Popups #################################
+
+        var fadeInPopupDialog = function(hash) {
+            hash.w.fadeIn('fast',function(){ hash.o.show(); });
+            jQuery(".closeDialog", hash.w).attr("accesskey", "C"); // Dynamically assign accesskey to .closeDialog buttons
+        };
+
+        var fadeOutPopupDialog = function(hash) { hash.w.fadeOut('fast',function(){ hash.o.remove(); }); };
+
+        // ###################### Tabbed Forms #################################
+
+        var formTabErrors = {};
+
+        function formTabRaiseError(tabId, fieldId, message) {
+
+            formTabClearError(tabId, fieldId); // Clear error then re-add
+
+            log("Raise error for tab: '" + tabId + "' field: " + fieldId);
+
+            // Add an error message to the client message box
+            log("Adding error message: " +tabId + fieldId + "ErrorMessage")
+            jQuery("#clientMessageBoxTable").append(
+                '<tr id="' + tabId + fieldId + 'ErrorMessage"><td><img src="/themes/sfwkorg/img/attention.gif" ' +
+                'height="18" width="18" class="clientMessageBoxImage attentionImage"/></td>' +
+                '<td><span id="attentionMessage" class="attentionMessage">'+ message + '</span></td></tr>'
+            );
+            if (formTabErrors[tabId] == null) {
+                formTabErrors[tabId] = 1;
+            } else {
+                formTabErrors[tabId]++;
+            }
+            formTabRenderErrors(tabId);
+        }
+
+        function formTabClearError(tabId, fieldId) {
+            if (document.getElementById(tabId+fieldId+"ErrorMessage") != null) { // This error is displayed
+                log("Clear error for tab: '" + tabId + "' field: " + fieldId);
+                log("Removing error message: " +tabId + fieldId + "ErrorMessage")
+                // Remove the error message on the client message box
+                jQuery("#"+tabId + fieldId + "ErrorMessage").remove();
+
+                formTabErrors[tabId]--;
+                formTabRenderErrors(tabId);
+            }
+        }
+
+        function formTabRenderErrors(tabId) {
+            log("Errors for tab: '" + tabId + "': " + formTabErrors[tabId]);
+
+            if (formTabErrors[tabId] > 0 && document.getElementById(tabId+"InvalidIcon") == null) {
+                log("Showing icon for tab: " + tabId);
+                // Show an icon on the tab and blink it a few times
+                jQuery("#"+tabId)
+                    .prepend('<img id="' + tabId + 'InvalidIcon" ' +
+                            'src="/themes/sfwkorg/img/attention.gif" width="13" height="13" ' +
+                            'alt="!" style="vertical-align:bottom;margin-left:5px;margin-right:5px;"/>');
+                pulsate("#"+tabId);
+            } else if (formTabErrors[tabId] < 1){
+                log("Removing icon of tab: " + tabId);
+                jQuery("#"+tabId + "InvalidIcon").remove();             // Remove the error icon on the tab
+            }
+
+            var tabsHaveErrors = false;
+            for (var tab in formTabErrors) {
+                var numOfErrors = formTabErrors[tab];
+                if (numOfErrors > 0) {
+                    tabsHaveErrors = true;
+                    break;
+                }
+            }
+
+            if (tabsHaveErrors) {
+                log("Hiding save button and showing form message box");
+                jQuery(".saveButton").hide();                       // Hide save button(s)
+                jQuery(".formControls").css("height", "30px");      // Adjust height for missing save button
+                jQuery("#messageBoxContainer").hide();                 // Hide server messages
+                jQuery("#clientMessageBoxContainer").show();           // Show client error messages
+            } else {
+                log("Showing save button and hiding form message box");
+                jQuery(".saveButton").show();                       // Show save button(s)
+                jQuery(".formControls").css("height", "");          // Readjust height for present save button
+                jQuery("#clientMessageBoxContainer").hide();           // Hide client error messages
+            }
+        }
+
+        function formTabClicked() {
+            jQuery("#messageBoxContainer").hide();                 // Hide server messages
+        }
+
+        function log(message) {
+            return; // Remove to enable logging
+            if (!log.window_ || log.window_.closed) {
+                var win = window.open("", null, "width=400,height=200," +
+                                                "scrollbars=yes,resizable=yes,status=no," +
+                                                "location=no,menubar=no,toolbar=no");
+                if (!win) return;
+                var doc = win.document;
+                doc.write("<html><head><title>Debug Log</title></head><body style='font-family: monospace'></body></html>");
+                doc.close();
+                log.window_ = win;
+            }
+            var logLine = log.window_.document.createElement("div");
+            logLine.appendChild(log.window_.document.createTextNode(message));
+            log.window_.document.body.appendChild(logLine);
+        }
+
+        // ###################### Design #################################
+
+        function highlightStars(item, range, end) {
+            for (i = 1; i <= range; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star_grey.gif");
+            }
+            for (i = 1; i <= end; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star.gif");
+            }
+        }
+
+        function pulsate(query) {
+            var blinkCount = 2*2;
+            do {
+                jQuery(query)['fade'+(blinkCount%2==0?'Out':'In')]('fast');
+            } while (--blinkCount);
+        }
+
+        function clearDocumentBackground() {
+            // Noop for this skin
+        }
+
+        // Wrap boxes with border and shadow
+        function wrapBoxes() {
+            // Noop for this skin
+        }
+
+        function initPage() {
+            checkCookieSupport();
+            wrapBoxes();
+        }
+
+        jQuery(function() {
+            initPage();
+        });
+
+    </script> 
+  <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-25106513-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script> 
+ </head> 
+ <body> 
+  <noscript> 
+   <div class="cookieJavaScriptWarning">
+     Please activate JavaScript in your browser. Without it, you will only be able to browse this website but clicking on any advanced feature (any forms or submit buttons) will not work. 
+   </div> 
+  </noscript>
+  <div id="dialogHelp" class="popupDialog">
+   <span id="dialogHelpPopup" title="dialogHelp"></span>
+   <span id="dialogHelpInit"> <script type="text/javascript">
+            function showHelpPopup(width, height, offsetId) {
+                var offset = jQuery("#"+offsetId).offset();
+                jsf('dialogHelpPopup')
+                    .css({width: width+"px", height: height+"px", top: offset.top-100+"px", left: offset.left-150+"px"})
+                    .jqm({
+                        closeClass: "closeDialog",
+                        overlay: 0
+                    });
+
+                jQuery("#dialogHelpContent").css("width", width-20+"px").css("height", height-75+"px");
+                jQuery("#dialogHelpContent").css("overflow", "auto");
+
+                jsf('dialogHelpPopup').jqmShow();
+            }
+        </script></span> 
+   <script type="text/javascript">jQuery(function() {
+        jsf('dialogHelpPopup').Resizable({
+            minTop: 1,
+            dragHandle: "#dialogHelpHead",
+            handlers: { se: "#dialogHelpResizeHandle" }
+        });
+    });</script> 
+   <div class="popupDialogHead" id="dialogHelpHead">
+    Help
+   </div>
+   <div id="dialogHelpContent" class="popupDialogContent"></div>
+   <div id="dialogHelpControls" class="popupDialogControls">
+    <div id="j_id14" style="padding:5px;">
+     <a href="#" class="buttonNonpersistent closeDialog"><span class="buttonLabel">Close Help</span></a>
+    </div>
+   </div>
+  </div> 
+  <div id="wrapper"> 
+   <div id="header">  
+    <div>
+     <a href="http://seamframework.org/"><img src="../themes/sfwkorg/img/blank.gif" height="98" width="210"></a> 
+    </div> 
+   </div>
+   <div id="body"> 
+    <div id="container"> 
+     <div id="leftColumn">
+      <div id="mainMenu" xmlns="http://www.w3.org/1999/xhtml">
+       <div id="j_id121" class="box">
+        <div class="mainMenuContainer"> 
+         <div class="mainMenuHeader"></div> 
+         <div class="mainMenuBody">
+          <div id="j_id123" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Home.html" class="level1Link">Home</a>
+          </div>
+          <div id="j_id130" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Home/WhySeam.html" class="level2Link">Why Seam?</a>
+          </div>
+          <div id="j_id137" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Seam2.html" class="level1Link">Seam 2</a>
+          </div>
+          <div id="j_id144" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/GettingStarted.html" class="level2Link">Getting Started</a>
+          </div>
+          <div id="j_id151" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Downloads.html" class="level2Link">Downloads</a>
+          </div>
+          <div id="j_id158" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Documentation.html" class="level2Link">Documentation</a>
+          </div>
+          <div id="j_id165" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="http://weld.cdi-spec.org/" class="level1Link">Weld</a>
+          </div>
+          <div id="j_id172" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Community.html" class="level1Link">Community</a>
+          </div>
+          <div id="j_id179" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="https://community.jboss.org/" class="level2Link">Forums</a>
+          </div>
+          <div id="j_id186" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/CDIExtensions.html" class="level2Link">CDI Extensions</a>
+          </div>
+          <div id="j_id193" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Contribute.html" class="level2Link">Contribute</a>
+          </div>
+          <div id="j_id200" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/JIRA.html" class="level2Link">JIRA</a>
+          </div>
+          <div id="j_id207" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/MailingLists.html" class="level2Link">Mailing Lists</a>
+          </div>
+          <div id="j_id214" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Events.html" class="level2Link">Events</a>
+          </div>
+          <div id="j_id221" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Links.html" class="level2Link">Links</a>
+          </div>
+          <div id="j_id228" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/SeamInProduction.html" class="level2Link">Seam In Production</a>
+          </div>
+          <div id="j_id235" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Documentation.html" class="level1Link">Documentation</a>
+          </div>
+          <div id="j_id242" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Documentation/FAQs.html" class="level2Link">FAQs</a>
+          </div>
+          <div id="j_id249" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Documentation/KnowledgeBase.html" class="level2Link">Knowledge Base</a>
+          </div>
+          <div id="j_id256" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Documentation/Design.html" class="level2Link">Design</a>
+          </div> 
+         </div> 
+         <div class="mainMenuFooter"></div> 
+        </div>
+       </div> 
+      </div> 
+      <br> 
+      <div style="margin-top: 25px; margin-left: 15px; margin-right: 15px; "> 
+       <h2>Built with Seam</h2> 
+       <p> You can find the full source code for this website in the <a href="/Download.html">Seam package</a> in the directory /examples/wiki. It is licensed under the LGPL. </p> 
+       <div style="text-align:center;">
+        <a href="/Community/GetASeamIcon.html"><img src="../themes/sfwkorg/img/runningon_seamlogo_beige.gif" height="50" width="200"></a> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="rightColumn">
+      <img src="../themes/sfwkorg/img/blank.gif" height="8" width="1">
+      <div id="breadcrumb" class="breadcrumb">
+       <span class="breadcrumbPanel"><a href="../index.html" class="itemLink breadcrumbRoot">Site</a><span class="itemSeparator breadcrumbRoot">·</span><a href="../Seam3.html" class="itemLink">Seam 3</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="CheckOutAndBuildSeam.html" class="itemText">Check Out and Build Seam</a></span>
+      </div>
+      <div id="messageBoxContainer"></div>
+      <div id="clientMessageBoxContainer" style="display:none;"> 
+       <div id="clientMessageBox" class="messageBox"> 
+        <table id="clientMessageBoxTable" class="messageBoxTable" cellpadding="0" cellspacing="0" border="0"></table> 
+        <script type="text/javascript">jQuery(function() {
+                    jQuery("#clientMessageBoxContainer").css("margin-top", "10px").css("margin-bottom", "10px");
+                    pulsate(".clientMessageBoxImage");
+                });</script> 
+       </div>
+      </div> 
+      <div id="documentDisplayContainer" class="box">
+       <div id="documentDisplay" class="documentDisplay">
+        <div id="j_id362"> 
+         <h1 class="documentTitle"><a href="CheckOutAndBuildSeam.html">Check Out and Build Seam</a> </h1>
+        </div>
+        <blockquote class="wikiBlockquote"> 
+         <strong style="color: rgb(255,0,0);">Page deprecated</strong>. Please see 
+         <a href="ContributeHome.html" target="" class="regularLink">Contribute</a> 
+        </blockquote> 
+        <p class="wikiPara"> One of the greatest tenets of open source is: if something doesn't work the way you want it to, you have the power to change it. </p> 
+        <p class="wikiPara"> Whether you want to try out a unreleased feature or you want to contribute code or documentation, you'll need to learn how to checkout and build the Seam project, or just a single module. Follow the instructions on this page to get started. </p> 
+        <h2 class="wikiHeadline2" id="H-SourceCodeOverview"><a href="CheckOutAndBuildSeam.html#H-SourceCodeOverview">Source code overview</a></h2> 
+        <p class="wikiPara"> Starting with Seam 3, the Seam source code is partitioned into multiple <a href="http://github.com/seam" target="" class="regularLink">git repositories</a>. As such, there is no longer a Seam <q>core</q>. The core is now JSR-299, other parts of Java EE and Seam Solder (formally Weld Extensions). This makes it easy to add Seam to existing Java EE applications. </p> 
+        <blockquote class="wikiBlockquote"> 
+         <b>FAQ:</b> 
+         <i class="wikiEmphasis">Why are the modules in separate git repositories?</i>
+         <br>
+         <br>We are using separate repositories for each module because our plan is to allow the modules to have independent release cycles. That means individual tags and possibly branches. But that doesn't mean we are throwing the multi-module mechanism of Maven out the window. One of the git repositories is a build aggregator, which, when checked out adjacent to the modules is able to build them at once and package a distribution. 
+        </blockquote> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <a href="BuildSystemArchitecture.html" target="" class="regularLink">Read more about the Seam 3 build system</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="BuildJobs.html" target="" class="regularLink">Discover the continuous integration jobs</a></li> 
+        </ul> 
+        <p class="wikiPara"> All Seam modules use the <tt>org.jboss.seam:seam-parent</tt> artifact as a parent. This module defines <i class="wikiEmphasis">local</i> dependencies for the project (such as the testing framework in use). The parent also imports the <tt>org.jboss.seam:seam-bom</tt> which defines the current Seam <i class="wikiEmphasis">stack</i> - thirdparty and Seam dependencies. The version of the BOM to use is defined by the property <tt>seam.version</tt> which should be specified explicitly in every module. </p> 
+        <p class="wikiPara"> If you need to add a dependency to the build, you should consider whether it is a runtime dependency for the module - if it is, you need to add the version to the BOM. If it is only a compile time dependency, then you can just add it to parent. </p> 
+        <blockquote class="wikiBlockquote"> 
+         <b>NOTE</b>
+         <br>
+         <br>Dependency on the Seam parent and BOM adheres to a release-dependency only policy. 
+        </blockquote> 
+        <p class="wikiPara"> Snapshot for Seam (and Weld) are deployed to the Nexus instance at <a href="http://oss.sonatype.org/content/repositories/snapshots" target="" class="regularLink">http://oss.sonatype.org/content/repositories/snapshots</a>. If you want permission to deploy snapshots, please contact <a href="http://seamframework.org/user/pete" target="" class="regularLink">Pete Muir</a>. If you are wondering, the JBoss snapshots repository (http://snapshots.jboss.org/maven2) is now deprecated. </p> 
+        <h2 class="wikiHeadline2" id="H-PrerequisiteSoftware"><a href="CheckOutAndBuildSeam.html#H-PrerequisiteSoftware">Prerequisite software</a></h2> 
+        <p class="wikiPara"> In order to check out and build the Seam source code, you will need the following software on your machine: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <a href="http://java.sun.com/javase/downloads/index.jsp" target="" class="regularLink">Java Development Kit (JDK)</a> 5 or above</li> 
+         <li class="wikiUnorderedListItem"> <a href="http://help.github.com/git-installation-redirect" target="" class="regularLink">Git</a> - most IDEs have a Git plugin or support it out of the box</li> 
+         <li class="wikiUnorderedListItem"> <a href="http://maven.apache.org/download.html" target="" class="regularLink">Maven 3</a> or above. We recommend the latest beta.</li> 
+         <li class="wikiUnorderedListItem"> Java EE 6-compliant application server (<a href="http://www.jboss.org/jbossas/" target="" class="regularLink">JBoss AS 6</a>, <a href="http://glassfish.org/" target="" class="regularLink">GlassFish V3</a>, etc) or a servlet container (<a href="http://tomcat.apache.org/" target="" class="regularLink">Tomcat 6</a>, <a href="http://jetty.codehaus.org/jetty/" target="" class="regularLink">Jetty 6</a>) (minimum versions shown)<br>- If you use a servlet container, you will need a CDI extension for servlet (<a href="https://docs.jboss.org/weld/reference/latest/en-US/html/environments.html#d0e5417" target="" class="regularLink">Weld Servlet</a>)</li> 
+        </ul> 
+        <p class="wikiPara"> After you have the JDK downloaded and setup, we recommend that you <a href="http://stackoverflow.com/questions/1672281/environment-variables-for-java-installation" target="" class="regularLink">set the JAVA_HOME environment variable</a>, though it's not necessary to build Seam. </p> 
+        <p class="wikiPara"> We also recommend that you use an IDE. One of the main benefits of CDI is that it supports refactoring, something an IDE is very good at doing. </p> 
+        <p class="wikiPara"> Here are a couple of IDEs to choose from: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <a href="http://www.jboss.org/tools/download/installation.html" target="" class="regularLink">JBoss Tools for Eclipse</a> - Use JBoss tools update site and install Maven integration and it will all be installed and setup</li> 
+         <li class="wikiUnorderedListItem"> <a href="http://netbeans.org/downloads/index.html" target="" class="regularLink">NetBeans</a> (Java bundle)</li> 
+         <li class="wikiUnorderedListItem"> <a href="http://www.jetbrains.com/idea/download/index.html" target="" class="regularLink">IntelliJ IDEA</a> (Seam contributors get a free license; contact a Seam project member for the key)</li> 
+        </ul> 
+        <h2 class="wikiHeadline2" id="H-GetTheSeam3SourceCode"><a href="CheckOutAndBuildSeam.html#H-GetTheSeam3SourceCode">Get the Seam 3 source code</a></h2> 
+        <p class="wikiPara"> The source code for Seam 3 lives in separate roots under the <a href="http://github.com/seam" target="" class="regularLink">Seam github.com organization</a>. </p> 
+        <p class="wikiPara"> There are several modes in which you can check out the source code: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Git Read-Only</li> 
+         <li class="wikiUnorderedListItem"> Git Fork / SSH Read-Write (on fork)</li> 
+         <li class="wikiUnorderedListItem"> SSH Read-Write (on master)</li> 
+        </ul> 
+        <p class="wikiPara"> If you just want to browse the source code, you can either just look at it online in the github.com source code viewer or you can checkout read-only. If you wanted to pull down the source for the Seam Faces module, you would use this git command: </p> 
+        <pre class="wikiPreformatted">git clone git://github.com/seam/faces.git</pre> 
+        <p class="wikiPara"> If you plan to contribute changes, you should first fork the repository into your own github account. You can commit to that repository and then send a pull request when you want to request your changes to be integrated. The <a href="http://help.github.com/forking/" target="" class="regularLink">fork process</a> is described well in the github.com help pages. </p> 
+        <p class="wikiPara"> Only the Seam integration manager (which is Pete) will merge pull requests into the master branch. To send a pull request, you must have signed the contributor agreement <a href="http://www.harddrivesforsale.com/Western-Digital.html">WD20EARS</a> <a href="http://fisheye.jboss.com/browse/Seam" target="" class="regularLink">Browse Seam Repository (FishEye)</a> | <a href="http://fisheye.jboss.com/changelog/~rss/Seam/rss.xml"><img style="vertical-align:middle;margin-left:5px;margin-right:5px;" src="../themes/sfwkorg/img/icon.atom.gif">Seam SVN Notification Feed</a> | <a href="https://lists.jboss.org/mailman/listinfo/seam-commits" target="" class="regularLink">Seam SVN Notification Mailing List</a> </p> 
+        <p class="wikiPara"> The Seam source code is modularized, which means it is separated into one trunk per sub-project. There are three types of sub-projects: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> build</li> 
+         <li class="wikiUnorderedListItem"> dist</li> 
+         <li class="wikiUnorderedListItem"> modules (one for each module)</li> 
+        </ul> 
+        <p class="wikiPara"> To build Seam, you need at least the build project and one module. </p> 
+        <h3 class="wikiHeadline3" id="H-ScriptingTheCheckout"><a href="CheckOutAndBuildSeam.html#H-ScriptingTheCheckout">Scripting the checkout</a></h3> 
+        <p class="wikiPara"> Since dealing with a modularized project can be difficult, we provide a script for Linux, Unix or Mac that checks out and organizes all the sub-projects you'll need. Begin by opening a terminal and changing to your development directory. Then, copy and paste the commands below into your terminal window to checkout the source code in read-only mode. </p> 
+        <pre class="wikiPreformatted">wget -N --no-check-certificate http://github.com/seam/build/raw/master/checkout.sh
+chmod 755 checkout.sh
+./checkout.sh -d seam-master</pre> 
+        <p class="wikiPara"> If you want to checkout in developer mode, just add the <tt>-m</tt> commandline switch. </p> 
+        <h3 class="wikiHeadline3" id="H-CheckingOutManually"><a href="CheckOutAndBuildSeam.html#H-CheckingOutManually">Checking out manually</a></h3> 
+        <p class="wikiPara"> Checking out manually doesn't require any voodoo magic. You just have to check out each of the trunks one at a time. Again, open a terminal and switch to your development directory. Follow these commands to mimic the work that the script above performs: </p> 
+        <pre class="wikiPreformatted">mkdir seam-upstream
+cd seam-upstream
+git clone git://github.com/seam/build.git
+git clone git://github.com/seam/dist.git
+git clone git://github.com/seam/documents.git
+git clone git://github.com/seam/drools.git
+git clone git://github.com/seam/faces.git
+git clone git://github.com/seam/international.git
+git clone git://github.com/seam/jms.git
+git clone git://github.com/seam/js-remoting.git
+git clone git://github.com/seam/persistence.git
+git clone git://github.com/seam/remoting.git
+git clone git://github.com/seam/security.git
+git clone git://github.com/seam/servlet.git
+git clone git://github.com/seam/wicket.git
+git clone git://github.com/seam/mail.git
+git clone git://github.com/seam/catch.git
+git clone git://github.com/seam/xml-config.git</pre> 
+        <p class="wikiPara"> If a module is missing from this list, take a look at the <a href="http://github.com/seam" target="" class="regularLink">repository list</a> in the Seam github.com organization to see what else is available. </p> 
+        <h2 class="wikiHeadline2" id="H-BuildingTheSourceCode"><a href="CheckOutAndBuildSeam.html#H-BuildingTheSourceCode">Building the source code</a></h2> 
+        <p class="wikiPara"> To build the project, switch to the build/parent directory and run Maven: </p> 
+        <pre class="wikiPreformatted">cd build/parent
+mvn install
+cd ..</pre> 
+        <p class="wikiPara"> Then switch to the dist directory (containing the Seam BOM) and run Maven: </p> 
+        <pre class="wikiPreformatted">cd dist
+mvn install
+cd ..</pre> 
+        <p class="wikiPara"> <i class="wikiEmphasis">Note:</i> If you've updated the parent or BOM, you'll need to install them locally to see your changes in the module. </p> 
+        <p class="wikiPara"> Now you can build any of the modules. First, consult the <a href="Status.html" target="" class="regularLink">module status page</a> to see which modules are functional. Here, we are building the faces module: </p> 
+        <pre class="wikiPreformatted">cd faces
+mvn install
+cd ..</pre> 
+        <p class="wikiPara"> At this point, you can import the projects into your IDE Sports Betting Live at <a href="http://case-de-pariuri.ro/agentii/bet365">Bet365 Pariuri</a> or build them individually from the commandline using the Maven command (mvn). </p> 
+        <h2 class="wikiHeadline2" id="H-CreatingANewModule"><a href="CheckOutAndBuildSeam.html#H-CreatingANewModule">Creating a new module</a></h2> 
+        <p class="wikiPara"> The easiest way to do this is to use the <tt>seam-module-archetype</tt>. To generate the module run: </p> 
+        <pre class="wikiPreformatted">mvn archetype:generate \
+   -DarchetypeGroupId=org.jboss.seam.build \
+   -DarchetypeArtifactId=seam-module-archetype \
+   -DarchetypeVersion=3.0.0-SNAPSHOT \
+   -DarchetypeRepository=http://oss.sonatype.org/content/repositories/snapshots \
+   -DartifactId=moduleName \
+   -DparentVersion=X.Y.Z-Q \
+   -DseamVersion=A.B.C-Q \
+   -DinteractiveMode=false</pre> 
+        <p class="wikiPara"> The <tt>artifactId</tt> flag defines the name of the module. Note that the prefix <tt>seam-</tt> will automatically be added to the name of the project, so don't include it in <tt>artifactId</tt> or it else will be repeated (e.g., seam-seam-moduleName). Currently, you'll want to choose <tt>3.0.0-SNAPSHOT</tt> for both the <tt>seamVersion</tt> and the <tt>parentVersion</tt>. </p> 
+        <p class="wikiPara"> Once you have generated the module, you'll want to import it into Eclipse (we recommend using the <a href="http://m2eclipse.sonatype.org/" target="" class="regularLink">m2eclipse plugin</a>), add dependencies as needed (don't forget to put the version in the right place!) and code away! </p> 
+        <h2 class="wikiHeadline2" id="H-DevelopingSeamUsingIntelliJIDEA"><a href="CheckOutAndBuildSeam.html#H-DevelopingSeamUsingIntelliJIDEA">Developing Seam using IntelliJ IDEA</a></h2> 
+        <p class="wikiPara"> If you would like to use IntelliJ IDEA for Seam development, you can take advantage of the Seam community license. The license key and details about the terms are available on request by one of the team members (try <a href="https://community.jboss.org/oldurl/redirect.jspa?sid=1&amp;p1=dan&amp;urlType=1">Dan</a> first). <i class="wikiEmphasis">Keep in mind the license expires each year in the fall</i>, so contact one of us when IntelliJ prompts you for the new code. </p> 
+        <p class="wikiPara"> <img src="../service/File/64445.png" width="470" height="62"> </p> 
+        <p class="wikiPara"> We'd like to thank JetBrains for their support of Seam development. Not only do they support the development of Seam by offering this license, they also have add extensive support for Seam development in the IDE in the form of plugins. </p> 
+        <p class="wikiPara"> Resources: <a href="http://whatisdyslexia.org/">What is Dyslexia</a> <a href="http://www.platinumdatarecovery.com/">Hard Drive Data Recovery Service</a> <a href="http://www.ulcertreatment.org/">UlcerTreatment</a> <a href="http://www.whatisms.net/">What is MS</a> <a href="http://www.whatisshingles.org/">What is Shingles</a> <a href="http://www.whatisadhd.org/">What is ADHD</a> <a href="http://www.securedatarecovery.com/data-recovery-customers.html">Data Recovery Company Reviews</a> </p> 
+        <p class="wikiPara"> </p> 
+       </div>
+       <div id="j_id367" class="documentTags undecoratedLink smallFont">
+        <div id="j_id368">
+          Tags:&nbsp;
+         <a href="https://community.jboss.org/tags?recursive=true#/?tags=Build">Build</a>&nbsp;|&nbsp;
+         <a href="https://community.jboss.org/tags?recursive=true#/?tags=Checkout">Checkout</a>&nbsp;|&nbsp;
+         <a href="https://community.jboss.org/tags?recursive=true#/?tags=SVN">SVN</a>&nbsp;|&nbsp;
+         <a href="https://community.jboss.org/tags?recursive=true#/?tags=Seam+3">Seam 3</a>&nbsp;|&nbsp;
+         <a href="https://community.jboss.org/tags?recursive=true#/?tags=Source">Source</a>&nbsp;|&nbsp;
+         <a href="https://community.jboss.org/tags?recursive=true#/?tags=Subversion">Subversion</a>
+        </div>
+       </div> 
+      </div>
+      <div id="commentDisplayForm"></div> 
+     </div> 
+     <div class="clear" style="padding-top:15px;"></div> 
+    </div>
+   </div> 
+  </div> 
+  <div id="footer" class="undecoratedLink"> 
+   <p> © Copyright 2009, Red Hat Middleware, LLC. All rights reserved. JBoss and Seam are registered trademarks and servicemarks of <a href="http://www.redhat.com/">Red Hat, Inc</a>. [<a href="http://www.redhat.com/legal/privacy_statement.html">Privacy Policy</a>]</p> 
+  </div>
+  <div id="status">
+   <span id="globalStatus"><span id="globalStatus.start" style="display: none">
+     <div id="j_id423" class="statusStart">
+      <img src="../themes/sfwkorg/img/statusindicator.gif" height="25" width="20">
+     </div></span><span id="globalStatus.stop">
+     <div id="j_id425" class="statusStop">
+      <img src="../themes/sfwkorg/img/blank.gif" height="25" width="20">
+     </div></span></span>
+  </div>  
+  <!-- Mirrored from 127.0.0.1:64444/Seam3/CheckOutAndBuildSeam by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:40:33 GMT --> 
+  <!-- Added by HTTrack -->
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack --> 
+ </body>
+</html>

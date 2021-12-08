@@ -1,0 +1,988 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <!-- Mirrored from 127.0.0.1:64444/Documentation/SeamDynamicCRUD by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:48:50 GMT -->
+ <!-- Added by HTTrack -->
+ <head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack -->  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+  <title>Seam Framework - Seam Dynamic CRUD</title> 
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/basic_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" rel="stylesheet" type="text/css">
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/extended_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" media="rich-extended-skinning" rel="stylesheet" type="text/css">
+  <script src="../a4j/g/3_3_3.CR1org.ajax4jsf.javascript.AjaxScript" type="text/javascript"></script>
+  <script type="text/javascript">window.RICH_FACES_EXTENDED_SKINNING_ON=true;</script>
+  <script src="../a4j/g/3_3_3.CR1org/richfaces/renderkit/html/scripts/skinning.js" type="text/javascript"></script>
+  <link href="../themes/sfwkorg/css/sfwk.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shCore.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shThemeDefault.css" rel="stylesheet" type="text/css"> 
+  <link rel="alternate" type="application/atom+xml" title="Dynamic CRUD" href="../service/Feed/atom/Area/Documentation/Node/DynamicCRUDhtml.html"> 
+  <script type="text/javascript" src="../seam/resource/remoting/resource/remote.js"></script> 
+  <script type="text/javascript" src="../seam/resource/remoting/interface1535.js?httpSessionChecker"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jquery.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jqueryPlugins.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/lacewiki.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shCore.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushBash.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCpp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCSharp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCss.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDelphi.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDiff.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushGroovy.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJava.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJScript.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPhp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPlain.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPython.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushRuby.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushScala.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushSql.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushVb.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushXml.js"></script> 
+  <script type="text/javascript">
+        /* If you really want to load the Flash garbage on every page, go ahead and enable this:
+        SyntaxHighlighter.config.clipboardSwf = '/themes/sfwkorg/js/sh/scripts/clipboard.swf';
+         */
+        SyntaxHighlighter.defaults['gutter'] = false;
+        SyntaxHighlighter.all();
+	</script> 
+  <script type="text/javascript">
+
+        // ###################### Session timeout alert #################################
+
+        var sessionChecker = Seam.Component.getInstance("httpSessionChecker");
+        var timeoutURL = '/Home/JBossSeam';
+        var timeoutMillis = '900'*1000+3000;
+        var sessionTimeoutInterval = null;
+
+        function startSessionTimeoutCheck() {
+            sessionTimeoutInterval = setInterval('sessionChecker.isNewSession(alertTimeout)', timeoutMillis);
+        }
+
+        function stopSessionTimeoutCheck() {
+            if (sessionTimeoutInterval) clearInterval(sessionTimeoutInterval);
+        }
+
+        function resetSessionTimeoutCheck() {
+            if (sessionTimeoutInterval != null) {
+                stopSessionTimeoutCheck();
+                startSessionTimeoutCheck();
+            }
+        }
+
+        function alertTimeout(newSession) {
+            if (newSession) {
+                clearInterval(sessionTimeoutInterval);
+                jQuery(".ajaxSupport")
+                        .removeAttr('onblur')
+                        .removeAttr('onchange')
+                        .removeAttr('onkeyup')
+                        .removeAttr('onclick');
+                jQuery(".sessionEventTrigger").hide();
+                var answer = confirm("Your session has timed out, you will be redirected to the start page.");
+                if (answer) window.location = timeoutURL;
+            }
+        }
+
+        // ###################### Popups #################################
+
+        var fadeInPopupDialog = function(hash) {
+            hash.w.fadeIn('fast',function(){ hash.o.show(); });
+            jQuery(".closeDialog", hash.w).attr("accesskey", "C"); // Dynamically assign accesskey to .closeDialog buttons
+        };
+
+        var fadeOutPopupDialog = function(hash) { hash.w.fadeOut('fast',function(){ hash.o.remove(); }); };
+
+        // ###################### Tabbed Forms #################################
+
+        var formTabErrors = {};
+
+        function formTabRaiseError(tabId, fieldId, message) {
+
+            formTabClearError(tabId, fieldId); // Clear error then re-add
+
+            log("Raise error for tab: '" + tabId + "' field: " + fieldId);
+
+            // Add an error message to the client message box
+            log("Adding error message: " +tabId + fieldId + "ErrorMessage")
+            jQuery("#clientMessageBoxTable").append(
+                '<tr id="' + tabId + fieldId + 'ErrorMessage"><td><img src="/themes/sfwkorg/img/attention.gif" ' +
+                'height="18" width="18" class="clientMessageBoxImage attentionImage"/></td>' +
+                '<td><span id="attentionMessage" class="attentionMessage">'+ message + '</span></td></tr>'
+            );
+            if (formTabErrors[tabId] == null) {
+                formTabErrors[tabId] = 1;
+            } else {
+                formTabErrors[tabId]++;
+            }
+            formTabRenderErrors(tabId);
+        }
+
+        function formTabClearError(tabId, fieldId) {
+            if (document.getElementById(tabId+fieldId+"ErrorMessage") != null) { // This error is displayed
+                log("Clear error for tab: '" + tabId + "' field: " + fieldId);
+                log("Removing error message: " +tabId + fieldId + "ErrorMessage")
+                // Remove the error message on the client message box
+                jQuery("#"+tabId + fieldId + "ErrorMessage").remove();
+
+                formTabErrors[tabId]--;
+                formTabRenderErrors(tabId);
+            }
+        }
+
+        function formTabRenderErrors(tabId) {
+            log("Errors for tab: '" + tabId + "': " + formTabErrors[tabId]);
+
+            if (formTabErrors[tabId] > 0 && document.getElementById(tabId+"InvalidIcon") == null) {
+                log("Showing icon for tab: " + tabId);
+                // Show an icon on the tab and blink it a few times
+                jQuery("#"+tabId)
+                    .prepend('<img id="' + tabId + 'InvalidIcon" ' +
+                            'src="/themes/sfwkorg/img/attention.gif" width="13" height="13" ' +
+                            'alt="!" style="vertical-align:bottom;margin-left:5px;margin-right:5px;"/>');
+                pulsate("#"+tabId);
+            } else if (formTabErrors[tabId] < 1){
+                log("Removing icon of tab: " + tabId);
+                jQuery("#"+tabId + "InvalidIcon").remove();             // Remove the error icon on the tab
+            }
+
+            var tabsHaveErrors = false;
+            for (var tab in formTabErrors) {
+                var numOfErrors = formTabErrors[tab];
+                if (numOfErrors > 0) {
+                    tabsHaveErrors = true;
+                    break;
+                }
+            }
+
+            if (tabsHaveErrors) {
+                log("Hiding save button and showing form message box");
+                jQuery(".saveButton").hide();                       // Hide save button(s)
+                jQuery(".formControls").css("height", "30px");      // Adjust height for missing save button
+                jQuery("#messageBoxContainer").hide();                 // Hide server messages
+                jQuery("#clientMessageBoxContainer").show();           // Show client error messages
+            } else {
+                log("Showing save button and hiding form message box");
+                jQuery(".saveButton").show();                       // Show save button(s)
+                jQuery(".formControls").css("height", "");          // Readjust height for present save button
+                jQuery("#clientMessageBoxContainer").hide();           // Hide client error messages
+            }
+        }
+
+        function formTabClicked() {
+            jQuery("#messageBoxContainer").hide();                 // Hide server messages
+        }
+
+        function log(message) {
+            return; // Remove to enable logging
+            if (!log.window_ || log.window_.closed) {
+                var win = window.open("", null, "width=400,height=200," +
+                                                "scrollbars=yes,resizable=yes,status=no," +
+                                                "location=no,menubar=no,toolbar=no");
+                if (!win) return;
+                var doc = win.document;
+                doc.write("<html><head><title>Debug Log</title></head><body style='font-family: monospace'></body></html>");
+                doc.close();
+                log.window_ = win;
+            }
+            var logLine = log.window_.document.createElement("div");
+            logLine.appendChild(log.window_.document.createTextNode(message));
+            log.window_.document.body.appendChild(logLine);
+        }
+
+        // ###################### Design #################################
+
+        function highlightStars(item, range, end) {
+            for (i = 1; i <= range; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star_grey.gif");
+            }
+            for (i = 1; i <= end; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star.gif");
+            }
+        }
+
+        function pulsate(query) {
+            var blinkCount = 2*2;
+            do {
+                jQuery(query)['fade'+(blinkCount%2==0?'Out':'In')]('fast');
+            } while (--blinkCount);
+        }
+
+        function clearDocumentBackground() {
+            // Noop for this skin
+        }
+
+        // Wrap boxes with border and shadow
+        function wrapBoxes() {
+            // Noop for this skin
+        }
+
+        function initPage() {
+            checkCookieSupport();
+            wrapBoxes();
+        }
+
+        jQuery(function() {
+            initPage();
+        });
+
+    </script> 
+  <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-25106513-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script> 
+ </head> 
+ <body> 
+  <noscript> 
+   <div class="cookieJavaScriptWarning">
+     Please activate JavaScript in your browser. Without it, you will only be able to browse this website but clicking on any advanced feature (any forms or submit buttons) will not work. 
+   </div> 
+  </noscript>
+  <div id="dialogHelp" class="popupDialog">
+   <span id="dialogHelpPopup" title="dialogHelp"></span>
+   <span id="dialogHelpInit"> <script type="text/javascript">
+            function showHelpPopup(width, height, offsetId) {
+                var offset = jQuery("#"+offsetId).offset();
+                jsf('dialogHelpPopup')
+                    .css({width: width+"px", height: height+"px", top: offset.top-100+"px", left: offset.left-150+"px"})
+                    .jqm({
+                        closeClass: "closeDialog",
+                        overlay: 0
+                    });
+
+                jQuery("#dialogHelpContent").css("width", width-20+"px").css("height", height-75+"px");
+                jQuery("#dialogHelpContent").css("overflow", "auto");
+
+                jsf('dialogHelpPopup').jqmShow();
+            }
+        </script></span> 
+   <script type="text/javascript">jQuery(function() {
+        jsf('dialogHelpPopup').Resizable({
+            minTop: 1,
+            dragHandle: "#dialogHelpHead",
+            handlers: { se: "#dialogHelpResizeHandle" }
+        });
+    });</script> 
+   <div class="popupDialogHead" id="dialogHelpHead">
+    Help
+   </div>
+   <div id="dialogHelpContent" class="popupDialogContent"></div>
+   <div id="dialogHelpControls" class="popupDialogControls">
+    <div id="j_id14" style="padding:5px;">
+     <a href="#" class="buttonNonpersistent closeDialog"><span class="buttonLabel">Close Help</span></a>
+    </div>
+   </div>
+  </div> 
+  <div id="wrapper"> 
+   <div id="header">  
+    <div>
+     <a href="http://seamframework.org/"><img src="../themes/sfwkorg/img/blank.gif" height="98" width="210"></a> 
+    </div> 
+   </div>
+   <div id="body"> 
+    <div id="container"> 
+     <div id="leftColumn">
+      <div id="mainMenu" xmlns="http://www.w3.org/1999/xhtml">
+       <div id="j_id121" class="box">
+        <div class="mainMenuContainer"> 
+         <div class="mainMenuHeader"></div> 
+         <div class="mainMenuBody">
+          <div id="j_id125" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Home.html" class="level1Link">Home</a>
+          </div>
+          <div id="j_id132" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Home/WhySeam.html" class="level2Link">Why Seam?</a>
+          </div>
+          <div id="j_id139" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Seam2.html" class="level1Link">Seam 2</a>
+          </div>
+          <div id="j_id146" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/GettingStarted.html" class="level2Link">Getting Started</a>
+          </div>
+          <div id="j_id153" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Downloads.html" class="level2Link">Downloads</a>
+          </div>
+          <div id="j_id160" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Documentation.html" class="level2Link">Documentation</a>
+          </div>
+          <div id="j_id167" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="http://weld.cdi-spec.org/" class="level1Link">Weld</a>
+          </div>
+          <div id="j_id174" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Community.html" class="level1Link">Community</a>
+          </div>
+          <div id="j_id181" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="https://community.jboss.org/" class="level2Link">Forums</a>
+          </div>
+          <div id="j_id188" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/CDIExtensions.html" class="level2Link">CDI Extensions</a>
+          </div>
+          <div id="j_id195" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Contribute.html" class="level2Link">Contribute</a>
+          </div>
+          <div id="j_id202" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/JIRA.html" class="level2Link">JIRA</a>
+          </div>
+          <div id="j_id209" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/MailingLists.html" class="level2Link">Mailing Lists</a>
+          </div>
+          <div id="j_id216" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Events.html" class="level2Link">Events</a>
+          </div>
+          <div id="j_id223" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Links.html" class="level2Link">Links</a>
+          </div>
+          <div id="j_id230" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/SeamInProduction.html" class="level2Link">Seam In Production</a>
+          </div>
+          <div id="j_id237" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Documentation.html" class="level1Link">Documentation</a>
+          </div>
+          <div id="j_id244" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="FAQs.html" class="level2Link">FAQs</a>
+          </div>
+          <div id="j_id251" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="KnowledgeBase.html" class="level2Link">Knowledge Base</a>
+          </div>
+          <div id="j_id258" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="Design.html" class="level2Link">Design</a>
+          </div> 
+         </div> 
+         <div class="mainMenuFooter"></div> 
+        </div>
+       </div> 
+      </div> 
+      <br> 
+      <div style="margin-top: 25px; margin-left: 15px; margin-right: 15px; "> 
+       <h2>Built with Seam</h2> 
+       <p> You can find the full source code for this website in the <a href="/Download.html">Seam package</a> in the directory /examples/wiki. It is licensed under the LGPL. </p> 
+       <div style="text-align:center;">
+        <a href="/Community/GetASeamIcon.html"><img src="../themes/sfwkorg/img/runningon_seamlogo_beige.gif" height="50" width="200"></a> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="rightColumn">
+      <img src="../themes/sfwkorg/img/blank.gif" height="8" width="1">
+      <div id="breadcrumb" class="breadcrumb">
+       <span class="breadcrumbPanel"><a href="../index.html" class="itemLink breadcrumbRoot">Site</a><span class="itemSeparator breadcrumbRoot">·</span><a href="../Documentation.html" class="itemLink">Documentation</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="KnowledgeBase.html" class="itemLink">Knowledge Base</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="Facelets.html" class="itemLink">Facelets</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="DynamicCRUD.html" class="itemLink">Dynamic CRUD</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="SeamDynamicCRUD.html" class="itemText">Seam Dynamic CRUD</a></span>
+      </div>
+      <div id="messageBoxContainer"></div>
+      <div id="clientMessageBoxContainer" style="display:none;"> 
+       <div id="clientMessageBox" class="messageBox"> 
+        <table id="clientMessageBoxTable" class="messageBoxTable" cellpadding="0" cellspacing="0" border="0"></table> 
+        <script type="text/javascript">jQuery(function() {
+                    jQuery("#clientMessageBoxContainer").css("margin-top", "10px").css("margin-bottom", "10px");
+                    pulsate(".clientMessageBoxImage");
+                });</script> 
+       </div>
+      </div> 
+      <div id="documentDisplayContainer" class="box">
+       <div id="documentDisplay" class="documentDisplay">
+        <div id="j_id362"> 
+         <h1 class="documentTitle"><a href="SeamDynamicCRUD.html">Seam Dynamic CRUD</a> </h1>
+        </div>
+        <h2 class="wikiHeadline2" id="H-TableOfContents"><a href="SeamDynamicCRUD.html#H-TableOfContents">Table of Contents</a></h2> 
+        <p class="wikiPara"> <a href="SeamDynamicCRUD.html#H-GettingStarted" target="" class="regularLink">Getting Started</a> </p> 
+        <p class="wikiPara"> <a href="SeamDynamicCRUD.html#H-DynamicAttributeBinding" target="" class="regularLink">Dynamic Attribute Binding</a> </p> 
+        <p class="wikiPara"> <a href="SeamDynamicCRUD.html#H-GeneratingTheDynamicForm" target="" class="regularLink">Generating The Dynamic Form</a> </p> 
+        <p class="wikiPara"> <a href="SeamDynamicCRUD.html#H-Collections" target="" class="regularLink">Collections</a> </p> 
+        <p class="wikiPara"> <a href="SeamDynamicCRUD.html#H-Enums" target="" class="regularLink">Enums</a> </p> 
+        <p class="wikiPara"> <a href="SeamDynamicCRUD.html#H-Dates" target="" class="regularLink">Dates</a> </p> 
+        <p class="wikiPara"> <a href="SeamDynamicCRUD.html#H-NestedEntities" target="" class="regularLink">Nested Entities</a> </p> 
+        <p class="wikiPara"> <a href="SeamDynamicCRUD.html#H-GeneratingTheDynamicTableView" target="" class="regularLink">Generating The Dynamic Table View</a> </p> 
+        <p class="wikiPara"> <a href="SeamDynamicCRUD.html#H-Customization" target="" class="regularLink">Customization</a> </p> 
+        <p class="wikiPara"> <a href="SeamDynamicCRUD.html#H-Assumptions" target="" class="regularLink">Assumptions</a> </p> 
+        <h2 class="wikiHeadline2" id="H-GettingStarted"><a href="SeamDynamicCRUD.html#H-GettingStarted">Getting Started</a></h2> 
+        <p class="wikiPara"> Dynamic CRUD through Facelets Composite Templates and Custom EL functions. </p> 
+        <p class="wikiPara"> Installation Instructions: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Download the seam-dynamic-crud.jar from this directory and copy it to the WEB-INF/lib folder of your webapp (JBDS) or to the lib folder of your project and define in deployed-jars.list (seam-gen).</li> 
+         <li class="wikiUnorderedListItem"> This has currently only been tested on Seam 2.0.2.SP1 (<a href="/Download.html" target="" class="regularLink">http://www.seamframework.org/Download</a>) and Richfaces 3.2.1.GA (<a href="http://www.jboss.org/jbossrichfaces/downloads/" target="" class="regularLink">http://www.jboss.org/jbossrichfaces/downloads/</a>) but you can experiment with other versions and let me know. When deploying a WAR Seam project just copy over the 3 richfaces jars to your WEB-INF and delete the old ones. If you are using an EAR Seam project copy the <tt>richfaces-ui-*.jar</tt> and <tt>richfaces-impl-*.jar</tt> to the WEB-INF/lib and the <tt>richfaces-api-*.jar</tt> to the <tt>&lt;project&gt;-ear/EarContent/</tt> directory.</li> 
+         <li class="wikiUnorderedListItem"> Create a Seam project in seam-gen or JBDS (Or using an existing project) and create a new Entity and name it Dog. This will also create dog.xhtml, dogList.xhtml, DogHome.java, DogList.java, and of course Dog.java</li> 
+         <li class="wikiUnorderedListItem"> Edit your web.xml and include:</li> 
+        </ul> 
+        <pre class="wikiPreformatted">&lt;context-param&gt;
+    &lt;param-name&gt;facelets.REFRESH_PERIOD&lt;/param-name&gt;
+    &lt;param-value&gt;0&lt;/param-value&gt;
+&lt;/context-param&gt;</pre> 
+        <p class="wikiPara"> This gets around a refresh issue with the templates in the jar. </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Download the img.zip uploaded in this directory and extract the zip which contains a folder img into your view (seam-gen) or WebContent (JBDS). This folder contains the necessary img files for some richfaces actions like spinner.gif for ajax requests.</li> 
+         <li class="wikiUnorderedListItem"> Open dog.xhtml and modify to be:</li> 
+        </ul> 
+        <pre class="wikiPreformatted">&lt;ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:crud="http://enhancements.seam/jsf"
+                template="layout/template.xhtml"&gt;
+                       
+	&lt;ui:define name="body"&gt;
+	    &lt;crud:masterEdit controlKey="dog"/&gt;
+	&lt;/ui:define&gt;
+
+&lt;/ui:composition&gt;</pre> 
+        <pre class="wikiPreformatted">&lt;ui:composition xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:s="http://jboss.com/products/seam/taglib"
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:crud="http://enhancements.seam/jsf"
+		template="layout/template.xhtml"&gt;
+    
+    &lt;ui:define name="body"&gt;
+    	&lt;crud:masterView controlKey="dog"/&gt;
+    &lt;/ui:define&gt;
+    
+&lt;/ui:composition&gt;</pre> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Open DogList.xhtml and modify to be:</li> 
+        </ul> 
+        <pre class="wikiPreformatted">@Name("dogList")
+public class DogList extends EntityQuery&lt;Dog&gt; {
+	@Override
+	public String getEjbql() {
+		return "select dog from Dog dog";
+	}
+
+        //Required with current version
+	private Dog dog = new Dog();
+	public Dog getDog() { return dog; }
+}</pre> 
+        <p class="wikiPara"> It is necessary to create a new entity like above with the private <tt>Dog dog = new Dog();</tt> and have the getter. The EL looks for an Object based on the controlKey in the List code, on my list to find a work around. </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Now, just re-deploy the application (Always required when adding an Entity) and go to <tt>http://localhost:8080/&lt;webapp&gt;/dog.seam</tt>. You'll see an extremely simple page displayed with just the Name input, nothing fancy.</li> 
+         <li class="wikiUnorderedListItem"> Edit your Dog.java Entity and String ownerName and Integer age:</li> 
+        </ul> 
+        <pre class="wikiPreformatted">@Entity
+public class Dog implements Serializable {
+	
+	//seam-gen attributes (you should probably edit these)
+	private Long id;
+	private Integer version;
+	private String name;
+	private String ownerName;
+	private Integer age;
+    //add additional entity attributes
+	
+	//seam-gen attribute getters/setters with annotations (you probably should edit)
+		
+	public Integer getAge() {
+		return age;
+	}
+
+	public void setAge(Integer age) {
+		this.age = age;
+	}
+
+	public String getOwnerName() {
+		return ownerName;
+	}
+
+	public void setOwnerName(String ownerName) {
+		this.ownerName = ownerName;
+	}
+
+	@Id @GeneratedValue
+	public Long getId() {
+	     return id;
+	}
+
+	public void setId(Long id) {
+	     this.id = id;
+	}
+	
+	@Version
+	public Integer getVersion() {
+	     return version;
+	}
+
+	private void setVersion(Integer version) {
+	     this.version = version;
+	}   	
+	
+	@Length(max=20)
+	public String getName() {
+	     return name;
+	}
+
+	public void setName(String name) {
+	     this.name = name;
+	}   	
+}</pre> 
+        <p class="wikiPara"> And redeploy and refresh <tt>http://localhost:8080/&lt;webapp&gt;/dog.seam</tt>. Now you'll see the additional fields, go ahead and create a dog if you'd like </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> How about making a field required Let's make the fields name and age required:</li> 
+        </ul> 
+        <pre class="wikiPreformatted">&lt;ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:s="http://jboss.com/products/seam/taglib"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:crud="http://enhancements.seam/jsf"
+                template="layout/template.xhtml"&gt;
+                       
+	&lt;ui:define name="body"&gt;
+	    &lt;crud:masterEdit controlKey="dog" requiredFields="name, age"/&gt;
+	&lt;/ui:define&gt;
+
+&lt;/ui:composition&gt;</pre> 
+        <p class="wikiPara"> No need to redeploy here as this is an xhtml file, just refresh your browser after you've exploded or allowed JBDS to synchronize. Now you'll see the two fields are required in dog.seam and if you fail to enter a value a validation error will pop up automatically via an ajax update. </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Now onto searching, go ahead to the <tt>http://localhost:8080/&lt;webapp&gt;/dogList.seam</tt> page and you'll see the search togglePanel along with your list of created dogs. To get the search to work, edit dogList.seam:</li> 
+        </ul> 
+        <pre class="wikiPreformatted">&lt;ui:composition xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:s="http://jboss.com/products/seam/taglib"
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:crud="http://enhancements.seam/jsf"
+		template="layout/template.xhtml"&gt;
+    
+    &lt;ui:define name="body"&gt;
+    	&lt;crud:masterView controlKey="dog" searchFields="ownerName, name"/&gt;
+    &lt;/ui:define&gt;
+    
+&lt;/ui:composition&gt;</pre> 
+        <p class="wikiPara"> but don't refresh yet, one more change: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Modify DogList.java and add the necessary restrictions:</li> 
+        </ul> 
+        <pre class="wikiPreformatted">@Name("dogList")
+public class DogList extends EntityQuery
+{
+	private static final String[] RESTRICTIONS = {
+		"lower(dog.name) like lower( concat(#{dogList.dog.name},'%') )",
+		"lower(dog.ownerName) like lower( concat(#{dogList.dog.ownerName},'%') )"
+	}; 
+	
+    @Override
+    public String getEjbql() { 
+        return "select dog from Dog dog";
+    }
+    
+    private Dog dog = new Dog();
+	public Dog getDog() { return dog; }
+	
+	@Override
+    public List&lt;String&gt; getRestrictions() {
+		System.out.println("Adding restrictions: " + RESTRICTIONS);
+            return Arrays.asList(RESTRICTIONS);
+    }
+    
+}</pre> 
+        <p class="wikiPara"> now re-deploy the app and refresh dogList.seam, given your app has a create-drop policy, create a few more Dogs, then you'll be able to search via the search fields. </p> 
+        <p class="wikiPara"> If you have any problems running the above, please email me smendenh@redhat.com with the versions of Seam/Richfaces you are using along with the error messages you are getting and how you got those messages. Or feel free to make any feature requests/comments/criticisms/suggestions. </p> 
+        <p class="wikiPara"> Code Explanation </p> 
+        <p class="wikiPara"> Note that I am not writing this initially with performance in mind, purely function. And none of the following should ever be used in production in its current incantation. </p> 
+        <h2 class="wikiHeadline2" id="H-DynamicAttributeBinding"><a href="SeamDynamicCRUD.html#H-DynamicAttributeBinding">Dynamic Attribute Binding</a></h2> 
+        <p class="wikiPara"> This allows the following <tt>&lt;crud:masterEdit ... eyeColorEnum="#{eyeColors}" eyeColorEnumLabel="label" ... /&gt;</tt> where eyeColorEnum and eyeColorEnumLabel are not known to the composite template in the backend. This is accomplished via a TagHandler which exposes the attribute in the FaceletsContext (VariableMapper is private and not accessible, has to be a better way than forcing it) to the the FacesContext. This allows the attributes to be references via EL in the composite template. </p> 
+        <p class="wikiPara"> Continuing the example above, eyeColorEnum gets exposed to the FacesContext in the edit.xhtml composite template here: <tt>&lt;e:setPropertyBindings valueBinding="#{field.name}" endsWith="Enum"/&gt;</tt>. Meaning, look for a variable in the Facelets VariableMapper that ends with Enum, and starts with <tt>#{field.name}</tt> which <tt>#{field.name}</tt> resolves to eyeColor, and put that in the FacesContext. </p> 
+        <p class="wikiPara"> Then the following with comments inline: </p> 
+        <pre class="wikiPreformatted">&lt;e:isEnum id="vb"&gt;
+    &lt;!-- Bind the var enum to the previously exposed value ie eyeColorEnum --&gt;
+    &lt;e:setValueBinding var="enum" valueBinding="#{e:evalEl(e:concat(field.name, 'Enum'))}"/&gt;
+    &lt;!-- Bind eyeColorEnumLabel like above--&gt;
+    &lt;e:setValueBinding var="enumLabel" valueBinding="#{e:evalEl(e:concat(field.name, 'EnumLabel'))}"/&gt;
+    
+    &lt;!-- Now the value can just be referenced like always #{enum} and the label can be referenced via #{e[enumLabel]} which is standard composite EL --&gt;
+    &lt;h:selectOneMenu value="#{entity[field.name]}"&gt;
+		&lt;s:selectItems value="#{enum}" var="e" label="#{e[enumLabel]}" noSelectionLabel="Please select" /&gt;
+		&lt;s:convertEnum /&gt;
+    &lt;/h:selectOneMenu&gt;
+&lt;/e:isEnum&gt;
+</pre> 
+        <h2 class="wikiHeadline2" id="H-GeneratingTheDynamicForm"><a href="SeamDynamicCRUD.html#H-GeneratingTheDynamicForm">Generating The Dynamic Form</a></h2> 
+        <p class="wikiPara"> <tt>&lt;crud:masterEdit /&gt;</tt> Usage </p> 
+        <p class="wikiPara"> <tt>&lt;crud:masterEdit /&gt;</tt> is backed by masterEdit.xhtml which is composed of <tt>&lt;crud:masterEdit /&gt;</tt> backed by edit.xhtml and <tt>&lt;crud:actionButtons /&gt;</tt> backed by actionButtons.xhtml and it contains all of the necessary formatting for a typical crud page, ie. messages, rich panels, ect... </p> 
+        <p class="wikiPara"> Available attributes crud:masterEdit: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Attribute</li> 
+         <li class="wikiUnorderedListItem"> Default</li> 
+         <li class="wikiUnorderedListItem"> Description</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> controlKey</li> 
+         <li class="wikiUnorderedListItem"> </li> 
+         <li class="wikiUnorderedListItem"> If not set, MUST set other attributes accordingly, can only use controlKey if using default EntityHome/EntityQuery Seam conventions</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> entityHome </li> 
+         <li class="wikiUnorderedListItem"> <tt>#{e:evalEl(e:concat(controlKey, 'Home'))}</tt> </li> 
+         <li class="wikiUnorderedListItem"> EntityHome is not used anywhere else in the backing code, purely to allow the entity variable to resolve by default</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> entity </li> 
+         <li class="wikiUnorderedListItem"> <tt>#{entityHomeinstance}</tt> </li> 
+         <li class="wikiUnorderedListItem"> Ex. <tt>&lt;crud:masterEdit entity="#{personHome.instance}" ... /&gt;</tt> but this is not necessary if the controlKey is available and you are using default EntityHome conventions, so the easiest is to do <tt>&lt;crud:masterEdit controlKey="person" /&gt;"</tt> which would result in the entity being <tt>#{personHome.instance}</tt></li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> excludedFields </li> 
+         <li class="wikiUnorderedListItem"> <q>version, id</q> </li> 
+         <li class="wikiUnorderedListItem"> Excludes fields from being parsed for input in the form Ex. <tt>&lt;crud:masterEdit controlKey="person" excludedFields="version, id, password" /&gt;</tt></li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> requiredFields </li> 
+         <li class="wikiUnorderedListItem"> </li> 
+         <li class="wikiUnorderedListItem"> Setting the required fields adds the * through the s:decorate seam tag and makes the field required in JSF Ex. <tt>&lt;crud:masterEdit controlKey="person" excludedFields="version, id, password" requiredFields="firstName, lastName, email" /&gt;</tt></li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> ajax </li> 
+         <li class="wikiUnorderedListItem"> true </li> 
+         <li class="wikiUnorderedListItem"> Causes form validation to happen per input via a:support (Recommended to keep true) Ex. <tt>&lt;crud:masterEdit controlKey="person" excludedFields="version, id, password" requiredFields="firstName, lastName, email" ajax="false" /&gt;</tt></li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> eventsQueue </li> 
+         <li class="wikiUnorderedListItem"> <tt>#{controlKey}Queue</tt> </li> 
+         <li class="wikiUnorderedListItem"> The eventsQueue ensures all ajax request happen in the same queue (Recommended to leave this alone if using the controlKey) Ex. <tt>&lt;crud:masterEdit controlKey="person" excludedFields="version, id, password" requiredFields="firstName, lastName, email" eventsQueue="someQueue" /&gt;</tt></li> 
+        </ul> 
+        <h2 class="wikiHeadline2" id="H-Collections"><a href="SeamDynamicCRUD.html#H-Collections">Collections</a></h2> 
+        <p class="wikiPara"> Now how do we deal with displaying <tt>@OneToMany or @ManyToMany</tt> List collections This is extremely easy as long as you observe a few rules: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> The name of field must end with the String List if it is a java.util.List or the like. Say you have a person and want to display children for selection. You must have the actual field name in the Person Entity has <tt>private List&lt;Child&gt; childrenList</tt>. The edit.xhtml composite facelet reflects the entity and looks for the <tt>#{field.name}List</tt>.</li> 
+        </ul> 
+        <p class="wikiPara"> Ex. </p> 
+        <pre class="wikiPreformatted">&lt;crud:masterEdit controlKey="person"
+	   	 requiredFields="firstName, email"
+	   	 childrenList="#{childrenList}" /&gt;</pre> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Bind the field you want to display in the select items to <tt>&lt;field name&gt;Label</tt>, in this case <tt>childrenListLabel="firstName"</tt> because I want the firstName of the child to be displayed when I go to select children. Remember childrenListLabel means nothing unless the childrenList part actually exists in the Child Entity.</li> 
+        </ul> 
+        <p class="wikiPara"> Ex. </p> 
+        <pre class="wikiPreformatted">@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+private List&lt;Child&gt; children = new ArrayList&lt;Child&gt;();
+
+&lt;crud:masterEdit controlKey="person"
+	   	 requiredFields="firstName, email"
+	   	 childrenList="#{childrenList}" 
+	   	 childrenListLabel="firstName"/&gt;</pre> 
+        <p class="wikiPara"> The way this looks in the backend is such: </p> 
+        <pre class="wikiPreformatted">&lt;h:selectManyListbox value="#{entity[field.name]}"&gt;
+	&lt;s:selectItems value="#{list}" var="e" label="#{e:evalEl('e')}"/&gt;
+	&lt;s:convertEntity /&gt;
+
+&lt;/h:selectManyListbox&gt;</pre> 
+        <p class="wikiPara"> Where list is defined as: </p> 
+        <pre class="wikiPreformatted">&lt;e:setValueBinding var="list" valueBinding="#{e:evalEl(e:concat(field.name, 'List'))}"/&gt;</pre> 
+        <p class="wikiPara"> Note that there is currently a problem on Post back using the actual Label defined, so in reality the label should be <tt>"#{eEevalEleconcatfield.nameListLabel}"</tt> so right now I am assuming the toString of the var e, it is not a high priority atm. </p> 
+        <h2 class="wikiHeadline2" id="H-Enums"><a href="SeamDynamicCRUD.html#H-Enums">Enums</a></h2> 
+        <p class="wikiPara"> Dealing with Enums: </p> 
+        <p class="wikiPara"> 1) Same rules as above, except the field MUST end with the String Enum so if my Person.java has a field: </p> 
+        <pre class="wikiPreformatted">@Enumerated(EnumType.STRING)
+private EyeColor eyeColor;
+</pre> 
+        <p class="wikiPara"> then </p> 
+        <pre class="wikiPreformatted">&lt;crud:masterEdit controlKey="person"
+	   	 requiredFields="firstName, email"
+	   	 childrenList="#{childrenList}" 
+	   	 childrenListLabel="firstName"
+	   	 eyeColorEnum="#{eyeColors}"
+	   	 eyeColorEnumLabel="label"/&gt;</pre> 
+        <p class="wikiPara"> The backing code being: </p> 
+        <pre class="wikiPreformatted">&lt;e:isEnum id="vb"&gt;
+    &lt;e:setValueBinding var="enum" valueBinding="#{e:evalEl(e:concat(field.name, 'Enum'))}"/&gt;
+    &lt;e:setValueBinding var="enumLabel" valueBinding="#{e:evalEl(e:concat(field.name, 'EnumLabel'))}"/&gt;
+    
+    &lt;h:selectOneMenu value="#{entity[field.name]}"&gt;
+	&lt;s:selectItems value="#{enum}" var="e" label="#{e[enumLabel]}" noSelectionLabel="Please select" /&gt;
+	&lt;s:convertEnum /&gt;
+    &lt;/h:selectOneMenu&gt;
+&lt;/e:isEnum&gt;</pre> 
+        <h2 class="wikiHeadline2" id="H-Dates"><a href="SeamDynamicCRUD.html#H-Dates">Dates</a></h2> 
+        <p class="wikiPara"> For dates, the really only concern you need to worry about is if you want a custom pattern, to do this, create an attribute like so: <tt>&lt;field name&gt;DatePattern="MM/dd/yyyy"</tt> where the field is: </p> 
+        <pre class="wikiPreformatted">@Temporal(TemporalType.TIMESTAMP)
+private Date birthDate;</pre> 
+        <p class="wikiPara"> Ex. </p> 
+        <pre class="wikiPreformatted">&lt;crud:masterEdit   controlKey="person"
+	     requiredFields="firstName, email"
+	     childrenList="#{childrenList}"
+	     childrenListLabel="firstName"
+	     eyeColorEnum="#{eyeColors}"
+	     eyeColorEnumLabel="label"
+	     birthDateDatePattern="MM/dd/yyyy"
+	     /&gt;</pre> 
+        <p class="wikiPara"> And the backing code: </p> 
+        <pre class="wikiPreformatted">&lt;e:isDate id="vb"&gt;
+				
+	&lt;e:setValueBinding var="datePattern" valueBinding="#{e:evalConcattedEL(field.name, 'DatePattern')}"/&gt;
+
+	&lt;c:if test="${not empty Display}"&gt;
+		&lt;ui:include src="${Display}" /&gt;
+	&lt;/c:if&gt;
+	&lt;c:if test="${empty Display}"&gt;
+    		&lt;rich:calendar id="#{field.name}Input" 
+    			   value="#{entity[field.name]}" 
+    			   required="#{e:csvContains(requiredFields, field.name)}" 
+    			   datePattern="#{datePattern}"
+    			   enableManualInput="true"&gt;
+   			&lt;a:support event="ondateselected" status="#{field.name}Status" reRender="#{field.name}Decorate" ajaxSingle="true" bypassUpdates="true" eventsQueue="#{eventsQueue}" ignoreDupResponses="true" requestDelay="200" rendered="#{ajax}"/&gt;
+		&lt;/rich:calendar&gt;
+	    &lt;a:status forceId="true" id="#{field.name}Status"&gt;
+        	&lt;f:facet name="start"&gt;
+           		&lt;h:graphicImage  value="/img/spinner.gif"/&gt;
+        	&lt;/f:facet&gt;
+    	    &lt;/a:status&gt;
+	&lt;/c:if&gt;
+&lt;/e:isDate&gt;</pre> 
+        <h2 class="wikiHeadline2" id="H-GeneratingTheDynamicTableView"><a href="SeamDynamicCRUD.html#H-GeneratingTheDynamicTableView">Generating The Dynamic Table View</a></h2> 
+        <p class="wikiPara"> <tt>&lt;crud:masterView /&gt;</tt> Usage </p> 
+        <p class="wikiPara"> <tt>&lt;crud:masterView /&gt;</tt> is backed by masterView.xhtml which is composed of <tt>&lt;crud:searchView /&gt;</tt> backed by searchView.xhtml and <tt>&lt;crud:view /&gt;</tt> backed by view.xhtml and it contains all of the necessary xhtml for a typical <tt>search+List</tt> page. </p> 
+        <p class="wikiPara"> Available attributes crud:masterView: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Attribute</li> 
+         <li class="wikiUnorderedListItem"> Default</li> 
+         <li class="wikiUnorderedListItem"> Description</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> controlKey </li> 
+         <li class="wikiUnorderedListItem"> If not set, must set other attributes accordingly, can only use controlKey if using default EntityHome/EntityQuery Seam conventions. Ex. <tt>&lt;crud:masterView controlKey="dog" /&gt;</tt> will generate a full functional view page given you have the EntityList to back it up. In this case EntityList would also need to contain <tt>private Dog dog = new Dog();</tt> and also the getter due to current architecture</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> entityQuery </li> 
+         <li class="wikiUnorderedListItem"> <tt>#{e:evalEl(e:concat(controlKey, 'List'))}</tt></li> 
+         <li class="wikiUnorderedListItem"> Defines the search bean. This has only been tested using EntityQuery subclasses. By default assumes naming of entityList Ex. <tt>controlKey="dog"</tt> then entityQuery would be dogList which should be backed by DogList extends EntityQuery</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> excludedFields </li> 
+         <li class="wikiUnorderedListItem"> <q>version</q> </li> 
+         <li class="wikiUnorderedListItem"> Excludes fields from being processed and showing up in the table</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> entityView </li> 
+         <li class="wikiUnorderedListItem"> <tt>/#{controlKey}.xhtml </tt></li> 
+         <li class="wikiUnorderedListItem"> Ex. <tt>&lt;crud:masterView controlKey="dog" entityView="/dog.xhtml" ... /&gt;</tt> but this is not necessary if the controlKey is available and you are using default EntityHome conventions, so the easiest is to do <tt>&lt;crud:masterEdit controlKey="dog" /&gt;</tt> which would result in the entityView as /dog.xhtml</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> linkedFields </li> 
+         <li class="wikiUnorderedListItem"> <q>id</q> </li> 
+         <li class="wikiUnorderedListItem"> Defines which fields in the Entity are clickable to edit the Entity</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> entityIdName </li> 
+         <li class="wikiUnorderedListItem"> <tt>#{controlKey}Id</tt> </li> 
+         <li class="wikiUnorderedListItem"> This binds to the id name in the EntityHome sublcass. In this case DogHome would have a field @RequestParameter Long dogId; which is what, by default, given the controlKey, the entityIdName would bind to.</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> entityIdField </li> 
+         <li class="wikiUnorderedListItem"> <q>id</q> </li> 
+         <li class="wikiUnorderedListItem"> Defines the name of the actual @Id field in the Entity, assumes it is id by default.</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> eventsQueue </li> 
+         <li class="wikiUnorderedListItem"> <tt>#{controlKey}Queue </tt></li> 
+         <li class="wikiUnorderedListItem"> The eventsQueue ensures all ajax request happen in the same queue (Recommended to leave this alone if using the controlKey) Ex. <tt>&lt;crud:masterEdit controlKey="person" excludedFields="version, id, password" requiredFields="firstName, lastName, email" eventsQueue="someQueue" /&gt;</tt></li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> tableId </li> 
+         <li class="wikiUnorderedListItem"> <tt>#{controlKey}Table</tt> </li> 
+         <li class="wikiUnorderedListItem"> Allows the table to be reRendered</li> 
+        </ul> 
+        <p class="wikiPara"> A more complex example would look like: </p> 
+        <pre class="wikiPreformatted">&lt;ui:composition xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:s="http://jboss.com/products/seam/taglib"
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:h="http://java.sun.com/jsf/html"
+		xmlns:rich="http://richfaces.org/rich"
+		xmlns:a="http://richfaces.org/a4j"
+		xmlns:crud="http://enhancements.seam/jsf"
+		xmlns:ft="http://facestrace.sourceforge.net"
+		template="layout/template.xhtml"&gt;
+    
+    &lt;ui:define name="body"&gt;
+    
+    	&lt;crud:masterView controlKey="person"
+			 birthDateDatePattern="MM/dd/yyyy"
+		         hobbiesListLabel="hobbyName"
+			 eyeColorEnumLabel="label"
+			 searchFields="firstName, id, email"/&gt;
+				
+    &lt;/ui:define&gt;
+    
+&lt;/ui:composition&gt;</pre> 
+        <h2 class="wikiHeadline2" id="H-Customization"><a href="SeamDynamicCRUD.html#H-Customization">Customization</a></h2> 
+        <p class="wikiPara"> A few points of interest here </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> To define the location for a custom input on the form use the attribute <tt>&lt;field name&gt;Display="&lt;location to xhtml&gt;"</tt></li> 
+        </ul> 
+        <p class="wikiPara"> Ex. </p> 
+        <pre class="wikiPreformatted">&lt;crud:masterEdit controlKey="person"
+		  excludedFields="id, version"
+		  childrenList="#{childrenList}"
+		  childrenListLabel="firstName"
+		  hobbiesList="#{hobbiesList}"
+		  hobbiesDisplay="../manyCheckboxDisplay.xhtml"
+		  hobbiesListLabel="hobbyName"
+		  eyeColorEnum="#{eyeColors}"
+		  eyeColorEnumLabel="label"
+		  hairColorEnum="#{hairColors}"
+		  hairColorEnumLabel="label"
+		  birthDateDatePattern="MM/dd/yyyy"/&gt;</pre> 
+        <p class="wikiPara"> Where ../manyCheckboxDisplay.xhtml resolves to <tt>WebContent/layout/manyCheckboxDisplay.xhtml</tt> (JBDS) or <tt>view/layout/manyCheckboxDisplay.xhtml</tt> (seam-gen) and looks like: </p> 
+        <pre class="wikiPreformatted">&lt;ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a="http://richfaces.org/a4j"&gt;
+
+	&lt;h:selectManyCheckbox value="#{entity[field.name]}"&gt;
+		&lt;s:selectItems value="#{List}" var="e" label="#{e[ListLabel]}" /&gt;
+		&lt;s:convertEntity /&gt;
+	&lt;/h:selectManyCheckbox&gt;
+&lt;/ui:composition&gt;</pre> 
+        <p class="wikiPara"> The above may be a bit confusing, but to explain: When you override the default behavior, you <i class="wikiEmphasis">must</i> retain the actual EL notations defined in the edit.xhtml code in seam-dynamic-crud.jar, otherwise the dynamic crud won't work if you change the EL. You can change layout, components, whatever within the bounds of what is being displayed, but retain the naming scheme. </p> 
+        <p class="wikiPara"> The default code for displaying Lists (Many) looks like: </p> 
+        <pre class="wikiPreformatted">&lt;c:if test="${not empty Display}"&gt;
+    &lt;ui:include src="${Display}" /&gt;
+&lt;/c:if&gt;
+&lt;c:if test="${empty Display}"&gt;				
+    &lt;h:selectManyListbox value="#{entity[field.name]}"&gt;
+        &lt;s:selectItems value="#{List}" var="e" label="#{e[ListLabel]}" /&gt;
+        &lt;s:convertEntity /&gt;
+    &lt;/h:selectManyListbox&gt;
+&lt;/c:if&gt;</pre> 
+        <p class="wikiPara"> Which the only thing of concern is what is between the <tt>&lt;c:if test="${empty Display}"&gt;</tt> being: </p> 
+        <pre class="wikiPreformatted">&lt;h:selectManyListbox value="#{entity[field.name]}"&gt;
+    &lt;s:selectItems value="#{List}" var="e" label="#{e[ListLabel]}" /&gt;
+    &lt;s:convertEntity /&gt;
+&lt;/h:selectManyListbox&gt;</pre> 
+        <p class="wikiPara"> which is what is customizable. Overriding the Display of a field also has the advantage of being hot-deployable. Now, any changes made to manyCheckboxDisplay.xhtml does not require a redeploy. An important distinction must be made with overriding field inputs. The xhtml you use to override will also be quite generic, so avoid namings like <tt>hobbiesDisplay="../hobbiesDisplay.xhtml"</tt> as that would look like hobbiesDisplay.xhtml can only be used for the hobbies field, which is not true. Naming <tt>hobbiesDisplay="../manyCheckboxDisplay.xhtml"</tt> is much more concise since manyCheckboxDisplay.xhtml can be reused for any other List field. </p> 
+        <h2 class="wikiHeadline2" id="H-Assumptions"><a href="SeamDynamicCRUD.html#H-Assumptions">Assumptions</a></h2> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> The composite templates rely on s:decorate with <tt>template="../edit.xhtml"</tt> so the Seam edit.xhtml MUST be located in WebContent(or)view/layout/edit.xhtml (I also call my edit screen edit.xhtml but this resides in enhancements)</li> 
+         <li class="wikiUnorderedListItem"> EntityQuery subclass must have an object of the parametarized type, like if PersonList extends <tt>EntityQuery&lt;Person&gt;</tt> then the PersonList must have private <tt>Person person = new Person();</tt> and have a getter for the Person. </li> 
+        </ul> 
+        <p class="wikiPara"> Otherwise the following expensive operation is necessary: <tt>&lt;c:forEach items="#{entityQuery.resultList.size() == 0 ? null : entityQuery.resultList.get(0).getClass().getDeclaredFields()}" var="field"&gt;</tt> Which with the assumption can be rewritten as so: <tt>&lt;c:forEach items="#{entityQuery[controlKey].getClass().getDeclaredFields()}" var="field"&gt;</tt> </p> 
+        <p class="wikiPara"> And this: <tt>&lt;e:setValueBinding var="vb" valueBinding="#{entityQuery.resultList.get(uiComponent[tableId].rowIndex)[field.name]}"/&gt;</tt> rewritten as: <tt>&lt;e:setValueBinding var="vb" valueBinding="#{entityQuery[ControlKey][Field.name]}"/&gt;</tt> </p> 
+        <h2 class="wikiHeadline2" id="H-Contact"><a href="SeamDynamicCRUD.html#H-Contact">Contact</a></h2> 
+        <p class="wikiPara"> If you have any problems or bugs to report send to Samuel.Mendenhall@gmail.com</p> 
+       </div>
+       <div id="j_id374" class="documentCreatorHistory undecoratedLink smallFont">
+        <div id="j_id375">
+          Created:&nbsp;31. Jul 2008, 14:19&nbsp;America/New_York&nbsp;(Samuel Mendenhall)
+        </div>
+        <div id="j_id383">
+          Last Modified:&nbsp;20. Sep 2011, 14:31&nbsp;America/New_York&nbsp;(Shane Bryzak)
+        </div>
+       </div> 
+      </div>
+      <div id="commentDisplayForm">
+       <div id="comments" class="commentsDisplay"></div>
+      </div> 
+     </div> 
+     <div class="clear" style="padding-top:15px;"></div> 
+    </div>
+   </div> 
+  </div> 
+  <div id="footer" class="undecoratedLink"> 
+   <p> © Copyright 2009, Red Hat Middleware, LLC. All rights reserved. JBoss and Seam are registered trademarks and servicemarks of <a href="http://www.redhat.com/">Red Hat, Inc</a>. [<a href="http://www.redhat.com/legal/privacy_statement.html">Privacy Policy</a>]</p> 
+  </div>
+  <div id="status">
+   <span id="globalStatus"><span id="globalStatus.start" style="display: none">
+     <div id="j_id608" class="statusStart">
+      <img src="../themes/sfwkorg/img/statusindicator.gif" height="25" width="20">
+     </div></span><span id="globalStatus.stop">
+     <div id="j_id610" class="statusStop">
+      <img src="../themes/sfwkorg/img/blank.gif" height="25" width="20">
+     </div></span></span>
+  </div>  
+  <!-- Mirrored from 127.0.0.1:64444/Documentation/SeamDynamicCRUD by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:48:54 GMT --> 
+  <!-- Added by HTTrack -->
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack --> 
+ </body>
+</html>

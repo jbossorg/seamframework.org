@@ -1,0 +1,615 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <!-- Mirrored from 127.0.0.1:64444/Documentation/WhatIsBeansxmlAndWhyDoINeedIt by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:45:32 GMT -->
+ <!-- Added by HTTrack -->
+ <head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack -->  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+  <title>Seam Framework - What is beans.xml and why do I need it?</title> 
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/basic_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" rel="stylesheet" type="text/css">
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/extended_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" media="rich-extended-skinning" rel="stylesheet" type="text/css">
+  <script src="../a4j/g/3_3_3.CR1org.ajax4jsf.javascript.AjaxScript" type="text/javascript"></script>
+  <script type="text/javascript">window.RICH_FACES_EXTENDED_SKINNING_ON=true;</script>
+  <script src="../a4j/g/3_3_3.CR1org/richfaces/renderkit/html/scripts/skinning.js" type="text/javascript"></script>
+  <link class="user" href="../seam/resource/wikiPluginTheme/fb/faqBrowser/css/faqBrowser.css" rel="stylesheet" type="text/css">
+  <link class="user" href="../seam/resource/wikiPluginTheme/basic/docPager/css/docPager.css" rel="stylesheet" type="text/css">
+  <link href="../themes/sfwkorg/css/sfwk.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shCore.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shThemeDefault.css" rel="stylesheet" type="text/css"> 
+  <script type="text/javascript" src="../seam/resource/remoting/resource/remote.js"></script> 
+  <script type="text/javascript" src="../seam/resource/remoting/interface1535.js?httpSessionChecker"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jquery.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jqueryPlugins.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/lacewiki.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shCore.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushBash.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCpp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCSharp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCss.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDelphi.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDiff.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushGroovy.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJava.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJScript.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPhp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPlain.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPython.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushRuby.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushScala.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushSql.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushVb.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushXml.js"></script> 
+  <script type="text/javascript">
+        /* If you really want to load the Flash garbage on every page, go ahead and enable this:
+        SyntaxHighlighter.config.clipboardSwf = '/themes/sfwkorg/js/sh/scripts/clipboard.swf';
+         */
+        SyntaxHighlighter.defaults['gutter'] = false;
+        SyntaxHighlighter.all();
+	</script> 
+  <script type="text/javascript">
+
+        // ###################### Session timeout alert #################################
+
+        var sessionChecker = Seam.Component.getInstance("httpSessionChecker");
+        var timeoutURL = '/Home/JBossSeam';
+        var timeoutMillis = '900'*1000+3000;
+        var sessionTimeoutInterval = null;
+
+        function startSessionTimeoutCheck() {
+            sessionTimeoutInterval = setInterval('sessionChecker.isNewSession(alertTimeout)', timeoutMillis);
+        }
+
+        function stopSessionTimeoutCheck() {
+            if (sessionTimeoutInterval) clearInterval(sessionTimeoutInterval);
+        }
+
+        function resetSessionTimeoutCheck() {
+            if (sessionTimeoutInterval != null) {
+                stopSessionTimeoutCheck();
+                startSessionTimeoutCheck();
+            }
+        }
+
+        function alertTimeout(newSession) {
+            if (newSession) {
+                clearInterval(sessionTimeoutInterval);
+                jQuery(".ajaxSupport")
+                        .removeAttr('onblur')
+                        .removeAttr('onchange')
+                        .removeAttr('onkeyup')
+                        .removeAttr('onclick');
+                jQuery(".sessionEventTrigger").hide();
+                var answer = confirm("Your session has timed out, you will be redirected to the start page.");
+                if (answer) window.location = timeoutURL;
+            }
+        }
+
+        // ###################### Popups #################################
+
+        var fadeInPopupDialog = function(hash) {
+            hash.w.fadeIn('fast',function(){ hash.o.show(); });
+            jQuery(".closeDialog", hash.w).attr("accesskey", "C"); // Dynamically assign accesskey to .closeDialog buttons
+        };
+
+        var fadeOutPopupDialog = function(hash) { hash.w.fadeOut('fast',function(){ hash.o.remove(); }); };
+
+        // ###################### Tabbed Forms #################################
+
+        var formTabErrors = {};
+
+        function formTabRaiseError(tabId, fieldId, message) {
+
+            formTabClearError(tabId, fieldId); // Clear error then re-add
+
+            log("Raise error for tab: '" + tabId + "' field: " + fieldId);
+
+            // Add an error message to the client message box
+            log("Adding error message: " +tabId + fieldId + "ErrorMessage")
+            jQuery("#clientMessageBoxTable").append(
+                '<tr id="' + tabId + fieldId + 'ErrorMessage"><td><img src="/themes/sfwkorg/img/attention.gif" ' +
+                'height="18" width="18" class="clientMessageBoxImage attentionImage"/></td>' +
+                '<td><span id="attentionMessage" class="attentionMessage">'+ message + '</span></td></tr>'
+            );
+            if (formTabErrors[tabId] == null) {
+                formTabErrors[tabId] = 1;
+            } else {
+                formTabErrors[tabId]++;
+            }
+            formTabRenderErrors(tabId);
+        }
+
+        function formTabClearError(tabId, fieldId) {
+            if (document.getElementById(tabId+fieldId+"ErrorMessage") != null) { // This error is displayed
+                log("Clear error for tab: '" + tabId + "' field: " + fieldId);
+                log("Removing error message: " +tabId + fieldId + "ErrorMessage")
+                // Remove the error message on the client message box
+                jQuery("#"+tabId + fieldId + "ErrorMessage").remove();
+
+                formTabErrors[tabId]--;
+                formTabRenderErrors(tabId);
+            }
+        }
+
+        function formTabRenderErrors(tabId) {
+            log("Errors for tab: '" + tabId + "': " + formTabErrors[tabId]);
+
+            if (formTabErrors[tabId] > 0 && document.getElementById(tabId+"InvalidIcon") == null) {
+                log("Showing icon for tab: " + tabId);
+                // Show an icon on the tab and blink it a few times
+                jQuery("#"+tabId)
+                    .prepend('<img id="' + tabId + 'InvalidIcon" ' +
+                            'src="/themes/sfwkorg/img/attention.gif" width="13" height="13" ' +
+                            'alt="!" style="vertical-align:bottom;margin-left:5px;margin-right:5px;"/>');
+                pulsate("#"+tabId);
+            } else if (formTabErrors[tabId] < 1){
+                log("Removing icon of tab: " + tabId);
+                jQuery("#"+tabId + "InvalidIcon").remove();             // Remove the error icon on the tab
+            }
+
+            var tabsHaveErrors = false;
+            for (var tab in formTabErrors) {
+                var numOfErrors = formTabErrors[tab];
+                if (numOfErrors > 0) {
+                    tabsHaveErrors = true;
+                    break;
+                }
+            }
+
+            if (tabsHaveErrors) {
+                log("Hiding save button and showing form message box");
+                jQuery(".saveButton").hide();                       // Hide save button(s)
+                jQuery(".formControls").css("height", "30px");      // Adjust height for missing save button
+                jQuery("#messageBoxContainer").hide();                 // Hide server messages
+                jQuery("#clientMessageBoxContainer").show();           // Show client error messages
+            } else {
+                log("Showing save button and hiding form message box");
+                jQuery(".saveButton").show();                       // Show save button(s)
+                jQuery(".formControls").css("height", "");          // Readjust height for present save button
+                jQuery("#clientMessageBoxContainer").hide();           // Hide client error messages
+            }
+        }
+
+        function formTabClicked() {
+            jQuery("#messageBoxContainer").hide();                 // Hide server messages
+        }
+
+        function log(message) {
+            return; // Remove to enable logging
+            if (!log.window_ || log.window_.closed) {
+                var win = window.open("", null, "width=400,height=200," +
+                                                "scrollbars=yes,resizable=yes,status=no," +
+                                                "location=no,menubar=no,toolbar=no");
+                if (!win) return;
+                var doc = win.document;
+                doc.write("<html><head><title>Debug Log</title></head><body style='font-family: monospace'></body></html>");
+                doc.close();
+                log.window_ = win;
+            }
+            var logLine = log.window_.document.createElement("div");
+            logLine.appendChild(log.window_.document.createTextNode(message));
+            log.window_.document.body.appendChild(logLine);
+        }
+
+        // ###################### Design #################################
+
+        function highlightStars(item, range, end) {
+            for (i = 1; i <= range; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star_grey.gif");
+            }
+            for (i = 1; i <= end; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star.gif");
+            }
+        }
+
+        function pulsate(query) {
+            var blinkCount = 2*2;
+            do {
+                jQuery(query)['fade'+(blinkCount%2==0?'Out':'In')]('fast');
+            } while (--blinkCount);
+        }
+
+        function clearDocumentBackground() {
+            // Noop for this skin
+        }
+
+        // Wrap boxes with border and shadow
+        function wrapBoxes() {
+            // Noop for this skin
+        }
+
+        function initPage() {
+            checkCookieSupport();
+            wrapBoxes();
+        }
+
+        jQuery(function() {
+            initPage();
+        });
+
+    </script> 
+  <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-25106513-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script> 
+ </head> 
+ <body> 
+  <noscript> 
+   <div class="cookieJavaScriptWarning">
+     Please activate JavaScript in your browser. Without it, you will only be able to browse this website but clicking on any advanced feature (any forms or submit buttons) will not work. 
+   </div> 
+  </noscript>
+  <div id="dialogHelp" class="popupDialog">
+   <span id="dialogHelpPopup" title="dialogHelp"></span>
+   <span id="dialogHelpInit"> <script type="text/javascript">
+            function showHelpPopup(width, height, offsetId) {
+                var offset = jQuery("#"+offsetId).offset();
+                jsf('dialogHelpPopup')
+                    .css({width: width+"px", height: height+"px", top: offset.top-100+"px", left: offset.left-150+"px"})
+                    .jqm({
+                        closeClass: "closeDialog",
+                        overlay: 0
+                    });
+
+                jQuery("#dialogHelpContent").css("width", width-20+"px").css("height", height-75+"px");
+                jQuery("#dialogHelpContent").css("overflow", "auto");
+
+                jsf('dialogHelpPopup').jqmShow();
+            }
+        </script></span> 
+   <script type="text/javascript">jQuery(function() {
+        jsf('dialogHelpPopup').Resizable({
+            minTop: 1,
+            dragHandle: "#dialogHelpHead",
+            handlers: { se: "#dialogHelpResizeHandle" }
+        });
+    });</script> 
+   <div class="popupDialogHead" id="dialogHelpHead">
+    Help
+   </div>
+   <div id="dialogHelpContent" class="popupDialogContent"></div>
+   <div id="dialogHelpControls" class="popupDialogControls">
+    <div id="j_id14" style="padding:5px;">
+     <a href="#" class="buttonNonpersistent closeDialog"><span class="buttonLabel">Close Help</span></a>
+    </div>
+   </div>
+  </div> 
+  <div id="wrapper"> 
+   <div id="header">  
+    <div>
+     <a href="http://seamframework.org/"><img src="../themes/sfwkorg/img/blank.gif" height="98" width="210"></a> 
+    </div> 
+   </div>
+   <div id="body"> 
+    <div id="container"> 
+     <div id="leftColumn">
+      <div id="mainMenu" xmlns="http://www.w3.org/1999/xhtml">
+       <div id="j_id121" class="box">
+        <div class="mainMenuContainer"> 
+         <div class="mainMenuHeader"></div> 
+         <div class="mainMenuBody">
+          <div id="j_id125" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Home.html" class="level1Link">Home</a>
+          </div>
+          <div id="j_id132" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Home/WhySeam.html" class="level2Link">Why Seam?</a>
+          </div>
+          <div id="j_id139" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Seam2.html" class="level1Link">Seam 2</a>
+          </div>
+          <div id="j_id146" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/GettingStarted.html" class="level2Link">Getting Started</a>
+          </div>
+          <div id="j_id153" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Downloads.html" class="level2Link">Downloads</a>
+          </div>
+          <div id="j_id160" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Documentation.html" class="level2Link">Documentation</a>
+          </div>
+          <div id="j_id167" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="http://weld.cdi-spec.org/" class="level1Link">Weld</a>
+          </div>
+          <div id="j_id174" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Community.html" class="level1Link">Community</a>
+          </div>
+          <div id="j_id181" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="https://community.jboss.org/" class="level2Link">Forums</a>
+          </div>
+          <div id="j_id188" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/CDIExtensions.html" class="level2Link">CDI Extensions</a>
+          </div>
+          <div id="j_id195" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Contribute.html" class="level2Link">Contribute</a>
+          </div>
+          <div id="j_id202" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/JIRA.html" class="level2Link">JIRA</a>
+          </div>
+          <div id="j_id209" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/MailingLists.html" class="level2Link">Mailing Lists</a>
+          </div>
+          <div id="j_id216" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Events.html" class="level2Link">Events</a>
+          </div>
+          <div id="j_id223" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Links.html" class="level2Link">Links</a>
+          </div>
+          <div id="j_id230" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/SeamInProduction.html" class="level2Link">Seam In Production</a>
+          </div>
+          <div id="j_id237" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Documentation.html" class="level1Link">Documentation</a>
+          </div>
+          <div id="j_id244" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="FAQs.html" class="level2Link">FAQs</a>
+          </div>
+          <div id="j_id251" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="KnowledgeBase.html" class="level2Link">Knowledge Base</a>
+          </div>
+          <div id="j_id258" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="Design.html" class="level2Link">Design</a>
+          </div> 
+         </div> 
+         <div class="mainMenuFooter"></div> 
+        </div>
+       </div> 
+      </div> 
+      <br> 
+      <div style="margin-top: 25px; margin-left: 15px; margin-right: 15px; "> 
+       <h2>Built with Seam</h2> 
+       <p> You can find the full source code for this website in the <a href="/Download.html">Seam package</a> in the directory /examples/wiki. It is licensed under the LGPL. </p> 
+       <div style="text-align:center;">
+        <a href="/Community/GetASeamIcon.html"><img src="../themes/sfwkorg/img/runningon_seamlogo_beige.gif" height="50" width="200"></a> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="rightColumn">
+      <img src="../themes/sfwkorg/img/blank.gif" height="8" width="1">
+      <div id="breadcrumb" class="breadcrumb">
+       <span class="breadcrumbPanel"><a href="../index.html" class="itemLink breadcrumbRoot">Site</a><span class="itemSeparator breadcrumbRoot">·</span><a href="../Documentation.html" class="itemLink">Documentation</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="FAQs.html" class="itemLink">FAQs</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="CDI.html" class="itemLink">CDI</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="WhatIsBeansxmlAndWhyDoINeedIt.html" class="itemText">What is beans.xml and why do I nee...</a></span>
+      </div>
+      <div id="messageBoxContainer"></div>
+      <div id="clientMessageBoxContainer" style="display:none;"> 
+       <div id="clientMessageBox" class="messageBox"> 
+        <table id="clientMessageBoxTable" class="messageBoxTable" cellpadding="0" cellspacing="0" border="0"></table> 
+        <script type="text/javascript">jQuery(function() {
+                    jQuery("#clientMessageBoxContainer").css("margin-top", "10px").css("margin-bottom", "10px");
+                    pulsate(".clientMessageBoxImage");
+                });</script> 
+       </div>
+      </div> 
+      <div id="documentDisplayContainer" class="box">
+       <div id="documentDisplay" class="documentDisplay">
+        <p class="wikiPara"> </p>
+        <div id="faqBrowserPlugin:faqBrowserPluginContainer">
+         <div id="faqBrowserPlugin:faqControlsContainer" class="faqControlsContainer"> 
+          <form id="faqBrowserPlugin:faqsSelectorForm" name="faqBrowserPlugin:faqsSelectorForm" method="post" action="http://127.0.0.1:64444/docDisplay_d.seam" enctype="application/x-www-form-urlencoded"> 
+           <input type="hidden" name="faqBrowserPlugin:faqsSelectorForm" value="faqBrowserPlugin:faqsSelectorForm"> 
+           <div id="faqBrowserPlugin:faqsSelectorForm:faqQuestions"></div>
+           <input type="hidden" name="javax.faces.ViewState" id="javax.faces.ViewState" value="j_id187"> 
+          </form>
+         </div>
+         <div id="faqBrowserPlugin:faqQuestionFormContainer" class="faqQuestionFormContainer"></div>
+        </div> 
+        <table class="docPager" border="0" cellpadding="0" cellspacing="0"> 
+         <tbody> 
+          <tr> 
+           <td class="docPagerPrevious">
+            <div id="j_id399:j_id402" class="undecoratedLink">
+             <a href="CanIShareInformationBetweenObserversInAnExtension.html"><img src="../themes/sfwkorg/img/left.gif" height="18" width="18" class="docPagerButton"><span class="docPagerLabel">Can I share information between ob...</span></a>
+            </div></td> 
+           <td class=" docPagerNext">
+            <div id="j_id399:j_id408" class="undecoratedLink">
+             <a href="WhenAreInterceptorsAndDecoratorsApplied.html"><span class="docPagerLabel">When are interceptors and decorato...</span><img src="../themes/sfwkorg/img/right.gif" height="18" width="18" class="docPagerButton"></a>
+            </div></td> 
+          </tr> 
+         </tbody> 
+        </table> 
+        <p></p> 
+        <div id="j_id414"> 
+         <h1 class="documentTitle"><a href="WhatIsBeansxmlAndWhyDoINeedIt.html">What is beans.xml and why do I need it?</a> </h1>
+        </div>
+        <p class="wikiPara"> The beans.xml file is know as the bean archive descriptor. This answer addresses the purpose of this file and why it is needed. </p> 
+        <h2 class="wikiHeadline2" id="H-TheMinimalBeanDescriptor"><a href="WhatIsBeansxmlAndWhyDoINeedIt.html#H-TheMinimalBeanDescriptor">The minimal bean descriptor</a></h2> 
+        <p class="wikiPara"> First, it's important to understand that the XML bean descriptor in CDI (META-INF/beans.xml or WEB-INF/beans.xml) is not there to define beans in XML, like in other popular bean containers. Rather, you use this file to enable CDI services for the current bean archive that are difficult to define consistently in Java or which you don't want to define in Java (e.g., to accomodate testing). </p> 
+        <p class="wikiPara"> For example, in CDI, XML is used to enable interceptors (which are disabled by default) and define interceptor ordering. So the bean descriptor <i class="wikiEmphasis">complements</i> the metadata that is provided in the Java language syntax. (You may still want to define beans in XML for other reasons, but that is the concern of an extension). </p> 
+        <blockquote class="wikiBlockquote"> 
+         <strong>NOTE</strong>
+         <br>
+         <br>The 
+         <a href="../Seam3/ConfigModuleHome.html" target="" class="regularLink">XML Bean Config module</a> in Seam 3 allows you to declare and customize beans in beans.xml using an type-safe XML syntax. 
+        </blockquote> 
+        <p class="wikiPara"> Let's first ask why the beans.xml is required, then look at what services it is used used to enable. </p> 
+        <h2 class="wikiHeadline2" id="H-WhyIsBeansxmlRequired"><a href="WhatIsBeansxmlAndWhyDoINeedIt.html#H-WhyIsBeansxmlRequired">Why is beans.xml required?</a></h2> 
+        <p class="wikiPara"> You may be wondering, if beans are not described using XML, why do we need beans.xml at all? In particular, why do you need it if you don't have anything that you would need the bean descriptor to enable (alternatives, interceptors or decorators)? </p> 
+        <p class="wikiPara"> There are two things about CDI that we need to keep in mind: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> CDI does not require any special declaration on a Java class to enable it to be injected - that's right, no annotation or XML declaration at all!</li> 
+         <li class="wikiUnorderedListItem"> CDI does not define any special kind of module - CDI beans can be deployed in a library jar, EJB jar, war, rar, or JVM classpath directory.</li> 
+        </ul> 
+        <p class="wikiPara"> The CDI specification calls the process of identifying beans in modules <i class="wikiEmphasis">bean discovery</i>. </p> 
+        <p class="wikiPara"> So there are potentially a lot of classes in the classpath which might be beans! We don't want to force the container to scan every one of those classes at startup and build its internal metamodel for each of them. This really could make bean discovery very slow. </p> 
+        <p class="wikiPara"> But there's another reason we need to give the user some control over which classes are available for injection. We don't want every class in the classpath to potentially match an injection point, including classes that were never intended to be injected into things. This would force the developer to have to use qualifiers much more often to disambiguate injection points. </p> 
+        <p class="wikiPara"> So we have two choices. We could have the developer: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> explicitly exclude modules which do not contain beans, or</li> 
+         <li class="wikiUnorderedListItem"> explicitly declare modules which do contain beans.</li> 
+        </ul> 
+        <p class="wikiPara"> Hopefully you agree that the second option is a much better way to go. In following this approach, CDI has the notion of a bean archive. A bean archive is just a module that has a file named beans.xml in the META-INF directory. The container looks for beans in bean archives. It ignores other modules. </p> 
+        <p class="wikiPara"> Now, you might be wondering if we've got the granularity wrong here. Why should module be the right criteria to use for including/excluding a class? Why not consider: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> a class-level annotation,</li> 
+         <li class="wikiUnorderedListItem"> the package,</li> 
+         <li class="wikiUnorderedListItem"> some type it implements or extends, or</li> 
+         <li class="wikiUnorderedListItem"> some naming convention?</li> 
+        </ul> 
+        <p class="wikiPara"> We've got the first option covered. Annotate a bean <tt>@Alternative</tt>, or with an alternative stereotype, and it will be considered disabled by CDI, as long as you don't explicitly enable it in beans.xml. That's not quite the same thing as excluding the class from scanning altogether, but it's close. (One difference is that a portable extension with still get a <tt>ProcessAnnotatedType</tt> event for that class). </p> 
+        <p class="wikiPara"> A future version of CDI might allow you to declare excluded packages in beans.xml. Excluding a bean by type or naming convention isn't really that appealing. In the world of CDI, we use stereotypes for identifying architectural roles. We don't use marker interfaces or naming conventions. Names really shouldn't affect functionality as it is too fragile. </p> 
+        <p class="wikiPara"> Enough theory, what elements are available in beans.xml? </p> 
+        <h2 class="wikiHeadline2" id="H-BeanDescriptorSchema"><a href="WhatIsBeansxmlAndWhyDoINeedIt.html#H-BeanDescriptorSchema">Bean descriptor schema?</a></h2> 
+        <p class="wikiPara"> If you don't need to activate any interceptors, decorators or alternatives (you just have plain beans that you need to use in an archive), the beans.xml file can be <i class="wikiEmphasis">empty</i>. If you do have one of these requirements, then you need to start popularing the descriptor. </p> 
+        <p class="wikiPara"> The root element of a beans.xml file is <tt>beans</tt>, with the following <a href="http://anonsvn.jboss.org/repos/weld/api/trunk/cdi/src/main/resources/beans.xsd" target="" class="regularLink">schema</a>: </p> 
+        <pre class="wikiPreformatted">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://java.sun.com/xml/ns/javaee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="
+      http://java.sun.com/xml/ns/javaee 
+      http://java.sun.com/xml/ns/javaee/beans_1_0.xsd"&gt;
+&lt;/beans&gt;</pre> 
+        <p class="wikiPara"> The <tt>beans</tt> element can have one or more of each of the following children: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <tt>interceptors</tt></li> 
+         <li class="wikiUnorderedListItem"> <tt>decorators</tt></li> 
+         <li class="wikiUnorderedListItem"> <tt>alternatives</tt></li> 
+        </ul> 
+        <p class="wikiPara"> Let's look at each element in detail. </p> 
+        <h4 class="wikiHeadline4" id="H-Ltinterceptorsgt"><a href="WhatIsBeansxmlAndWhyDoINeedIt.html#H-Ltinterceptorsgt">&lt;interceptors&gt;</a></h4> 
+        <p class="wikiPara"> By default, a bean archive has no enabled interceptors bound via interceptor bindings. An interceptor must be explicitly enabled by listing the fully qualified class name in a child <tt>&lt;class&gt;</tt> element of <tt>&lt;interceptors&gt;</tt>. </p> 
+        <p class="wikiPara"> There may be zero or more interceptor class elements. The order of the class declarations determines the interceptor ordering. Interceptors which occur earlier in the list are called first. The same class may not be listed twice. And of course, the class must exist and it must be an interceptor class. </p> 
+        <pre class="wikiPreformatted">&lt;interceptors&gt;
+   &lt;class&gt;com.acme.intercept.SecurityInterceptor&lt;/class&gt;
+   &lt;class&gt;com.acme.intercept.TransactionInterceptor&lt;/class&gt;
+&lt;/interceptors&gt;</pre> 
+        <h4 class="wikiHeadline4" id="H-Ltdecoratorsgt"><a href="WhatIsBeansxmlAndWhyDoINeedIt.html#H-Ltdecoratorsgt">&lt;decorators&gt;</a></h4> 
+        <p class="wikiPara"> By default, a bean archive has no enabled decorators. A decorator must be explicitly enabled by listing the fully qualified class name in a child <tt>&lt;class&gt;</tt> element of <tt>&lt;decorators&gt;</tt>. </p> 
+        <p class="wikiPara"> There may be zero or more decorator class elements. The order of the class declarations determines the decorator ordering. Decorators which occur earlier in the list are called first. The same class may not be listed twice. And of course, the class must exist and it must be an decorator class. </p> 
+        <pre class="wikiPreformatted">&lt;decorators&gt;
+   &lt;class&gt;com.acme.decorate.BigAccountDecorator&lt;/class&gt;
+   &lt;class&gt;com.acme.decorate.SpecialGiftDecorator&lt;/class&gt;
+&lt;/decorators&gt;</pre> 
+        <h4 class="wikiHeadline4" id="H-Ltalternativesgt"><a href="WhatIsBeansxmlAndWhyDoINeedIt.html#H-Ltalternativesgt">&lt;alternatives&gt;</a></h4> 
+        <p class="wikiPara"> An alternative is a bean that must be explicitly declared in the beans.xml file if it should be available for lookup, injection or EL resolution. By default, a bean archive has no active alternatives. An alternative must be explicitly declared using the fully qualified bean class name or stereotype class name in either a child <tt>&lt;class&gt;</tt> or <tt>&lt;stereotype&gt;</tt> element of <tt>&lt;alternatives&gt;</tt>, respectively. </p> 
+        <p class="wikiPara"> An alternative is selected for the bean archive if either: the alternative is a managed bean or session bean and the bean class of the bean is listed, or the alternative is a producer method, field or resource, and the bean class that declares the method or field is listed, or any <tt>@Alternative</tt> stereotype of the alternative is listed. </p> 
+        <p class="wikiPara"> There may be zero or more alternative bean class elements. The same class may not be listed twice. And of course, the class must exist and it must be an alternative bean class. </p> 
+        <p class="wikiPara"> There may also be zero or more <tt>@Alternative</tt> stereotype elements. The same stereotype may not be listed twice. And of course, the stereotype class must exist and it must be an stereotype annotation. </p> 
+        <pre class="wikiPreformatted">&lt;stereotypes&gt;
+   &lt;class&gt;com.acme.business.MockPaymentProcessor&lt;/class&gt;
+   &lt;stereotype&gt;com.acme.stereotype.Mock&lt;/stereotype&gt;
+&lt;/stereotypes&gt;</pre> 
+        <p class="wikiPara"> And that's it! A very simple schema, used only to activate and order CDI services.</p> 
+       </div>
+       <div id="j_id426" class="documentCreatorHistory undecoratedLink smallFont">
+        <div id="j_id427">
+          Created:&nbsp;11. Apr 2010, 15:00&nbsp;America/New_York&nbsp;(Dan Allen)
+        </div>
+        <div id="j_id435">
+          Last Modified:&nbsp;11. Apr 2010, 15:02&nbsp;America/New_York&nbsp;(Dan Allen)
+        </div>
+       </div> 
+      </div>
+      <div id="commentDisplayForm">
+       <div id="comments" class="commentsDisplay"></div>
+      </div> 
+     </div> 
+     <div class="clear" style="padding-top:15px;"></div> 
+    </div>
+   </div> 
+  </div> 
+  <div id="footer" class="undecoratedLink"> 
+   <p> © Copyright 2009, Red Hat Middleware, LLC. All rights reserved. JBoss and Seam are registered trademarks and servicemarks of <a href="http://www.redhat.com/">Red Hat, Inc</a>. [<a href="http://www.redhat.com/legal/privacy_statement.html">Privacy Policy</a>]</p> 
+  </div>
+  <div id="status">
+   <span id="globalStatus"><span id="globalStatus.start" style="display: none">
+     <div id="j_id660" class="statusStart">
+      <img src="../themes/sfwkorg/img/statusindicator.gif" height="25" width="20">
+     </div></span><span id="globalStatus.stop">
+     <div id="j_id662" class="statusStop">
+      <img src="../themes/sfwkorg/img/blank.gif" height="25" width="20">
+     </div></span></span>
+  </div>  
+  <!-- Mirrored from 127.0.0.1:64444/Documentation/WhatIsBeansxmlAndWhyDoINeedIt by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:45:34 GMT --> 
+  <!-- Added by HTTrack -->
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack --> 
+ </body>
+</html>

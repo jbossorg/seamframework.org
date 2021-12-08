@@ -1,0 +1,708 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <!-- Mirrored from 127.0.0.1:64444/Seam3/ModuleAnatomy by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:54:44 GMT -->
+ <!-- Added by HTTrack -->
+ <head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack -->  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+  <title>Seam Framework - Module Anatomy</title> 
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/basic_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" rel="stylesheet" type="text/css">
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/extended_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" media="rich-extended-skinning" rel="stylesheet" type="text/css">
+  <script src="../a4j/g/3_3_3.CR1org.ajax4jsf.javascript.AjaxScript" type="text/javascript"></script>
+  <script type="text/javascript">window.RICH_FACES_EXTENDED_SKINNING_ON=true;</script>
+  <script src="../a4j/g/3_3_3.CR1org/richfaces/renderkit/html/scripts/skinning.js" type="text/javascript"></script>
+  <link href="../themes/sfwkorg/css/sfwk.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shCore.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shThemeDefault.css" rel="stylesheet" type="text/css"> 
+  <script type="text/javascript" src="../seam/resource/remoting/resource/remote.js"></script> 
+  <script type="text/javascript" src="../seam/resource/remoting/interface1535.js?httpSessionChecker"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jquery.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jqueryPlugins.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/lacewiki.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shCore.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushBash.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCpp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCSharp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCss.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDelphi.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDiff.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushGroovy.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJava.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJScript.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPhp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPlain.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPython.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushRuby.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushScala.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushSql.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushVb.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushXml.js"></script> 
+  <script type="text/javascript">
+        /* If you really want to load the Flash garbage on every page, go ahead and enable this:
+        SyntaxHighlighter.config.clipboardSwf = '/themes/sfwkorg/js/sh/scripts/clipboard.swf';
+         */
+        SyntaxHighlighter.defaults['gutter'] = false;
+        SyntaxHighlighter.all();
+	</script> 
+  <script type="text/javascript">
+
+        // ###################### Session timeout alert #################################
+
+        var sessionChecker = Seam.Component.getInstance("httpSessionChecker");
+        var timeoutURL = '/Home/JBossSeam';
+        var timeoutMillis = '900'*1000+3000;
+        var sessionTimeoutInterval = null;
+
+        function startSessionTimeoutCheck() {
+            sessionTimeoutInterval = setInterval('sessionChecker.isNewSession(alertTimeout)', timeoutMillis);
+        }
+
+        function stopSessionTimeoutCheck() {
+            if (sessionTimeoutInterval) clearInterval(sessionTimeoutInterval);
+        }
+
+        function resetSessionTimeoutCheck() {
+            if (sessionTimeoutInterval != null) {
+                stopSessionTimeoutCheck();
+                startSessionTimeoutCheck();
+            }
+        }
+
+        function alertTimeout(newSession) {
+            if (newSession) {
+                clearInterval(sessionTimeoutInterval);
+                jQuery(".ajaxSupport")
+                        .removeAttr('onblur')
+                        .removeAttr('onchange')
+                        .removeAttr('onkeyup')
+                        .removeAttr('onclick');
+                jQuery(".sessionEventTrigger").hide();
+                var answer = confirm("Your session has timed out, you will be redirected to the start page.");
+                if (answer) window.location = timeoutURL;
+            }
+        }
+
+        // ###################### Popups #################################
+
+        var fadeInPopupDialog = function(hash) {
+            hash.w.fadeIn('fast',function(){ hash.o.show(); });
+            jQuery(".closeDialog", hash.w).attr("accesskey", "C"); // Dynamically assign accesskey to .closeDialog buttons
+        };
+
+        var fadeOutPopupDialog = function(hash) { hash.w.fadeOut('fast',function(){ hash.o.remove(); }); };
+
+        // ###################### Tabbed Forms #################################
+
+        var formTabErrors = {};
+
+        function formTabRaiseError(tabId, fieldId, message) {
+
+            formTabClearError(tabId, fieldId); // Clear error then re-add
+
+            log("Raise error for tab: '" + tabId + "' field: " + fieldId);
+
+            // Add an error message to the client message box
+            log("Adding error message: " +tabId + fieldId + "ErrorMessage")
+            jQuery("#clientMessageBoxTable").append(
+                '<tr id="' + tabId + fieldId + 'ErrorMessage"><td><img src="/themes/sfwkorg/img/attention.gif" ' +
+                'height="18" width="18" class="clientMessageBoxImage attentionImage"/></td>' +
+                '<td><span id="attentionMessage" class="attentionMessage">'+ message + '</span></td></tr>'
+            );
+            if (formTabErrors[tabId] == null) {
+                formTabErrors[tabId] = 1;
+            } else {
+                formTabErrors[tabId]++;
+            }
+            formTabRenderErrors(tabId);
+        }
+
+        function formTabClearError(tabId, fieldId) {
+            if (document.getElementById(tabId+fieldId+"ErrorMessage") != null) { // This error is displayed
+                log("Clear error for tab: '" + tabId + "' field: " + fieldId);
+                log("Removing error message: " +tabId + fieldId + "ErrorMessage")
+                // Remove the error message on the client message box
+                jQuery("#"+tabId + fieldId + "ErrorMessage").remove();
+
+                formTabErrors[tabId]--;
+                formTabRenderErrors(tabId);
+            }
+        }
+
+        function formTabRenderErrors(tabId) {
+            log("Errors for tab: '" + tabId + "': " + formTabErrors[tabId]);
+
+            if (formTabErrors[tabId] > 0 && document.getElementById(tabId+"InvalidIcon") == null) {
+                log("Showing icon for tab: " + tabId);
+                // Show an icon on the tab and blink it a few times
+                jQuery("#"+tabId)
+                    .prepend('<img id="' + tabId + 'InvalidIcon" ' +
+                            'src="/themes/sfwkorg/img/attention.gif" width="13" height="13" ' +
+                            'alt="!" style="vertical-align:bottom;margin-left:5px;margin-right:5px;"/>');
+                pulsate("#"+tabId);
+            } else if (formTabErrors[tabId] < 1){
+                log("Removing icon of tab: " + tabId);
+                jQuery("#"+tabId + "InvalidIcon").remove();             // Remove the error icon on the tab
+            }
+
+            var tabsHaveErrors = false;
+            for (var tab in formTabErrors) {
+                var numOfErrors = formTabErrors[tab];
+                if (numOfErrors > 0) {
+                    tabsHaveErrors = true;
+                    break;
+                }
+            }
+
+            if (tabsHaveErrors) {
+                log("Hiding save button and showing form message box");
+                jQuery(".saveButton").hide();                       // Hide save button(s)
+                jQuery(".formControls").css("height", "30px");      // Adjust height for missing save button
+                jQuery("#messageBoxContainer").hide();                 // Hide server messages
+                jQuery("#clientMessageBoxContainer").show();           // Show client error messages
+            } else {
+                log("Showing save button and hiding form message box");
+                jQuery(".saveButton").show();                       // Show save button(s)
+                jQuery(".formControls").css("height", "");          // Readjust height for present save button
+                jQuery("#clientMessageBoxContainer").hide();           // Hide client error messages
+            }
+        }
+
+        function formTabClicked() {
+            jQuery("#messageBoxContainer").hide();                 // Hide server messages
+        }
+
+        function log(message) {
+            return; // Remove to enable logging
+            if (!log.window_ || log.window_.closed) {
+                var win = window.open("", null, "width=400,height=200," +
+                                                "scrollbars=yes,resizable=yes,status=no," +
+                                                "location=no,menubar=no,toolbar=no");
+                if (!win) return;
+                var doc = win.document;
+                doc.write("<html><head><title>Debug Log</title></head><body style='font-family: monospace'></body></html>");
+                doc.close();
+                log.window_ = win;
+            }
+            var logLine = log.window_.document.createElement("div");
+            logLine.appendChild(log.window_.document.createTextNode(message));
+            log.window_.document.body.appendChild(logLine);
+        }
+
+        // ###################### Design #################################
+
+        function highlightStars(item, range, end) {
+            for (i = 1; i <= range; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star_grey.gif");
+            }
+            for (i = 1; i <= end; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star.gif");
+            }
+        }
+
+        function pulsate(query) {
+            var blinkCount = 2*2;
+            do {
+                jQuery(query)['fade'+(blinkCount%2==0?'Out':'In')]('fast');
+            } while (--blinkCount);
+        }
+
+        function clearDocumentBackground() {
+            // Noop for this skin
+        }
+
+        // Wrap boxes with border and shadow
+        function wrapBoxes() {
+            // Noop for this skin
+        }
+
+        function initPage() {
+            checkCookieSupport();
+            wrapBoxes();
+        }
+
+        jQuery(function() {
+            initPage();
+        });
+
+    </script> 
+  <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-25106513-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script> 
+ </head> 
+ <body> 
+  <noscript> 
+   <div class="cookieJavaScriptWarning">
+     Please activate JavaScript in your browser. Without it, you will only be able to browse this website but clicking on any advanced feature (any forms or submit buttons) will not work. 
+   </div> 
+  </noscript>
+  <div id="dialogHelp" class="popupDialog">
+   <span id="dialogHelpPopup" title="dialogHelp"></span>
+   <span id="dialogHelpInit"> <script type="text/javascript">
+            function showHelpPopup(width, height, offsetId) {
+                var offset = jQuery("#"+offsetId).offset();
+                jsf('dialogHelpPopup')
+                    .css({width: width+"px", height: height+"px", top: offset.top-100+"px", left: offset.left-150+"px"})
+                    .jqm({
+                        closeClass: "closeDialog",
+                        overlay: 0
+                    });
+
+                jQuery("#dialogHelpContent").css("width", width-20+"px").css("height", height-75+"px");
+                jQuery("#dialogHelpContent").css("overflow", "auto");
+
+                jsf('dialogHelpPopup').jqmShow();
+            }
+        </script></span> 
+   <script type="text/javascript">jQuery(function() {
+        jsf('dialogHelpPopup').Resizable({
+            minTop: 1,
+            dragHandle: "#dialogHelpHead",
+            handlers: { se: "#dialogHelpResizeHandle" }
+        });
+    });</script> 
+   <div class="popupDialogHead" id="dialogHelpHead">
+    Help
+   </div>
+   <div id="dialogHelpContent" class="popupDialogContent"></div>
+   <div id="dialogHelpControls" class="popupDialogControls">
+    <div id="j_id14" style="padding:5px;">
+     <a href="#" class="buttonNonpersistent closeDialog"><span class="buttonLabel">Close Help</span></a>
+    </div>
+   </div>
+  </div> 
+  <div id="wrapper"> 
+   <div id="header">  
+    <div>
+     <a href="http://seamframework.org/"><img src="../themes/sfwkorg/img/blank.gif" height="98" width="210"></a> 
+    </div> 
+   </div>
+   <div id="body"> 
+    <div id="container"> 
+     <div id="leftColumn">
+      <div id="mainMenu" xmlns="http://www.w3.org/1999/xhtml">
+       <div id="j_id121" class="box">
+        <div class="mainMenuContainer"> 
+         <div class="mainMenuHeader"></div> 
+         <div class="mainMenuBody">
+          <div id="j_id125" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Home.html" class="level1Link">Home</a>
+          </div>
+          <div id="j_id132" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Home/WhySeam.html" class="level2Link">Why Seam?</a>
+          </div>
+          <div id="j_id139" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Seam2.html" class="level1Link">Seam 2</a>
+          </div>
+          <div id="j_id146" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/GettingStarted.html" class="level2Link">Getting Started</a>
+          </div>
+          <div id="j_id153" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Downloads.html" class="level2Link">Downloads</a>
+          </div>
+          <div id="j_id160" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Documentation.html" class="level2Link">Documentation</a>
+          </div>
+          <div id="j_id167" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="http://weld.cdi-spec.org/" class="level1Link">Weld</a>
+          </div>
+          <div id="j_id174" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Community.html" class="level1Link">Community</a>
+          </div>
+          <div id="j_id181" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="https://community.jboss.org/" class="level2Link">Forums</a>
+          </div>
+          <div id="j_id188" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/CDIExtensions.html" class="level2Link">CDI Extensions</a>
+          </div>
+          <div id="j_id195" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Contribute.html" class="level2Link">Contribute</a>
+          </div>
+          <div id="j_id202" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/JIRA.html" class="level2Link">JIRA</a>
+          </div>
+          <div id="j_id209" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/MailingLists.html" class="level2Link">Mailing Lists</a>
+          </div>
+          <div id="j_id216" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Events.html" class="level2Link">Events</a>
+          </div>
+          <div id="j_id223" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Links.html" class="level2Link">Links</a>
+          </div>
+          <div id="j_id230" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/SeamInProduction.html" class="level2Link">Seam In Production</a>
+          </div>
+          <div id="j_id237" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Documentation.html" class="level1Link">Documentation</a>
+          </div>
+          <div id="j_id244" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Documentation/FAQs.html" class="level2Link">FAQs</a>
+          </div>
+          <div id="j_id251" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Documentation/KnowledgeBase.html" class="level2Link">Knowledge Base</a>
+          </div>
+          <div id="j_id258" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Documentation/Design.html" class="level2Link">Design</a>
+          </div> 
+         </div> 
+         <div class="mainMenuFooter"></div> 
+        </div>
+       </div> 
+      </div> 
+      <br> 
+      <div style="margin-top: 25px; margin-left: 15px; margin-right: 15px; "> 
+       <h2>Built with Seam</h2> 
+       <p> You can find the full source code for this website in the <a href="/Download.html">Seam package</a> in the directory /examples/wiki. It is licensed under the LGPL. </p> 
+       <div style="text-align:center;">
+        <a href="/Community/GetASeamIcon.html"><img src="../themes/sfwkorg/img/runningon_seamlogo_beige.gif" height="50" width="200"></a> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="rightColumn">
+      <img src="../themes/sfwkorg/img/blank.gif" height="8" width="1">
+      <div id="breadcrumb" class="breadcrumb">
+       <span class="breadcrumbPanel"><a href="../index.html" class="itemLink breadcrumbRoot">Site</a><span class="itemSeparator breadcrumbRoot">·</span><a href="../Seam3.html" class="itemLink">Seam 3</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="ModuleHandbook.html" class="itemLink">Module Handbook</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="ModuleAnatomy.html" class="itemText">Module Anatomy</a></span>
+      </div>
+      <div id="messageBoxContainer"></div>
+      <div id="clientMessageBoxContainer" style="display:none;"> 
+       <div id="clientMessageBox" class="messageBox"> 
+        <table id="clientMessageBoxTable" class="messageBoxTable" cellpadding="0" cellspacing="0" border="0"></table> 
+        <script type="text/javascript">jQuery(function() {
+                    jQuery("#clientMessageBoxContainer").css("margin-top", "10px").css("margin-bottom", "10px");
+                    pulsate(".clientMessageBoxImage");
+                });</script> 
+       </div>
+      </div> 
+      <div id="documentDisplayContainer" class="box">
+       <div id="documentDisplay" class="documentDisplay">
+        <div id="j_id362"> 
+         <h1 class="documentTitle"><a href="ModuleAnatomy.html">Module Anatomy</a> </h1>
+        </div>
+        <p class="wikiPara"> This page provides guidelines for structuring a Seam module project. A Seam module is a multi-module Maven project capable of producing both Maven jar, javadoc and source artifacts as well as a packaged distribution. </p> 
+        <h2 class="wikiHeadline2" id="H-ModuleArchetype"><a href="ModuleAnatomy.html#H-ModuleArchetype">Module archetype</a></h2> 
+        <p class="wikiPara"> When creating a new Seam module, you can use the module archetype described on the <a href="CheckOutAndBuildSeam.html#H-CreatingANewModule" target="" class="regularLink">Check Out and Build Seam</a> page. </p> 
+        <a href="http://www.securedatarecovery.com/computer-repair.html">Computer Repair Services</a> 
+        <p class="wikiPara"> With your project seeded, we'll look at the project tree as a whole, then divide into the role of notable files and folders. </p> 
+        <h2 class="wikiHeadline2" id="H-ProjectTree"><a href="ModuleAnatomy.html#H-ProjectTree">Project tree</a></h2> 
+        <p class="wikiPara"> Below is a dump of the project tree so that you can get a full view of where the files and directories fall. </p> 
+        <pre class="wikiPreformatted module">|-- api (or spi)
+|   |-- pom.xml
+|   \-- src
+|       |-- main
+|       |   |-- java
+|       |   |   \-- org
+|       |   |       \-- jboss
+|       |   |           \-- seam
+|       |   |               \-- [module]
+|       |   |                    \-- **/*.java
+|       \-- test
+|           |-- java
+|               \-- org
+|                   \-- jboss
+|                       \-- seam
+|                           \-- [module]
+|                                \-- **/*.java
+|-- apl.txt / lgpl.txt
+|-- combined
+|   \-- pom.xml
+|-- dist
+|   |-- pom.xml
+|   \-- src
+|       \-- main
+|           \-- assembly
+|               |-- assembly.xml
+|               |-- lgpl.txt
+|               \-- readme.txt
+|-- docs
+|   |-- pom.xml
+|   \-- src
+|       \-- main
+|           \-- docbook
+|               \-- en-US
+|                   |-- author_group.xml
+|                   |-- book_info.xml
+|                   |-- master.xml
+|                   |-- preface.xml
+|                   \-- ...
+|-- examples
+|   |-- [exampleA]
+|   |    \-- src
+|   |        |-- main
+|   |        |   |-- java
+|   |        |   |   |-- org
+|   |        |   |       \-- jboss
+|   |        |   |           \-- seam
+|   |        |   |               \-- [module]
+|   |        |   \-- ...             \-- examples
+|   |        |                           \-- [exampleA]
+|   |        |                               \-- **/*.java
+|   |        \-- test
+|   |            |-- java
+|   |            |   |-- org
+|   |            |       \-- jboss
+|   |            |           \-- seam
+|   |            |               \-- [module]
+|   |            \-- ...             \-- examples
+|   |                                    \-- [exampleA]
+|   |                                        \-- ftest
+|   |                                            \-- **/*.java
+|   |-- ...
+|   \-- [exampleZ] 
+|-- impl
+|   |-- pom.xml
+|   \-- src
+|       |-- main
+|       |   |-- java
+|       |   |   \-- org
+|       |   |       \-- jboss
+|       |   |           \-- seam
+|       |   |                \-- [module]
+|       |   |                     \-- **/*.java
+|       |   \-- resources
+|       |       \-- META-INF
+|       |           |-- beans.xml
+|       |           |-- *.properties
+|       |           |-- *.xml
+|       |           \-- services
+|       |               \-- javax.enterprise.inject.spi.Extension
+|       \-- test
+|           |-- java
+|           |   \-- org
+|           |       \-- jboss
+|           |           \-- seam
+|           |                \-- [module]
+|           |                    \-- **/*.java
+|           \-- resources
+|-- pom.xml
+\-- readme.txt</pre> 
+        <h2 class="wikiHeadline2" id="H-ProjectBreakdown"><a href="ModuleAnatomy.html#H-ProjectBreakdown">Project breakdown</a></h2> 
+        <p class="wikiPara"> The series of tables below describe the function of notable files and folders in the project. First, we'll start with the Maven POM structure. </p> 
+        <h3 class="wikiHeadline3" id="H-POMHierarchy"><a href="ModuleAnatomy.html#H-POMHierarchy">POM hierarchy</a></h3> 
+        <p class="wikiPara"> Each module will have a parent pom.xml (POM) at the root of the module and a POM for each artifact in the subprojects listed below. </p> 
+        <p class="wikiPara"> Here are the guidelines for the POMs: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> All projects should inherit from a <tt>org.jboss.seam:seam-parent</tt> release (e.g., 5, 6, 7, ...). The <tt>seam-parent</tt> POM defines versions for modules tests and examples <a href="http://www.harddrivesforsale.com/Western-Digital.html">WD10EADS</a>.</li> 
+         <li class="wikiUnorderedListItem"> All projects should import a <tt>org.jboss.seam:seam-bom</tt> release (e.g. 3.0.0.b04, 3.0.0.M1, 3.0.0.Final). The Seam BOM/Stack POM defines versions for running Seam modules, and can be imported by a user.</li> 
+         <li class="wikiUnorderedListItem"> Dependency versions should only be defined in the modules parent POM dependencyManagement section if a temporary override is needed to either the parent POM or Stack POM. For a Final release, there must be no overrides.</li> 
+         <li class="wikiUnorderedListItem"> Java EE 6 API dependencies should use the groupId:artifactId from the <a href="https://repository.jboss.org/nexus/content/groups/public/org/jboss/spec/jboss-javaee-6.0/" target="" class="regularLink">JBoss Java EE 6 spec bom</a></li> 
+         <li class="wikiUnorderedListItem"> All dependencies must be in the JBoss Maven Repository</li> 
+        </ul> 
+        <p class="wikiPara"> The following diagram displays Seam's Maven hierarchy. Only the Drools module is displayed (as an example) as all modules should roughly look the same. </p> 
+        <a href="/service/File/137207.html" target="_new"> <img src="http://www.seamframework.org/service/File/137207" style="width:800px"> </a> 
+        <p class="wikiPara"> See the <a href="DevelopmentGuidelines.html" target="" class="regularLink">Development Guidelines</a> for additional details about project guidelines. </p> 
+        <h3 class="wikiHeadline3" id="H-Subprojects"><a href="ModuleAnatomy.html#H-Subprojects">Subprojects</a></h3> 
+        <p class="wikiPara"> Each module will have at least three or four subprojects, described in the table below. A module may decide to break up the implementation (or even API) into multiple artifacts if there are a distinct optional features. <a href="http://www.platinumdatarecovery.com/">Cheap Data Recovery</a> </p> 
+        <table class="datatable topLeftBottomBorder rightBorder" cellspacing="0" cellpadding="5" border="0"> 
+         <tbody>
+          <tr class="regularHeader"> 
+           <th>Folder</th> 
+           <th>Artifact Id</th> 
+           <th width="60%">Purpose</th> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td>api (or spi)</td> 
+           <td style="white-space: nowrap;">seam-[module]-api (or -spi)</td> 
+           <td><p>The public APIs (and <a href="http://en.wikipedia.org/wiki/Service_Provider_Interface" target="" class="regularLink">SPIs</a>) that are exposed by the module. This is a Java project that consists of classes, interfaces and annotations that the end developer will import into their project classes to use the module. The developer is only required to include this artifact on the classpath to compile a project that uses this module.</p><p>Separating out these Java artifacts from the implementation also has the benefit of making it easy to create JavaDocs just for the public APIs.</p><p><strong>NOTE:</strong> <i class="wikiEmphasis">If you module only has an SPI, rather than an API, you can rename this folder and project to spi. If you have neither, you can leave out this project folder.</i></p></td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td>combined</td> 
+           <td style="white-space: nowrap;">seam-[module]</td> 
+           <td><p>The public APIs (and/or SPIs) and implementation(s) of the module shaded into a single JAR.</p></td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td>dist</td> 
+           <td style="white-space: nowrap;">seam-[module]-dist</td> 
+           <td><p>We recommend using a distribution module in your project hierarchy, just another module in the project directory, which depends on everything you want to bundle together. Using <tt>&lt;dependencySets/&gt;</tt> in the assembly plugin is MUCH less quirky than using <tt>&lt;moduleSets/&gt;</tt> or <tt>&lt;fileSets /&gt;</tt>.</p><p>If you'd like an example, check out <a href="http://anonsvn.jboss.org/repos/seam/modules/faces/trunk/dist/src/main/assembly/assembly.xml" target="" class="regularLink">Seam Faces POM</a> which creates a zip containing module sources and binaries, reference guide and javadoc, libraries needed at runtime, and examples.</p></td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td>docs</td> 
+           <td style="white-space: nowrap;">seam-[module]-reference-guide</td> 
+           <td><p>The docbook source for generating HTML and PDF versions of the reference guide.</p></td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td>examples/[example]</td> 
+           <td style="white-space: nowrap;">seam-[module]-example-[example]</td> 
+           <td><p>A Maven project for each example. These examples depend only on the current module and perhaps its dependent modules. The purpose of these examples is to demonstrate the features that this module alone provides.</p></td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td>impl</td> 
+           <td style="white-space: nowrap;">seam-[module]-impl</td> 
+           <td><p>The implementation classes for this module. The end developer should not be exposed to these classes directly (except to enable interceptors and/or decorators). This project hosts the beans.xml marker file and the extensions service file.</p></td> 
+          </tr> 
+         </tbody>
+        </table> 
+        <h3 class="wikiHeadline3" id="H-DistributionFiles"><a href="ModuleAnatomy.html#H-DistributionFiles">Distribution files</a></h3> 
+        <p class="wikiPara"> A project should include a minimal set of distribution files that help the end developer find their way around the project the first time. These files are targeted at the zip distribution, but may also contain useful information for source checkouts. </p> 
+        <table class="datatable topLeftBottomBorder rightBorder" cellspacing="0" cellpadding="5" border="0"> 
+         <tbody>
+          <tr class="regularHeader"> 
+           <th>File</th> 
+           <th width="75%">Purpose</th> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td>assembly.xml</td> 
+           <td><p>The Maven assembly descriptor that identifies the files to be included in the zip distribution. The distribution should include:</p> 
+            <ul class="wikiUnorderedList"> 
+             <li class="wikiUnorderedListItem"> API JavaDoc</li> 
+             <li class="wikiUnorderedListItem"> API and impl sources</li> 
+             <li class="wikiUnorderedListItem"> Examples</li> 
+             <li class="wikiUnorderedListItem"> Pre-compiled JARs</li> 
+             <li class="wikiUnorderedListItem"> Dependent library JARs</li> 
+            </ul> </td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td>license.txt</td> 
+           <td>The license document for this module</td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td>readme.txt</td> 
+           <td>An information document about the project. This file should include: 
+            <ul class="wikiUnorderedList"> 
+             <li class="wikiUnorderedListItem"> Project name</li> 
+             <li class="wikiUnorderedListItem"> Project version</li> 
+             <li class="wikiUnorderedListItem"> Project mission statement</li> 
+             <li class="wikiUnorderedListItem"> Contents overview</li> 
+             <li class="wikiUnorderedListItem"> Project URLs</li> 
+             <li class="wikiUnorderedListItem"> Release notes (or link to release notes)</li> 
+            </ul> </td> 
+          </tr> 
+         </tbody>
+        </table> 
+        <h3 class="wikiHeadline3" id="H-ExampleNamingConvention"><a href="ModuleAnatomy.html#H-ExampleNamingConvention">Example naming convention</a></h3> 
+        <p class="wikiPara"> A sample application should follow this convention in order to be consistent with other Seam 3 applications: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> containing folder name: examples</li> 
+         <li class="wikiUnorderedListItem"> folder name: {example}</li> 
+         <li class="wikiUnorderedListItem"> artifact id: seam-{module}-example-{example}</li> 
+         <li class="wikiUnorderedListItem"> context path: {module}-{example}</li> 
+         <li class="wikiUnorderedListItem"> package: org.jboss.seam.{module}.examples.{example}</li> 
+         <li class="wikiUnorderedListItem"> use dashes as delimiters</li> 
+         <li class="wikiUnorderedListItem"> if the example name uses dashes ( - ), these are removed in the package name</li>
+        </ul> 
+        <p class="wikiPara"> </p> 
+       </div>
+       <div id="j_id367" class="documentTags undecoratedLink smallFont">
+        <div id="j_id368">
+          Tags:&nbsp;
+         <a href="https://community.jboss.org/tags?recursive=true#/?tags=Seam+3">Seam 3</a>&nbsp;|&nbsp;
+         <a href="https://community.jboss.org/tags?recursive=true#/?tags=module">module</a>
+        </div>
+       </div> 
+      </div>
+      <div id="commentDisplayForm"></div> 
+     </div> 
+     <div class="clear" style="padding-top:15px;"></div> 
+    </div>
+   </div> 
+  </div> 
+  <div id="footer" class="undecoratedLink"> 
+   <p> © Copyright 2009, Red Hat Middleware, LLC. All rights reserved. JBoss and Seam are registered trademarks and servicemarks of <a href="http://www.redhat.com/">Red Hat, Inc</a>. [<a href="http://www.redhat.com/legal/privacy_statement.html">Privacy Policy</a>]</p> 
+  </div>
+  <div id="status">
+   <span id="globalStatus"><span id="globalStatus.start" style="display: none">
+     <div id="j_id423" class="statusStart">
+      <img src="../themes/sfwkorg/img/statusindicator.gif" height="25" width="20">
+     </div></span><span id="globalStatus.stop">
+     <div id="j_id425" class="statusStop">
+      <img src="../themes/sfwkorg/img/blank.gif" height="25" width="20">
+     </div></span></span>
+  </div>  
+  <!-- Mirrored from 127.0.0.1:64444/Seam3/ModuleAnatomy by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:54:45 GMT --> 
+  <!-- Added by HTTrack -->
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack --> 
+ </body>
+</html>

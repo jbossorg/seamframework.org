@@ -1,0 +1,810 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <!-- Mirrored from 127.0.0.1:64444/Seam3/Seam2ToSeam3MigrationNotes by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:52:00 GMT -->
+ <!-- Added by HTTrack -->
+ <head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack -->  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+  <title>Seam Framework - Seam 2 to Seam 3 Migration Notes</title> 
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/basic_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" rel="stylesheet" type="text/css">
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/extended_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" media="rich-extended-skinning" rel="stylesheet" type="text/css">
+  <script src="../a4j/g/3_3_3.CR1org.ajax4jsf.javascript.AjaxScript" type="text/javascript"></script>
+  <script type="text/javascript">window.RICH_FACES_EXTENDED_SKINNING_ON=true;</script>
+  <script src="../a4j/g/3_3_3.CR1org/richfaces/renderkit/html/scripts/skinning.js" type="text/javascript"></script>
+  <link href="../themes/sfwkorg/css/sfwk.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shCore.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shThemeDefault.css" rel="stylesheet" type="text/css"> 
+  <link rel="alternate" type="application/atom+xml" title="Seam 3" href="../service/Feed/atom/Area/Seam3html.html"> 
+  <script type="text/javascript" src="../seam/resource/remoting/resource/remote.js"></script> 
+  <script type="text/javascript" src="../seam/resource/remoting/interface1535.js?httpSessionChecker"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jquery.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jqueryPlugins.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/lacewiki.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shCore.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushBash.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCpp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCSharp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCss.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDelphi.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDiff.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushGroovy.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJava.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJScript.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPhp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPlain.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPython.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushRuby.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushScala.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushSql.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushVb.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushXml.js"></script> 
+  <script type="text/javascript">
+        /* If you really want to load the Flash garbage on every page, go ahead and enable this:
+        SyntaxHighlighter.config.clipboardSwf = '/themes/sfwkorg/js/sh/scripts/clipboard.swf';
+         */
+        SyntaxHighlighter.defaults['gutter'] = false;
+        SyntaxHighlighter.all();
+	</script> 
+  <script type="text/javascript">
+
+        // ###################### Session timeout alert #################################
+
+        var sessionChecker = Seam.Component.getInstance("httpSessionChecker");
+        var timeoutURL = '/Home/JBossSeam';
+        var timeoutMillis = '900'*1000+3000;
+        var sessionTimeoutInterval = null;
+
+        function startSessionTimeoutCheck() {
+            sessionTimeoutInterval = setInterval('sessionChecker.isNewSession(alertTimeout)', timeoutMillis);
+        }
+
+        function stopSessionTimeoutCheck() {
+            if (sessionTimeoutInterval) clearInterval(sessionTimeoutInterval);
+        }
+
+        function resetSessionTimeoutCheck() {
+            if (sessionTimeoutInterval != null) {
+                stopSessionTimeoutCheck();
+                startSessionTimeoutCheck();
+            }
+        }
+
+        function alertTimeout(newSession) {
+            if (newSession) {
+                clearInterval(sessionTimeoutInterval);
+                jQuery(".ajaxSupport")
+                        .removeAttr('onblur')
+                        .removeAttr('onchange')
+                        .removeAttr('onkeyup')
+                        .removeAttr('onclick');
+                jQuery(".sessionEventTrigger").hide();
+                var answer = confirm("Your session has timed out, you will be redirected to the start page.");
+                if (answer) window.location = timeoutURL;
+            }
+        }
+
+        // ###################### Popups #################################
+
+        var fadeInPopupDialog = function(hash) {
+            hash.w.fadeIn('fast',function(){ hash.o.show(); });
+            jQuery(".closeDialog", hash.w).attr("accesskey", "C"); // Dynamically assign accesskey to .closeDialog buttons
+        };
+
+        var fadeOutPopupDialog = function(hash) { hash.w.fadeOut('fast',function(){ hash.o.remove(); }); };
+
+        // ###################### Tabbed Forms #################################
+
+        var formTabErrors = {};
+
+        function formTabRaiseError(tabId, fieldId, message) {
+
+            formTabClearError(tabId, fieldId); // Clear error then re-add
+
+            log("Raise error for tab: '" + tabId + "' field: " + fieldId);
+
+            // Add an error message to the client message box
+            log("Adding error message: " +tabId + fieldId + "ErrorMessage")
+            jQuery("#clientMessageBoxTable").append(
+                '<tr id="' + tabId + fieldId + 'ErrorMessage"><td><img src="/themes/sfwkorg/img/attention.gif" ' +
+                'height="18" width="18" class="clientMessageBoxImage attentionImage"/></td>' +
+                '<td><span id="attentionMessage" class="attentionMessage">'+ message + '</span></td></tr>'
+            );
+            if (formTabErrors[tabId] == null) {
+                formTabErrors[tabId] = 1;
+            } else {
+                formTabErrors[tabId]++;
+            }
+            formTabRenderErrors(tabId);
+        }
+
+        function formTabClearError(tabId, fieldId) {
+            if (document.getElementById(tabId+fieldId+"ErrorMessage") != null) { // This error is displayed
+                log("Clear error for tab: '" + tabId + "' field: " + fieldId);
+                log("Removing error message: " +tabId + fieldId + "ErrorMessage")
+                // Remove the error message on the client message box
+                jQuery("#"+tabId + fieldId + "ErrorMessage").remove();
+
+                formTabErrors[tabId]--;
+                formTabRenderErrors(tabId);
+            }
+        }
+
+        function formTabRenderErrors(tabId) {
+            log("Errors for tab: '" + tabId + "': " + formTabErrors[tabId]);
+
+            if (formTabErrors[tabId] > 0 && document.getElementById(tabId+"InvalidIcon") == null) {
+                log("Showing icon for tab: " + tabId);
+                // Show an icon on the tab and blink it a few times
+                jQuery("#"+tabId)
+                    .prepend('<img id="' + tabId + 'InvalidIcon" ' +
+                            'src="/themes/sfwkorg/img/attention.gif" width="13" height="13" ' +
+                            'alt="!" style="vertical-align:bottom;margin-left:5px;margin-right:5px;"/>');
+                pulsate("#"+tabId);
+            } else if (formTabErrors[tabId] < 1){
+                log("Removing icon of tab: " + tabId);
+                jQuery("#"+tabId + "InvalidIcon").remove();             // Remove the error icon on the tab
+            }
+
+            var tabsHaveErrors = false;
+            for (var tab in formTabErrors) {
+                var numOfErrors = formTabErrors[tab];
+                if (numOfErrors > 0) {
+                    tabsHaveErrors = true;
+                    break;
+                }
+            }
+
+            if (tabsHaveErrors) {
+                log("Hiding save button and showing form message box");
+                jQuery(".saveButton").hide();                       // Hide save button(s)
+                jQuery(".formControls").css("height", "30px");      // Adjust height for missing save button
+                jQuery("#messageBoxContainer").hide();                 // Hide server messages
+                jQuery("#clientMessageBoxContainer").show();           // Show client error messages
+            } else {
+                log("Showing save button and hiding form message box");
+                jQuery(".saveButton").show();                       // Show save button(s)
+                jQuery(".formControls").css("height", "");          // Readjust height for present save button
+                jQuery("#clientMessageBoxContainer").hide();           // Hide client error messages
+            }
+        }
+
+        function formTabClicked() {
+            jQuery("#messageBoxContainer").hide();                 // Hide server messages
+        }
+
+        function log(message) {
+            return; // Remove to enable logging
+            if (!log.window_ || log.window_.closed) {
+                var win = window.open("", null, "width=400,height=200," +
+                                                "scrollbars=yes,resizable=yes,status=no," +
+                                                "location=no,menubar=no,toolbar=no");
+                if (!win) return;
+                var doc = win.document;
+                doc.write("<html><head><title>Debug Log</title></head><body style='font-family: monospace'></body></html>");
+                doc.close();
+                log.window_ = win;
+            }
+            var logLine = log.window_.document.createElement("div");
+            logLine.appendChild(log.window_.document.createTextNode(message));
+            log.window_.document.body.appendChild(logLine);
+        }
+
+        // ###################### Design #################################
+
+        function highlightStars(item, range, end) {
+            for (i = 1; i <= range; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star_grey.gif");
+            }
+            for (i = 1; i <= end; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star.gif");
+            }
+        }
+
+        function pulsate(query) {
+            var blinkCount = 2*2;
+            do {
+                jQuery(query)['fade'+(blinkCount%2==0?'Out':'In')]('fast');
+            } while (--blinkCount);
+        }
+
+        function clearDocumentBackground() {
+            // Noop for this skin
+        }
+
+        // Wrap boxes with border and shadow
+        function wrapBoxes() {
+            // Noop for this skin
+        }
+
+        function initPage() {
+            checkCookieSupport();
+            wrapBoxes();
+        }
+
+        jQuery(function() {
+            initPage();
+        });
+
+    </script> 
+  <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-25106513-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script> 
+ </head> 
+ <body> 
+  <noscript> 
+   <div class="cookieJavaScriptWarning">
+     Please activate JavaScript in your browser. Without it, you will only be able to browse this website but clicking on any advanced feature (any forms or submit buttons) will not work. 
+   </div> 
+  </noscript>
+  <div id="dialogHelp" class="popupDialog">
+   <span id="dialogHelpPopup" title="dialogHelp"></span>
+   <span id="dialogHelpInit"> <script type="text/javascript">
+            function showHelpPopup(width, height, offsetId) {
+                var offset = jQuery("#"+offsetId).offset();
+                jsf('dialogHelpPopup')
+                    .css({width: width+"px", height: height+"px", top: offset.top-100+"px", left: offset.left-150+"px"})
+                    .jqm({
+                        closeClass: "closeDialog",
+                        overlay: 0
+                    });
+
+                jQuery("#dialogHelpContent").css("width", width-20+"px").css("height", height-75+"px");
+                jQuery("#dialogHelpContent").css("overflow", "auto");
+
+                jsf('dialogHelpPopup').jqmShow();
+            }
+        </script></span> 
+   <script type="text/javascript">jQuery(function() {
+        jsf('dialogHelpPopup').Resizable({
+            minTop: 1,
+            dragHandle: "#dialogHelpHead",
+            handlers: { se: "#dialogHelpResizeHandle" }
+        });
+    });</script> 
+   <div class="popupDialogHead" id="dialogHelpHead">
+    Help
+   </div>
+   <div id="dialogHelpContent" class="popupDialogContent"></div>
+   <div id="dialogHelpControls" class="popupDialogControls">
+    <div id="j_id14" style="padding:5px;">
+     <a href="#" class="buttonNonpersistent closeDialog"><span class="buttonLabel">Close Help</span></a>
+    </div>
+   </div>
+  </div> 
+  <div id="wrapper"> 
+   <div id="header">  
+    <div>
+     <a href="http://seamframework.org/"><img src="../themes/sfwkorg/img/blank.gif" height="98" width="210"></a> 
+    </div> 
+   </div>
+   <div id="body"> 
+    <div id="container"> 
+     <div id="leftColumn">
+      <div id="mainMenu" xmlns="http://www.w3.org/1999/xhtml">
+       <div id="j_id121" class="box">
+        <div class="mainMenuContainer"> 
+         <div class="mainMenuHeader"></div> 
+         <div class="mainMenuBody">
+          <div id="j_id125" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Home.html" class="level1Link">Home</a>
+          </div>
+          <div id="j_id132" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Home/WhySeam.html" class="level2Link">Why Seam?</a>
+          </div>
+          <div id="j_id139" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Seam2.html" class="level1Link">Seam 2</a>
+          </div>
+          <div id="j_id146" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/GettingStarted.html" class="level2Link">Getting Started</a>
+          </div>
+          <div id="j_id153" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Downloads.html" class="level2Link">Downloads</a>
+          </div>
+          <div id="j_id160" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Documentation.html" class="level2Link">Documentation</a>
+          </div>
+          <div id="j_id167" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="http://weld.cdi-spec.org/" class="level1Link">Weld</a>
+          </div>
+          <div id="j_id174" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Community.html" class="level1Link">Community</a>
+          </div>
+          <div id="j_id181" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="https://community.jboss.org/" class="level2Link">Forums</a>
+          </div>
+          <div id="j_id188" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/CDIExtensions.html" class="level2Link">CDI Extensions</a>
+          </div>
+          <div id="j_id195" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Contribute.html" class="level2Link">Contribute</a>
+          </div>
+          <div id="j_id202" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/JIRA.html" class="level2Link">JIRA</a>
+          </div>
+          <div id="j_id209" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/MailingLists.html" class="level2Link">Mailing Lists</a>
+          </div>
+          <div id="j_id216" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Events.html" class="level2Link">Events</a>
+          </div>
+          <div id="j_id223" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Links.html" class="level2Link">Links</a>
+          </div>
+          <div id="j_id230" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/SeamInProduction.html" class="level2Link">Seam In Production</a>
+          </div>
+          <div id="j_id237" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Documentation.html" class="level1Link">Documentation</a>
+          </div>
+          <div id="j_id244" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Documentation/FAQs.html" class="level2Link">FAQs</a>
+          </div>
+          <div id="j_id251" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Documentation/KnowledgeBase.html" class="level2Link">Knowledge Base</a>
+          </div>
+          <div id="j_id258" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Documentation/Design.html" class="level2Link">Design</a>
+          </div> 
+         </div> 
+         <div class="mainMenuFooter"></div> 
+        </div>
+       </div> 
+      </div> 
+      <br> 
+      <div style="margin-top: 25px; margin-left: 15px; margin-right: 15px; "> 
+       <h2>Built with Seam</h2> 
+       <p> You can find the full source code for this website in the <a href="/Download.html">Seam package</a> in the directory /examples/wiki. It is licensed under the LGPL. </p> 
+       <div style="text-align:center;">
+        <a href="/Community/GetASeamIcon.html"><img src="../themes/sfwkorg/img/runningon_seamlogo_beige.gif" height="50" width="200"></a> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="rightColumn">
+      <img src="../themes/sfwkorg/img/blank.gif" height="8" width="1">
+      <div id="breadcrumb" class="breadcrumb">
+       <span class="breadcrumbPanel"><a href="../index.html" class="itemLink breadcrumbRoot">Site</a><span class="itemSeparator breadcrumbRoot">·</span><a href="../Seam3.html" class="itemLink">Seam 3</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="Seam2ToSeam3MigrationNotes.html" class="itemText">Seam 2 to Seam 3 Migration Notes</a></span>
+      </div>
+      <div id="messageBoxContainer"></div>
+      <div id="clientMessageBoxContainer" style="display:none;"> 
+       <div id="clientMessageBox" class="messageBox"> 
+        <table id="clientMessageBoxTable" class="messageBoxTable" cellpadding="0" cellspacing="0" border="0"></table> 
+        <script type="text/javascript">jQuery(function() {
+                    jQuery("#clientMessageBoxContainer").css("margin-top", "10px").css("margin-bottom", "10px");
+                    pulsate(".clientMessageBoxImage");
+                });</script> 
+       </div>
+      </div> 
+      <div id="documentDisplayContainer" class="box">
+       <div id="documentDisplay" class="documentDisplay">
+        <div id="j_id362"> 
+         <h1 class="documentTitle"><a href="Seam2ToSeam3MigrationNotes.html">Seam 2 to Seam 3 Migration Notes</a> </h1>
+        </div>
+        <p class="wikiPara"> This page contains a catalog of migration notes and recommendations when moving from Seam 2 to Seam 3. </p> 
+        <h1 class="wikiHeadline1" id="H-Resources"><a href="Seam2ToSeam3MigrationNotes.html#H-Resources">Resources</a></h1> 
+        <p class="wikiPara"> <a href="http://seamframework.org/Community/Seam23MigrationHowToStart" target="" class="regularLink">Sticky forum thread about migration</a> </p> 
+        <h1 class="wikiHeadline1" id="H-ScopesContexts"><a href="Seam2ToSeam3MigrationNotes.html#H-ScopesContexts">Scopes / Contexts</a></h1> 
+        <p class="wikiPara"> Seam 2 provides a fixed set of contexts. These are listed in the table below. Any java type can be stored in a context. Session and conversation contexts require the values to be serializable. In Seam 2, the scope of a component is defined using one of the values of the <tt>ScopeType</tt> enumeration, e.g. <tt>@Scope(ScopeType.SESSION)</tt>. </p> 
+        <p class="wikiPara"> CDI provides a similar set of contexts. This set can be extended by additional scopes provided by portable extensions that implement the required SPI. In CDI, each scope has an associated annotation, which consists of the scope name plus <q>Scoped</q>, e.g. <tt>@SessionScoped</tt>. </p> 
+        <p class="wikiPara"> CDI scopes are split into two groups: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <strong>Normal scopes</strong> - Implemented using dynamic proxies - the client receives a dynamic proxy for the contextual object. Everytime a method is invoked on a proxy, the container guarantees that the method is invoked on the actual contextual instance. Most of the built-in CDI scopes are normal scopes.</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <strong>Pseudo-scopes</strong> - Client proxies are not required for pseudo-scopes. CDI provides single built-in pseudo-scope - <tt>@Dependent</tt></li> 
+        </ul> 
+        <p class="wikiPara"> As a result of using dynamic proxies for implementing normal scopes (every scope except for <tt>@Dependent</tt>), every managed bean bound to a normal scope is required to be proxyable. The exact definition of a proxyable bean is defined in the <a href="http://docs.jboss.org/cdi/spec/1.0/html/injectionelresolution.html#unproxyable" target="" class="regularLink">specification</a>. This may be a problem for legacy applications that use unproxyable beans (e.g. an instance of java.lang.String bound to the session scope). The problem can be solved by: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> making the bean proxyable (e.g. adding a non-private no-arg constructor or removing the final modifier of a class or method) or</li> 
+         <li class="wikiUnorderedListItem"> creating a holder object that wraps the unproxyable object but is itself proxyable or</li> 
+         <li class="wikiUnorderedListItem"> using <tt>@Dependent</tt> scope instead of a normal scope if possible</li> 
+        </ul> 
+        <p class="wikiPara"> Names of corresponding scopes: </p> 
+        <table class="datatable topLeftBottomBorder rightBorder" border="0" cellspacing="0" cellpadding="5" style="width: auto;"> 
+         <tbody>
+          <tr class="regularHeader alignLeft"> 
+           <th>Seam 2 scope name </th>
+           <th>CDI/Seam 3 scope name </th>
+          </tr> 
+          <tr> 
+           <td><tt>Event</tt></td> 
+           <td><tt>Request</tt></td> 
+          </tr> 
+          <tr> 
+           <td><tt>Session</tt></td> 
+           <td><tt>Session</tt></td> 
+          </tr> 
+          <tr> 
+           <td><tt>Stateless</tt></td> 
+           <td>No direct corresponding scope. The stateless scope is using primarily for Stateless Session Beans (EJB) in Seam 2. A Stateless session bean can be bound to the <tt>@Dependent</tt> context in a CDI application.</td> 
+          </tr> 
+          <tr> 
+           <td>No direct match</td> 
+           <td><tt>Dependent</tt> - new instance for each injection point.</td> 
+          </tr> 
+          <tr> 
+           <td><tt>Application</tt></td> 
+           <td><tt>Application</tt></td> 
+          </tr> 
+          <tr> 
+           <td><tt>Page</tt></td> 
+           <td><a href="http://docs.jboss.org/seam/3/faces/latest/reference/en-US/html/scopes.html#viewscoped" target="" class="regularLink">View</a></td> 
+          </tr> 
+          <tr> 
+           <td><tt>Conversation</tt></td> 
+           <td>No direct corresponding scope. For long conversations, the corresponding scope is <tt>Conversation</tt>. For temporary conversations, the closest corresponding scope is <tt>Flash</tt> (but not the same). But there is no scope which would be automatically converted when stopping/starting a long-running conversation.(TODO: expand)</td> 
+          </tr> 
+          <tr> 
+           <td>No direct match</td> 
+           <td><tt>Conversation</tt> - covers only long-running conversations, where the boundaries are explicitly set by the programmer. (TODO: expand)</td> 
+          </tr> 
+          <tr> 
+           <td>No direct match</td> 
+           <td><tt>Flash</tt> - spans two requests. Survives a redirect. (TODO: expand)</td> 
+          </tr> 
+         </tbody>
+        </table> 
+        <h1 class="wikiHeadline1" id="H-Components"><a href="Seam2ToSeam3MigrationNotes.html#H-Components">Components</a></h1> 
+        <p class="wikiPara"> TODO </p> 
+        <h2 class="wikiHeadline2" id="H-Entities"><a href="Seam2ToSeam3MigrationNotes.html#H-Entities">Entities</a></h2> 
+        <p class="wikiPara"> In Seam 2, it is quite common to use JPA entities as Seam managed objects. Take the <a href="https://github.com/mareknovotny/seam-revisited/blob/master/jboss-seam-parent/examples/booking/booking-ejb/src/main/java/org/jboss/seam/example/booking/User.java" target="" class="regularLink">User entity</a> from the booking application as an example. Such entity is instantiated by Seam and stored in the session context. Its values are bound to a form in a JSF page using EL expressions and filled by an application user. Finally, the managed object is passed to the <tt>EntityManager</tt> and persisted in the database. </p> 
+        <p class="wikiPara"> Since Seam 2 stores direct references to bean objects in its contexts, the approach above works fine for non-intercepted entities (which entities usually are). </p> 
+        <p class="wikiPara"> CDI uses different memory model (TODO write a chapter on this difference). Everytime an application code accesses a reference to a CDI-managed bean stored in a normal context, it actually accesses a dynamic client proxy. Since proxy classes are different from the original classes of the entity, they cannot be used in the <tt>persist()</tt> method of the EntityManager. Therefore, never use entities as CDI managed beans. </p> 
+        <p class="wikiPara"> Although this may seem like a major limitation, it is not the case. Most of the time, there is not need for JPA entities to support dependency injection nor they need to be interceptor. The only services really useful to entities is storing them in a context. CDI supports this in form of a producer field or method. The common approach is to use a stateful manager object for instantiating and holding the reference to a scoped entity. See the <a href="https://github.com/mareknovotny/seam-revisited/blob/master/jboss-seam-parent/examples/booking/booking-ejb/src/main/java/org/jboss/seam/example/booking/RegisterAction.java" target="" class="regularLink">Registrar</a> component of the Seam 3 booking application as an example. </p> 
+        <h1 class="wikiHeadline1" id="H-Services"><a href="Seam2ToSeam3MigrationNotes.html#H-Services">Services</a></h1> 
+        <p class="wikiPara"> TODO </p> 
+        <h2 class="wikiHeadline2" id="H-InstallConditionalInstallation"><a href="Seam2ToSeam3MigrationNotes.html#H-InstallConditionalInstallation">@Install - Conditional installation</a></h2> 
+        <p class="wikiPara"> Seam 2 offers the <tt>@Install</tt> annotation for controlling whether a given bean should be installed or not. The following concepts are supported and can be configured using the annotation: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> explicit prevention from installation</li> 
+         <li class="wikiUnorderedListItem"> installation dependencies</li> 
+         <li class="wikiUnorderedListItem"> bean selection based component ordering (precedence)</li> 
+        </ul> 
+        <p class="wikiPara"> The CDI specification itself does not define a single replacement for all the functionality represented by the @Install annotation. Instead, the concepts are implemented separately. </p> 
+        <table class="datatable topLeftBottomBorder rightBorder" border="0" cellspacing="0" cellpadding="5" style="width: auto;"> 
+         <tbody>
+          <tr class="regularHeader alignLeft"> 
+           <th>Concept </th>
+           <th>Seam 2 </th>
+           <th>CDI / Seam 3 </th>
+          </tr> 
+          <tr> 
+           <td>explicit prevention from installation</td> 
+           <td><pre class="wikiPreformatted">@Install(false)</pre> </td> 
+           <td><pre class="wikiPreformatted">@Veto</pre> or <pre class="wikiPreformatted">@Alternative</pre> </td> 
+          </tr> 
+          <tr> 
+           <td>installation dependencies</td> 
+           <td><pre class="wikiPreformatted">@Install(dependencies = "foo")</pre> </td> 
+           <td><pre class="wikiPreformatted">@Requires("javax.persistence.EntityManager")</pre> Note that class-level dependencies are supported only</td> 
+          </tr> 
+          <tr> 
+           <td>bean selection based component ordering (precedence)</td> 
+           <td><pre class="wikiPreformatted">@Install(precedence = MOCK)</pre> </td> 
+           <td><pre class="wikiPreformatted">@Alternative</pre> or Alternative <a href="http://docs.jboss.org/cdi/spec/1.0/html/concepts.html#stereotypes" target="" class="regularLink">stereotype</a> or <pre class="wikiPreformatted">@Specializes</pre> </td> 
+          </tr> 
+         </tbody>
+        </table> 
+        <h2 class="wikiHeadline2" id="H-Startup"><a href="Seam2ToSeam3MigrationNotes.html#H-Startup">@Startup</a></h2> 
+        <p class="wikiPara"> Seam 2 provides the <tt>@Startup</tt> annotation that can be applied to an application or session scoped component. A <tt>@Startup</tt>-annotated component is instantiated immediately after the context is started up, instead of instantiating the component lazily when first needed by a client. </p> 
+        <p class="wikiPara"> There are two possible alternatives in Java EE 6: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> EJB <a href="http://download.oracle.com/javaee/6/tutorial/doc/gipjg.html#gipim" target="" class="regularLink">Singleton</a> beans - which can be marked to be instantiated eagerly at application startup using the <a href="http://download.oracle.com/javaee/6/api/javax/ejb/Startup.html" target="" class="regularLink">@Startup</a> annotation. Combined with the fact that these components can benefit from declarative transaction management, these components are good candidates for performing database imports, etc.</li> 
+         <li class="wikiUnorderedListItem"> Observing <a href="http://docs.jboss.org/seam/3/solder/snapshot/reference/en-US/html/servlet-events.html" target="" class="regularLink">Solder's events</a> which notify the component when the application starts or when the request or session context is activated due to a servlet request.</li> 
+        </ul> 
+        <h2 class="wikiHeadline2" id="H-InitializationAndLifecycleCallbacks"><a href="Seam2ToSeam3MigrationNotes.html#H-InitializationAndLifecycleCallbacks">Initialization and lifecycle callbacks</a></h2> 
+        <p class="wikiPara"> Seam 2 supports standard <tt>@PostConstruct</tt> and <tt>@PreDestroy</tt> annotations for designating post-initialization and pre-destruction callbacks. Besides, Seam-specific alternatives (<tt>@Create</tt> and <tt>@Destroy</tt>) with identical semantics are supported. </p> 
+        <p class="wikiPara"> CDI only supports the standard annotations. If using the Seam-specific ones in a legacy application, the easiest solution is to replace them with the standard ones. </p> 
+        <p class="wikiPara"> Besides, CDI provides richer initialization facilities such as </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> dependency injection using the bean constructor (which allow for using dependency injection in <strong>immutable objects</strong>)</li> 
+         <li class="wikiUnorderedListItem"> dependency injection using initializers methods</li> 
+        </ul> 
+        <p class="wikiPara"> See the <a href="http://docs.jboss.org/cdi/spec/1.0/html/injectionelresolution.html#instantiation" target="" class="regularLink">CDI specification</a> for more details. </p> 
+        <h2 class="wikiHeadline2" id="H-ELEvaluation"><a href="Seam2ToSeam3MigrationNotes.html#H-ELEvaluation">EL evaluation</a></h2> 
+        <p class="wikiPara"> Seam 2 provides a consistent use of the Expression Language within Java code. EL expressions can be used in </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Logger messages</li> 
+         <li class="wikiUnorderedListItem"> <tt>EntityManager</tt> queries</li> 
+         <li class="wikiUnorderedListItem"> JSF messages</li> 
+        </ul> 
+        <p class="wikiPara"> Currently, Seam 3 lacks similar level of consistency. When migrating legacy applications, the simplest migration path is to use the <a href="http://docs.jboss.org/seam/3/solder/snapshot/reference/en-US/html/solder-elextensions.html" target="" class="regularLink">Expressions component</a> and wrap each occurrence of string containing EL expression with a call to Expressions. </p> 
+        <pre class="wikiPreformatted">log.info(expressions.evaluateMethodExpression("Registered new user #{user.username}"));</pre> 
+        <h1 class="wikiHeadline1" id="H-Navigation"><a href="Seam2ToSeam3MigrationNotes.html#H-Navigation">Navigation</a></h1> 
+        <p class="wikiPara"> We should plan to have a chapter dedicated to navigation (e.g., pages.xml and s:button/s:link) as JSF 2 takes a very different approach. </p> 
+        <h1 class="wikiHeadline1" id="H-UIComponents"><a href="Seam2ToSeam3MigrationNotes.html#H-UIComponents">UI components</a></h1> 
+        <p class="wikiPara"> Many of the UI components in Seam 2 have been assimilated by JSF 2 or RichFaces. There are UI components that remain. We should have a clear mapping and identify components that have reached EOL. </p> 
+        <h1 class="wikiHeadline1" id="H-SpecialInjection"><a href="Seam2ToSeam3MigrationNotes.html#H-SpecialInjection">Special injection</a></h1> 
+        <p class="wikiPara"> Besides injecting a component using the <tt>@In</tt> annotation, Seam 2 provides access to special injectable objects. These are listed below </p> 
+        <h2 class="wikiHeadline2" id="H-RequestParameter"><a href="Seam2ToSeam3MigrationNotes.html#H-RequestParameter">@RequestParameter</a></h2> 
+        <p class="wikiPara"> The <tt>@RequestParameter</tt> annotation triggers injection of an HTTP request parameter. The parameter name can be set explicitly as a value of the annotation or can be implied from the name of an injection point. </p> 
+        <pre class="wikiPreformatted">@RequestParameter
+private Long id;</pre> 
+        <p class="wikiPara"> In Seam 3, the same functionality is provided by Solder's <tt>@RequestParam</tt>. </p> 
+        <pre class="wikiPreformatted">@Inject @RequestParam
+private Long id;</pre> 
+        <p class="wikiPara"> Besides request parameters, Solder also supports <a href="http://docs.jboss.org/seam/3/solder/snapshot/reference/en-US/html_single/#injectablerefs.header_param" target="" class="regularLink">injection of header parameters</a> of an HTTP request. </p> 
+        <p class="wikiPara"> Note that injection of multi-valued parameters into collections or arrays is not currently supported in Solder (See <a href="https://issues.jboss.org/browse/SOLDER-295" target="" class="regularLink">SOLDER-295</a>) </p> 
+        <h2 class="wikiHeadline2" id="H-Logger"><a href="Seam2ToSeam3MigrationNotes.html#H-Logger">@Logger</a></h2> 
+        <p class="wikiPara"> Seam 2 provides a <a href="http://docs.jboss.org/seam/2.2.2.Final/reference/en-US/html/concepts.html#d0e4254" target="" class="regularLink">built-in logger implementation</a>. It is a thin wrapper that delegates to an available logging framework (log4j or JDK logging). Besides, it provides extra features such as EL expression evaluation. </p> 
+        <p class="wikiPara"> In Seam 3, Solder provides a built-in logger which uses <a href="https://docs.jboss.org/author/display/JBLOGGING/Home" target="" class="regularLink">JBoss Logging</a> internally. Similarly to Seam 2, a logger instance can be injected easily. </p> 
+        <table class="datatable topLeftBottomBorder rightBorder" border="0" cellspacing="0" cellpadding="5" style="width: auto;"> 
+         <tbody>
+          <tr class="regularHeader alignLeft"> 
+           <th> </th>
+           <th>Seam 2 </th>
+           <th>Seam 3 </th>
+          </tr> 
+          <tr> 
+           <td>Obtaining a logger instance</td> 
+           <td><pre class="wikiPreformatted">@Logger(“foo.bar”)
+private Log log;</pre> </td> 
+           <td><pre class="wikiPreformatted">@Inject @Category(“foo.bar”)
+private Logger log;</pre> or use factory method for static fields <pre class="wikiPreformatted">private static Logger log = Logger.getLogger(Bean.class);</pre> </td> 
+          </tr> 
+          <tr> 
+           <td>Logging a message</td> 
+           <td><pre class="wikiPreformatted">log.debug("Creating new order for user: #0", user.username());</pre> </td> 
+           <td><pre class="wikiPreformatted">log.debugv("Creating new order for user: {0}", user.username());</pre> </td> 
+          </tr> 
+         </tbody>
+        </table> 
+        <p class="wikiPara"> Note that: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> the old format of parameter placeholders (e.g. #0) is no longer supported. You can use either <a href="http://download.oracle.com/javase/6/docs/api/java/text/MessageFormat.html" target="" class="regularLink">MessageFormat</a> or <a href="http://download.oracle.com/javase/1.5.0/docs/api/java/util/Formatter.html" target="" class="regularLink">Formatter</a> syntax instead.</li> 
+         <li class="wikiUnorderedListItem"> EL evaluation is not supported. The <a href="https://github.com/seam/solder/blob/develop/impl/src/main/java/org/jboss/solder/el/Expressions.java" target="" class="regularLink">Expressions</a> utility bean can be used for evaluating EL expressions programmatically.</li> 
+         <li class="wikiUnorderedListItem"> CDI does not support static injection. As a result, a logger reference should either be injected into a non-static or a static field should be initialized using logger factory</li> 
+        </ul> 
+        <p class="wikiPara"> Besides the traditional approach to logging, Solder provides support for <a href="http://docs.jboss.org/seam/3/solder/snapshot/reference/en-US/html_single/#typed-loggers" target="" class="regularLink">typed loggers</a> </p> 
+        <h2 class="wikiHeadline2" id="H-DataModelDataModelDataModelSelectionDataModelSelectionIndex"><a href="Seam2ToSeam3MigrationNotes.html#H-DataModelDataModelDataModelSelectionDataModelSelectionIndex">@DataModel* - (@DataModel, @DataModelSelection, @DataModelSelectionIndex)</a></h2> 
+        <p class="wikiPara"> In the old JSF 1.x days, due to limitations of the Expression Language, it was common to use data collections wrapped within <a href="http://download.oracle.com/javaee/6/api/javax/faces/model/DataModel.html" target="" class="regularLink">DataModel</a> objects from a JSF data table. This allowed the backing bean to <a href="http://ocpsoft.com/java/jsf-java/jsfs-hdatatable-vs-uirepeat-how-to-get-the-selected-row/" target="" class="regularLink">obtain the selected row of the data table on postback</a>. </p> 
+        <p class="wikiPara"> Seam 2 makes this task easier by wrapping data collections within appropriate <tt>DataModel</tt> subclass automatically. In addition, once a data model row is selected, the selected item (or selected row number) can be <a href="http://docs.jboss.org/seam/2.2.2.Final/reference/en-US/html/annotations.html#d0e26513" target="" class="regularLink">injected by Seam</a>. </p> 
+        <p class="wikiPara"> In Java EE 6, the Expression Language Specification evolved and allows <a href="http://www.mkyong.com/jsf2/how-to-pass-parameters-in-method-expression-jsf-2-0/" target="" class="regularLink">parameters to be passed to EL method expressions</a>. This approach should be used as a replacement for the <tt>@DataModel*</tt> functionality. Seam 3 does not provide a substitute for the <tt>@DataModel*</tt> functionality. </p> 
+        <h1 class="wikiHeadline1" id="H-Configuration"><a href="Seam2ToSeam3MigrationNotes.html#H-Configuration">Configuration</a></h1> 
+        <p class="wikiPara"> This section describes how to migrate your bean configuration. </p> 
+        <h2 class="wikiHeadline2" id="H-XMLConfiguration"><a href="Seam2ToSeam3MigrationNotes.html#H-XMLConfiguration">XML Configuration</a></h2> 
+        <p class="wikiPara"> Seam 2 provides an <a href="http://docs.jboss.org/seam/2.2.2.Final/reference/en-US/html/xml.html#xml.descriptor" target="" class="regularLink">XML configuration layer</a> that allows: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> selected types of meta-data to be overridden for an existing bean (scope, precedence, ...)</li> 
+         <li class="wikiUnorderedListItem"> registration of new beans</li> 
+         <li class="wikiUnorderedListItem"> initial values of a bean to be specified</li> 
+        </ul> 
+        <p class="wikiPara"> This is done either in the global <tt>components.xml</tt> file or in fine-grained configuration files. </p> 
+        <p class="wikiPara"> In Seam 3, Solder provides an <a href="http://docs.jboss.org/seam/3/solder/snapshot/reference/en-US/html/part4.html" target="" class="regularLink">XML configuration extension</a>. Compared to Seam 2, this extension supports a superset of features: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> adding / removing of beans</li> 
+         <li class="wikiUnorderedListItem"> modification of metadata of existing beans - any metadata information that can be expressed using annotations can be expressed using XML as well (e.g. injection point, producer method or observer method metadata )</li> 
+         <li class="wikiUnorderedListItem"> initial values of a bean including <a href="http://docs.jboss.org/seam/3/solder/snapshot/reference/en-US/html/xml-provider.html#d0e2477" target="" class="regularLink">inline bean declarations</a></li> 
+        </ul> 
+        <p class="wikiPara"> The configuration can either be specified directly in the <tt>beans.xml</tt> file or in a file called <tt>seam-beans.xml</tt>. </p> 
+        <h2 class="wikiHeadline2" id="H-OtherWaysOfConfiguration"><a href="Seam2ToSeam3MigrationNotes.html#H-OtherWaysOfConfiguration">Other ways of configuration</a></h2> 
+        <p class="wikiPara"> Seam 2 configuration can be overridden using <a href="http://docs.jboss.org/seam/2.2.2.Final/reference/en-US/html/xml.html#d0e4427" target="" class="regularLink">property settings</a>. These settings can be read from system properties, servlet context parameters and the seam.properties file. </p> 
+        <p class="wikiPara"> Seam 3 currently does not provide this level of integration between the XML layer and property-like configuration facilities. Nevertheless, access to the all source of configuration mentioned above is provided at some level: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> property files can be loaded using <a href="http://docs.jboss.org/seam/3/solder/snapshot/reference/en-US/html_single/#solder-resourceloading" target="" class="regularLink">resource loader</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="https://github.com/seam/solder/blob/develop/impl/src/main/java/org/jboss/solder/system/SystemProperties.java" target="" class="regularLink">system properties</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="https://github.com/seam/solder/blob/develop/impl/src/main/java/org/jboss/solder/system/SystemProperties.java" target="" class="regularLink">servlet context parameters</a></li> 
+        </ul> 
+        <h1 class="wikiHeadline1" id="H-Events"><a href="Seam2ToSeam3MigrationNotes.html#H-Events">Events</a></h1> 
+        <p class="wikiPara"> Both Seam 2 and CDI beans may produce and consume events in order to communicate with other beans. Unlike method invocation, events allow for decoupled architecture with no compile-time dependency. </p> 
+        <p class="wikiPara"> In Seam 2, the type of an event is represented by a string value. Observer methods may observer one or more event types. An observer method is notified when an event of a matching type is fired. An event can carry additional objects which are passed as method parameters to the observer method. Synchronous delivery, as well as other types such as asynchronous, timed and transaction-bound delivery modes are supported - these are summarized below. </p> 
+        <p class="wikiPara"> Unlike Seam 2, the process of observer method resolution is type-safe in CDI. A CDI event is represented by a payload (any Java object) and a set of qualifiers. The Java types of the event payload together with qualifiers to determine which observer methods are notified of the event (See <a href="http://docs.jboss.org/cdi/spec/1.0/html/events.html#d0e6686" target="" class="regularLink">observer resolution rules</a>). </p> 
+        <table class="datatable topLeftBottomBorder rightBorder" border="0" cellspacing="0" cellpadding="5" style="width: auto;"> 
+         <tbody>
+          <tr class="regularHeader alignLeft"> 
+           <th></th> 
+           <th>Seam 2 </th>
+           <th>CDI </th>
+          </tr> 
+          <tr> 
+           <td><strong>Raising event</strong></td> 
+           <td><pre class="wikiPreformatted">Events.instance().raiseEvent(“foo”);</pre> </td> 
+           <td><pre class="wikiPreformatted">@Inject 
+private Event&lt;Foo&gt; event;
+
+// in code
+event.fire(new Foo());</pre> </td> 
+          </tr> 
+          <tr> 
+           <td><strong>Observing an event</strong></td> 
+           <td><pre class="wikiPreformatted">@Observer("foo")
+public void observe() {
+}</pre> </td> 
+           <td><pre class="wikiPreformatted">public void observe(@Observes Foo foo)
+{
+}</pre> </td> 
+          </tr> 
+         </tbody>
+        </table> 
+        <p class="wikiPara"> The CDI specification itself supports both synchronous delivery of events as well as transactional observer methods which are invoked in specific points in a life-cycle of a transaction. Unlike Seam 2, where an entire event can be bound to a specific transaction phase, it’s the observer method which declares the transaction phase in case of CDI. As a result, observer method invocations for the same event may be executed in different phases of a transaction, which is not possible with Seam 2. </p> 
+        <p class="wikiPara"> Asynchronous and timed delivery of events is not covered by the CDI specification. These types of event delivery can be implemented either using facilities provided by other parts of the Java EE platform (EJB) or by portable extensions. </p> 
+        <table class="datatable topLeftBottomBorder rightBorder" border="0" cellspacing="0" cellpadding="5" style="width: auto;"> 
+         <tbody>
+          <tr class="regularHeader alignLeft"> 
+           <th>Delivery mode </th>
+           <th>Seam 2 - Raising events (observing is always same as above) </th>
+           <th>CDI - Observing events (raising is always same as above) </th>
+          </tr> 
+          <tr> 
+           <td><strong>Synchronous</strong></td> 
+           <td><pre class="wikiPreformatted">Events.instance()
+   .raiseEvent(“foo”);</pre> </td> 
+           <td><pre class="wikiPreformatted">public void observe(@Observes Foo foo)
+{
+}</pre> </td> 
+          </tr> 
+          <tr> 
+           <td><strong>Transaction success phase</strong></td> 
+           <td><pre class="wikiPreformatted">Events.instance()
+   .raiseTransactionSuccessEvent(“foo”);</pre> </td> 
+           <td><pre class="wikiPreformatted">public void observe(@Observes(during = TransactionPhase.AFTER_SUCCESS) Foo foo)
+{
+}</pre> </td> 
+          </tr> 
+          <tr> 
+           <td><strong>Transaction completion phase</strong></td> 
+           <td><pre class="wikiPreformatted">Events.instance()
+   .raiseTransactionCompletionEvent(“foo”);</pre> </td> 
+           <td><pre class="wikiPreformatted">public void observe(@Observes(during = TransactionPhase.AFTER_COMPLETION) Foo foo)
+{
+}
+</pre> </td> 
+          </tr> 
+          <tr> 
+           <td><strong>Asynchronous</strong></td> 
+           <td><pre class="wikiPreformatted">Events.instance()
+   .raiseTransactionCompletionEvent(“foo”);</pre> </td> 
+           <td> No direct alternative. Can be implemented using EJB @Asynchronous methods. <pre class="wikiPreformatted">@Stateless
+public clazz FooObserver {
+
+   @Asynchronous
+   public void observe(@Observes Foo foo)
+   {
+   }
+}</pre> </td> 
+          </tr> 
+          <tr> 
+           <td><strong>Timed</strong></td> 
+           <td><pre class="wikiPreformatted">Events.instance()
+   .raiseTimedEvent(“foo”, new Schedule(1000l));</pre> </td> 
+           <td> No direct alternative. Can be implemented using EJB <tt>TimerService</tt>.</td> 
+          </tr> 
+         </tbody>
+        </table> 
+        <h1 class="wikiHeadline1" id="H-Interceptors"><a href="Seam2ToSeam3MigrationNotes.html#H-Interceptors">Interceptors</a></h1> 
+        <p class="wikiPara"> In the Java EE specification version 6, the concept of interceptors was extracted into a separate specification. As a result, not only EJBs but any CDI-managed beans can benefit from this facility. </p> 
+        <p class="wikiPara"> If you used interceptors in Seam 2, migration is very straightforward. The names and semantics of most of the annotations remain unchanged. If you used meta annotations to bind interceptors to your beans in Seam 2, this idea (slightly modified) made it into the specification and is now know as an <a href="http://docs.jboss.org/cdi/spec/1.0/html/interceptors.html" target="" class="regularLink">interceptor binding</a>. </p> 
+        <p class="wikiPara"> Note that: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> It’s not possible to declare relative ordering of interceptors anymore (if my interceptor should be invoked before or after another interceptor). Interceptors must be globally <a href="http://docs.jboss.org/cdi/spec/1.0/html/interceptors.html#enabledinterceptors" target="" class="regularLink">activated and ordered</a> in the <tt>beans.xml</tt> file.</li> 
+         <li class="wikiUnorderedListItem"> Stateless interceptors - the performance optimization Seam 2 used is not supported in CDI. Interceptors always share the life cycle with the bean they intercept.</li> 
+        </ul> 
+        <p class="wikiPara"> </p> 
+       </div>
+       <div id="j_id367" class="documentTags undecoratedLink smallFont">
+        <div id="j_id368">
+          Tags:&nbsp;
+         <a href="https://community.jboss.org/tags?recursive=true#/?tags=Seam+2">Seam 2</a>&nbsp;|&nbsp;
+         <a href="https://community.jboss.org/tags?recursive=true#/?tags=Seam+3">Seam 3</a>&nbsp;|&nbsp;
+         <a href="https://community.jboss.org/tags?recursive=true#/?tags=migration">migration</a>
+        </div>
+       </div> 
+      </div>
+      <div id="commentDisplayForm">
+       <div id="comments" class="commentsDisplay"></div>
+      </div> 
+     </div> 
+     <div class="clear" style="padding-top:15px;"></div> 
+    </div>
+   </div> 
+  </div> 
+  <div id="footer" class="undecoratedLink"> 
+   <p> © Copyright 2009, Red Hat Middleware, LLC. All rights reserved. JBoss and Seam are registered trademarks and servicemarks of <a href="http://www.redhat.com/">Red Hat, Inc</a>. [<a href="http://www.redhat.com/legal/privacy_statement.html">Privacy Policy</a>]</p> 
+  </div>
+  <div id="status">
+   <span id="globalStatus"><span id="globalStatus.start" style="display: none">
+     <div id="j_id608" class="statusStart">
+      <img src="../themes/sfwkorg/img/statusindicator.gif" height="25" width="20">
+     </div></span><span id="globalStatus.stop">
+     <div id="j_id610" class="statusStop">
+      <img src="../themes/sfwkorg/img/blank.gif" height="25" width="20">
+     </div></span></span>
+  </div>  
+  <!-- Mirrored from 127.0.0.1:64444/Seam3/Seam2ToSeam3MigrationNotes by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:52:01 GMT --> 
+  <!-- Added by HTTrack -->
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack --> 
+ </body>
+</html>

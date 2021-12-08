@@ -1,0 +1,631 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <!-- Mirrored from 127.0.0.1:64444/Documentation/HTTPClientserverOptimizationStrategies by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:50:37 GMT -->
+ <!-- Added by HTTrack -->
+ <head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack -->  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+  <title>Seam Framework - HTTP client-server optimization strategies</title> 
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/basic_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" rel="stylesheet" type="text/css">
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/extended_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" media="rich-extended-skinning" rel="stylesheet" type="text/css">
+  <script src="../a4j/g/3_3_3.CR1org.ajax4jsf.javascript.AjaxScript" type="text/javascript"></script>
+  <script type="text/javascript">window.RICH_FACES_EXTENDED_SKINNING_ON=true;</script>
+  <script src="../a4j/g/3_3_3.CR1org/richfaces/renderkit/html/scripts/skinning.js" type="text/javascript"></script>
+  <link href="../themes/sfwkorg/css/sfwk.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shCore.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shThemeDefault.css" rel="stylesheet" type="text/css"> 
+  <link rel="alternate" type="application/atom+xml" title="Design" href="../service/Feed/atom/Area/Documentation/Node/Designhtml.html"> 
+  <script type="text/javascript" src="../seam/resource/remoting/resource/remote.js"></script> 
+  <script type="text/javascript" src="../seam/resource/remoting/interface1535.js?httpSessionChecker"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jquery.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jqueryPlugins.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/lacewiki.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shCore.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushBash.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCpp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCSharp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCss.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDelphi.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDiff.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushGroovy.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJava.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJScript.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPhp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPlain.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPython.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushRuby.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushScala.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushSql.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushVb.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushXml.js"></script> 
+  <script type="text/javascript">
+        /* If you really want to load the Flash garbage on every page, go ahead and enable this:
+        SyntaxHighlighter.config.clipboardSwf = '/themes/sfwkorg/js/sh/scripts/clipboard.swf';
+         */
+        SyntaxHighlighter.defaults['gutter'] = false;
+        SyntaxHighlighter.all();
+	</script> 
+  <script type="text/javascript">
+
+        // ###################### Session timeout alert #################################
+
+        var sessionChecker = Seam.Component.getInstance("httpSessionChecker");
+        var timeoutURL = '/Home/JBossSeam';
+        var timeoutMillis = '900'*1000+3000;
+        var sessionTimeoutInterval = null;
+
+        function startSessionTimeoutCheck() {
+            sessionTimeoutInterval = setInterval('sessionChecker.isNewSession(alertTimeout)', timeoutMillis);
+        }
+
+        function stopSessionTimeoutCheck() {
+            if (sessionTimeoutInterval) clearInterval(sessionTimeoutInterval);
+        }
+
+        function resetSessionTimeoutCheck() {
+            if (sessionTimeoutInterval != null) {
+                stopSessionTimeoutCheck();
+                startSessionTimeoutCheck();
+            }
+        }
+
+        function alertTimeout(newSession) {
+            if (newSession) {
+                clearInterval(sessionTimeoutInterval);
+                jQuery(".ajaxSupport")
+                        .removeAttr('onblur')
+                        .removeAttr('onchange')
+                        .removeAttr('onkeyup')
+                        .removeAttr('onclick');
+                jQuery(".sessionEventTrigger").hide();
+                var answer = confirm("Your session has timed out, you will be redirected to the start page.");
+                if (answer) window.location = timeoutURL;
+            }
+        }
+
+        // ###################### Popups #################################
+
+        var fadeInPopupDialog = function(hash) {
+            hash.w.fadeIn('fast',function(){ hash.o.show(); });
+            jQuery(".closeDialog", hash.w).attr("accesskey", "C"); // Dynamically assign accesskey to .closeDialog buttons
+        };
+
+        var fadeOutPopupDialog = function(hash) { hash.w.fadeOut('fast',function(){ hash.o.remove(); }); };
+
+        // ###################### Tabbed Forms #################################
+
+        var formTabErrors = {};
+
+        function formTabRaiseError(tabId, fieldId, message) {
+
+            formTabClearError(tabId, fieldId); // Clear error then re-add
+
+            log("Raise error for tab: '" + tabId + "' field: " + fieldId);
+
+            // Add an error message to the client message box
+            log("Adding error message: " +tabId + fieldId + "ErrorMessage")
+            jQuery("#clientMessageBoxTable").append(
+                '<tr id="' + tabId + fieldId + 'ErrorMessage"><td><img src="/themes/sfwkorg/img/attention.gif" ' +
+                'height="18" width="18" class="clientMessageBoxImage attentionImage"/></td>' +
+                '<td><span id="attentionMessage" class="attentionMessage">'+ message + '</span></td></tr>'
+            );
+            if (formTabErrors[tabId] == null) {
+                formTabErrors[tabId] = 1;
+            } else {
+                formTabErrors[tabId]++;
+            }
+            formTabRenderErrors(tabId);
+        }
+
+        function formTabClearError(tabId, fieldId) {
+            if (document.getElementById(tabId+fieldId+"ErrorMessage") != null) { // This error is displayed
+                log("Clear error for tab: '" + tabId + "' field: " + fieldId);
+                log("Removing error message: " +tabId + fieldId + "ErrorMessage")
+                // Remove the error message on the client message box
+                jQuery("#"+tabId + fieldId + "ErrorMessage").remove();
+
+                formTabErrors[tabId]--;
+                formTabRenderErrors(tabId);
+            }
+        }
+
+        function formTabRenderErrors(tabId) {
+            log("Errors for tab: '" + tabId + "': " + formTabErrors[tabId]);
+
+            if (formTabErrors[tabId] > 0 && document.getElementById(tabId+"InvalidIcon") == null) {
+                log("Showing icon for tab: " + tabId);
+                // Show an icon on the tab and blink it a few times
+                jQuery("#"+tabId)
+                    .prepend('<img id="' + tabId + 'InvalidIcon" ' +
+                            'src="/themes/sfwkorg/img/attention.gif" width="13" height="13" ' +
+                            'alt="!" style="vertical-align:bottom;margin-left:5px;margin-right:5px;"/>');
+                pulsate("#"+tabId);
+            } else if (formTabErrors[tabId] < 1){
+                log("Removing icon of tab: " + tabId);
+                jQuery("#"+tabId + "InvalidIcon").remove();             // Remove the error icon on the tab
+            }
+
+            var tabsHaveErrors = false;
+            for (var tab in formTabErrors) {
+                var numOfErrors = formTabErrors[tab];
+                if (numOfErrors > 0) {
+                    tabsHaveErrors = true;
+                    break;
+                }
+            }
+
+            if (tabsHaveErrors) {
+                log("Hiding save button and showing form message box");
+                jQuery(".saveButton").hide();                       // Hide save button(s)
+                jQuery(".formControls").css("height", "30px");      // Adjust height for missing save button
+                jQuery("#messageBoxContainer").hide();                 // Hide server messages
+                jQuery("#clientMessageBoxContainer").show();           // Show client error messages
+            } else {
+                log("Showing save button and hiding form message box");
+                jQuery(".saveButton").show();                       // Show save button(s)
+                jQuery(".formControls").css("height", "");          // Readjust height for present save button
+                jQuery("#clientMessageBoxContainer").hide();           // Hide client error messages
+            }
+        }
+
+        function formTabClicked() {
+            jQuery("#messageBoxContainer").hide();                 // Hide server messages
+        }
+
+        function log(message) {
+            return; // Remove to enable logging
+            if (!log.window_ || log.window_.closed) {
+                var win = window.open("", null, "width=400,height=200," +
+                                                "scrollbars=yes,resizable=yes,status=no," +
+                                                "location=no,menubar=no,toolbar=no");
+                if (!win) return;
+                var doc = win.document;
+                doc.write("<html><head><title>Debug Log</title></head><body style='font-family: monospace'></body></html>");
+                doc.close();
+                log.window_ = win;
+            }
+            var logLine = log.window_.document.createElement("div");
+            logLine.appendChild(log.window_.document.createTextNode(message));
+            log.window_.document.body.appendChild(logLine);
+        }
+
+        // ###################### Design #################################
+
+        function highlightStars(item, range, end) {
+            for (i = 1; i <= range; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star_grey.gif");
+            }
+            for (i = 1; i <= end; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star.gif");
+            }
+        }
+
+        function pulsate(query) {
+            var blinkCount = 2*2;
+            do {
+                jQuery(query)['fade'+(blinkCount%2==0?'Out':'In')]('fast');
+            } while (--blinkCount);
+        }
+
+        function clearDocumentBackground() {
+            // Noop for this skin
+        }
+
+        // Wrap boxes with border and shadow
+        function wrapBoxes() {
+            // Noop for this skin
+        }
+
+        function initPage() {
+            checkCookieSupport();
+            wrapBoxes();
+        }
+
+        jQuery(function() {
+            initPage();
+        });
+
+    </script> 
+  <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-25106513-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script> 
+ </head> 
+ <body> 
+  <noscript> 
+   <div class="cookieJavaScriptWarning">
+     Please activate JavaScript in your browser. Without it, you will only be able to browse this website but clicking on any advanced feature (any forms or submit buttons) will not work. 
+   </div> 
+  </noscript>
+  <div id="dialogHelp" class="popupDialog">
+   <span id="dialogHelpPopup" title="dialogHelp"></span>
+   <span id="dialogHelpInit"> <script type="text/javascript">
+            function showHelpPopup(width, height, offsetId) {
+                var offset = jQuery("#"+offsetId).offset();
+                jsf('dialogHelpPopup')
+                    .css({width: width+"px", height: height+"px", top: offset.top-100+"px", left: offset.left-150+"px"})
+                    .jqm({
+                        closeClass: "closeDialog",
+                        overlay: 0
+                    });
+
+                jQuery("#dialogHelpContent").css("width", width-20+"px").css("height", height-75+"px");
+                jQuery("#dialogHelpContent").css("overflow", "auto");
+
+                jsf('dialogHelpPopup').jqmShow();
+            }
+        </script></span> 
+   <script type="text/javascript">jQuery(function() {
+        jsf('dialogHelpPopup').Resizable({
+            minTop: 1,
+            dragHandle: "#dialogHelpHead",
+            handlers: { se: "#dialogHelpResizeHandle" }
+        });
+    });</script> 
+   <div class="popupDialogHead" id="dialogHelpHead">
+    Help
+   </div>
+   <div id="dialogHelpContent" class="popupDialogContent"></div>
+   <div id="dialogHelpControls" class="popupDialogControls">
+    <div id="j_id14" style="padding:5px;">
+     <a href="#" class="buttonNonpersistent closeDialog"><span class="buttonLabel">Close Help</span></a>
+    </div>
+   </div>
+  </div> 
+  <div id="wrapper"> 
+   <div id="header">  
+    <div>
+     <a href="http://seamframework.org/"><img src="../themes/sfwkorg/img/blank.gif" height="98" width="210"></a> 
+    </div> 
+   </div>
+   <div id="body"> 
+    <div id="container"> 
+     <div id="leftColumn">
+      <div id="mainMenu" xmlns="http://www.w3.org/1999/xhtml">
+       <div id="j_id121" class="box">
+        <div class="mainMenuContainer"> 
+         <div class="mainMenuHeader"></div> 
+         <div class="mainMenuBody">
+          <div id="j_id125" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Home.html" class="level1Link">Home</a>
+          </div>
+          <div id="j_id132" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Home/WhySeam.html" class="level2Link">Why Seam?</a>
+          </div>
+          <div id="j_id139" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Seam2.html" class="level1Link">Seam 2</a>
+          </div>
+          <div id="j_id146" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/GettingStarted.html" class="level2Link">Getting Started</a>
+          </div>
+          <div id="j_id153" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Downloads.html" class="level2Link">Downloads</a>
+          </div>
+          <div id="j_id160" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Documentation.html" class="level2Link">Documentation</a>
+          </div>
+          <div id="j_id167" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="http://weld.cdi-spec.org/" class="level1Link">Weld</a>
+          </div>
+          <div id="j_id174" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Community.html" class="level1Link">Community</a>
+          </div>
+          <div id="j_id181" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="https://community.jboss.org/" class="level2Link">Forums</a>
+          </div>
+          <div id="j_id188" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/CDIExtensions.html" class="level2Link">CDI Extensions</a>
+          </div>
+          <div id="j_id195" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Contribute.html" class="level2Link">Contribute</a>
+          </div>
+          <div id="j_id202" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/JIRA.html" class="level2Link">JIRA</a>
+          </div>
+          <div id="j_id209" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/MailingLists.html" class="level2Link">Mailing Lists</a>
+          </div>
+          <div id="j_id216" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Events.html" class="level2Link">Events</a>
+          </div>
+          <div id="j_id223" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Links.html" class="level2Link">Links</a>
+          </div>
+          <div id="j_id230" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/SeamInProduction.html" class="level2Link">Seam In Production</a>
+          </div>
+          <div id="j_id237" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Documentation.html" class="level1Link">Documentation</a>
+          </div>
+          <div id="j_id244" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="FAQs.html" class="level2Link">FAQs</a>
+          </div>
+          <div id="j_id251" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="KnowledgeBase.html" class="level2Link">Knowledge Base</a>
+          </div>
+          <div id="j_id258" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="Design.html" class="level2Link">Design</a>
+          </div> 
+         </div> 
+         <div class="mainMenuFooter"></div> 
+        </div>
+       </div> 
+      </div> 
+      <br> 
+      <div style="margin-top: 25px; margin-left: 15px; margin-right: 15px; "> 
+       <h2>Built with Seam</h2> 
+       <p> You can find the full source code for this website in the <a href="/Download.html">Seam package</a> in the directory /examples/wiki. It is licensed under the LGPL. </p> 
+       <div style="text-align:center;">
+        <a href="/Community/GetASeamIcon.html"><img src="../themes/sfwkorg/img/runningon_seamlogo_beige.gif" height="50" width="200"></a> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="rightColumn">
+      <img src="../themes/sfwkorg/img/blank.gif" height="8" width="1">
+      <div id="breadcrumb" class="breadcrumb">
+       <span class="breadcrumbPanel"><a href="../index.html" class="itemLink breadcrumbRoot">Site</a><span class="itemSeparator breadcrumbRoot">·</span><a href="../Documentation.html" class="itemLink">Documentation</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="Design.html" class="itemLink">Design</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="HTTPClientserverOptimizationStrategies.html" class="itemText">HTTP client-server optimization st...</a></span>
+      </div>
+      <div id="messageBoxContainer"></div>
+      <div id="clientMessageBoxContainer" style="display:none;"> 
+       <div id="clientMessageBox" class="messageBox"> 
+        <table id="clientMessageBoxTable" class="messageBoxTable" cellpadding="0" cellspacing="0" border="0"></table> 
+        <script type="text/javascript">jQuery(function() {
+                    jQuery("#clientMessageBoxContainer").css("margin-top", "10px").css("margin-bottom", "10px");
+                    pulsate(".clientMessageBoxImage");
+                });</script> 
+       </div>
+      </div> 
+      <div id="documentDisplayContainer" class="box">
+       <div id="documentDisplay" class="documentDisplay">
+        <div id="j_id362"> 
+         <h1 class="documentTitle"><a href="HTTPClientserverOptimizationStrategies.html">HTTP client-server optimization strategies</a> </h1>
+        </div>
+        <p class="wikiPara"> For any Seam-powered website, optimizing the communication between the webbrowser client and the server is crucial. Although some of these optimization strategies can be considered generic, and some are handled by Seam on the server-side automatically, many others depend on the content that is being served. In other words, Seam can only do so much automatically and you, as the developer of a website, will have to manually tune your system for optimal performance and scalability. </p> 
+        <p class="wikiPara"> This document outlines some common strategies useful for Seam application developers. </p> 
+        <h2 class="wikiHeadline2" id="H-AnalyzingHTTPCommunication"><a href="HTTPClientserverOptimizationStrategies.html#H-AnalyzingHTTPCommunication">Analyzing HTTP communication</a></h2> 
+        <p class="wikiPara"> Your best tool for analyzing the flow of information and related performance characteristics is the <a href="http://getfirebug.com/" target="" class="regularLink">Firebug plugin for Firefox</a>. This plugin allows you to analyze request and response HTTP messages. For example, you can use it to see what resources are cached on the client, or what resources have been sent from the server using compression. </p> 
+        <p class="wikiPara"> In addition, you should install the Firebug plugin <a href="http://code.google.com/speed/page-speed/" target="" class="regularLink">Google Page Speed</a>. This plugin can analyze the performance characteristics of a particular webpage and summarize potential optimization strategies, such as recommended changes you should make to caching of resources, compression, and so on. </p> 
+        <p class="wikiPara"> Keep in mind however that although tools such as Page Speed are useful to get an overview, you still have to use your own judgement, and you should not follow its recommendations blindly. The tool will only group the analysis results by a predefined metric of importance. It's very well possible that a particular optimization that is highly recommended by Page Speed will, in the end, not much improve the perceived performance of your website. </p> 
+        <p class="wikiPara"> As an example consider dynamically served images, e.g. from a database. Although Page Speed will show you that better compression of PNGs, JPGs, and so on could save you 50% bandwidth and that this would be a worthy and important optimization, actually implementing it would be quite a bit of work. And, because browsers (should) cache these images, the only time you'd see any real effect is on the first HTTP hit (cold cache); subsequently the browser would use the cached version (warm cache). </p> 
+        <p class="wikiPara"> This distinction between cold and warm browser cache behavior is a fundamental aspect of HTTP communication optimization. Always know what will be affected and balance your effort and the amount of work with the expected behavior and perception of your website visitors. </p> 
+        <p class="wikiPara"> Another example is the recommendation by Page Speed to allow parallel requests of CSS, Javascript, images and other dependencies by distributing them on different hostnames. Unless you have the infrastructure (DNS, virtual webserver hosts, etc.) to deal with this recommendation, you should simply ignore it. Although cold cache rendering speed of your website is important to get visitors, keeping them requires anyway that these resources be cached, so that subsequent visits are faster. Again, consider the effort and the expected result. </p> 
+        <h2 class="wikiHeadline2" id="H-CompressionOfTransferredContent"><a href="HTTPClientserverOptimizationStrategies.html#H-CompressionOfTransferredContent">Compression of transferred content</a></h2> 
+        <p class="wikiPara"> Especially for text-based content such as CSS and Javascript files, gzip compression before transferring the data to the client impacts the perceived cold-cache performance of your website. In other words, when a visitor opens your website for the first time, the speed with which it will render depends on how much data there is to download. Your goal is to reduce the number of kilobytes that have to be transferred across the wire. </p> 
+        <p class="wikiPara"> Ideally, content compression is enabled globally and not on a per-application basis. This is the job of the webserver or servlet container. If your servlet container does not support compression, you can always try to write your own <a href="http://seamframework.org/Community/EHCacheGZipFilterIncompatibleWithSeam" target="" class="regularLink">servlet filter</a> - note that no such filter is built-in with Seam or JSF. </p> 
+        <p class="wikiPara"> Tomcat will by default not compress content before transferring it to the client. You have to enable compression in your Tomcat <tt>server.xml</tt> for the content types you want to serve with compression: </p> 
+        <pre class="wikiPreformatted">&lt;Connector port="80" address="${jboss.bind.address}" ...
+    compressableMimeType="text/html,text/xml,text/plain,text/css,text/javascript" 
+    compression="on"/&gt;</pre> 
+        <p class="wikiPara"> If supported by the client, Tomcat will now respond to any request for such a resource with a gzip-compressed version. Note that compression requires more CPU power on your server! Therefore you can also set a minimum number of bytes (content length), to disable compression for resources that are very small - remember that even if Page Speed tells you it is important, you won't gain much from compressing a 1kb resource to 800 bytes. On the other hand, if CPU load on your server is not your primary concern, you can compress all text content easily. </p> 
+        <p class="wikiPara"> For reasons unknown, compression in Tomcat doesn't work for some content. We've observed this behavior with content that is being produced by servlets as well as simple static files that are served from the WAR webroot. Unfortunately, no clear failure pattern could be established. Therefore we have added some convenience methods in Seam 2.2.1 that allow you (and Seam itself) to enable compression on implementations of Seam's <tt>AbstractResource</tt> selectively. This is a Seam extension point you should consider instead of writing and configuring your own custom servlets. Your content will be handled through a single configured <tt>SeamResourceServlet</tt>: </p> 
+        <pre class="wikiPreformatted">@Scope(ScopeType.APPLICATION)
+@Name("myResource")
+@BypassInterceptors
+public class MyResource extends AbstractResource {
+
+    // The final resource path is (depending on web.xml): /seam/resource/myresource
+    public String getResourcePath() {
+        return "/myresource";
+    }
+
+    public void getResource(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        
+        response.setContentType("text/plain");
+        
+        OutputStreamWriter outStream = new OutputStreamWriter(
+                selectOutputStream(request, response)
+        );
+        outStream.write("Some text content!");
+        outStream.close();
+    }
+
+    @Override
+    protected boolean isGzipEnabled() {
+        return true;
+    }
+    
+    @Override
+    protected boolean isCompressedMimeType(String mimeType)
+    {
+       return mimeType.matches("text/.+");
+    }
+
+}</pre> 
+        <p class="wikiPara"> The <tt>selectOutputStream()</tt> method will automatically chose a compressed or non-compressed output and, when closing the stream, add the right HTTP response headers to inform the client about the content encoding. You can override the methods <tt>isGzipEnabled()</tt> and <tt>isCompressedMimeType()</tt> to dynamically implement compression. </p> 
+        <h2 class="wikiHeadline2" id="H-CachingContent"><a href="HTTPClientserverOptimizationStrategies.html#H-CachingContent">Caching content</a></h2> 
+        <p class="wikiPara"> Compression of transferred content is an important optimization, and it greatly influences how your visitors will perceive the speed of your website when they arrive for the first time, with a cold browser cache. You also have to consider how the cache is used and what happens on subsequent page views from the same browser. Most content can be cached on the browser, as it is static and if at all it rarely changes. </p> 
+        <p class="wikiPara"> You can control the browser's caching behavior with HTTP response headers. The most important header is <tt>Cache-Control: max-age=&lt;number of seconds&gt;</tt>. A browser will consider the content of the resource to be <q>fresh</q> as long as it hasn't expired. The browser will only make another roundtrip to the server to revalidate the content - that is, potentially retrieve it again - after it has expired in the local cache. </p> 
+        <p class="wikiPara"> The appropriate expiration and validation strategy depends on the resource that is being requested. For example, a static PNG or CSS file served from your WAR webroot can probably be cached for hours, maybe even days or weeks. On the other hand, dynamically generated content, be it text or image data that is typically rendered from database content, requires fine-grained control of expiration timeouts. </p> 
+        <p class="wikiPara"> The first resource you will probably consider caching is the rendered HTML output of the actual webpage. By design, a Seam application renders HTML dynamically and the content of the page changes all the time, so no browser caching is used here. </p> 
+        <p class="wikiPara"> Next you might find some CSS, Javascript, and image dependencies in your main HTML code that trigger additional HTTP roundtrips. These dependencies are either your own, or have been added by the Seam framework automatically because you enabled certain features such as client-side AJAX. </p> 
+        <p class="wikiPara"> If you use Richfaces, its resources will be served automatically with a cache expiration timeout of 24 hours (at the time of writing). You could disable this with the <tt>&lt;web:ajax4jsf-filter enable-cache="false"/&gt;</tt> setting in your <tt>components.xml</tt>. </p> 
+        <p class="wikiPara"> More problematic are static resources that are served from your WAR webroot, typically your own CSS, Javascript, and image files. You also have to consider resources served by Seam through <tt>AbstractResource</tt> implementations and through your own custom servlets. None of these resources will be served with cache control headers and it's up to the heuristics of the browser's cache to decide if the content can be cached and how long it will be cached. Clearly, this is not an optimal situation. </p> 
+        <p class="wikiPara"> Starting with Seam 2.2.1, you can configure a Seam filter that will apply cache control headers to responses in your <tt>components.xml</tt>: </p> 
+        <pre class="wikiPreformatted">&lt;web:cache-control-filter name="imageCacheControlFilter"
+                          regex-url-pattern=".*(\.gif|\.png|\.jpg|\.jpeg)"
+                          value="max-age=86400"/&gt;
+
+&lt;web:cache-control-filter name="textCacheControlFilter"
+                          regex-url-pattern=".*(\.css|\.js)"
+                          value="max-age=1400"/&gt;
+</pre> 
+        <p class="wikiPara"> Note that you do not have to name the filter if you only have one. However, in most cases you will need different expiration and cache control options for different resource types. </p> 
+        <h2 class="wikiHeadline2" id="H-HandlingConditionalHTTPRequests"><a href="HTTPClientserverOptimizationStrategies.html#H-HandlingConditionalHTTPRequests">Handling conditional HTTP requests</a></h2> 
+        <p class="wikiPara"> Caching content on the browser and keeping the cache <q>warm</q> is your first priority. But when a cached item expires on the browser, the next page visit will again trigger loading of the resources. If the resource state has still not been modified on the server, after the browser cache expired the item, the same data would be transferred to the browser again. So instead of demanding that the resource should be send under any circumstances, browsers can execute a <i class="wikiEmphasis">conditional</i> GET or HEAD request first to check if the resource has been modified. This is also called <i class="wikiEmphasis">cache revalidation</i>. </p> 
+        <p class="wikiPara"> If such a conditional request arrives on your server you can verify the condition(s) that have been sent by the browser, and send the right answer back: Either you return <i class="wikiEmphasis">304 Not Modified</i> and no content, which tells the browser to keep using the cached content. Or you send back a fresh representation, if the resource state has been modified and the conditions did not match. </p> 
+        <p class="wikiPara"> The conditions are either content-based (If-None-Match and ETag) or time-based (If-Modified-Since and Last-Modified) and which you use depends on how easy it is to calculate either a unique hash of the resource state, or to find the last modification timestamp of the resource on the server. </p> 
+        <p class="wikiPara"> In Seam 2.2.1 you can use the <tt>ConditionalAbstractResource</tt> superclass instead of the <tt>AbstractResource</tt> superclass for this purpose: </p> 
+        <pre class="wikiPreformatted">@Scope(ScopeType.APPLICATION)
+@Name("myResource")
+@BypassInterceptors
+public class MyResource extends ConditionalAbstractResource {
+
+    // The final resource path is /seam/resource/myresource
+    public String getResourcePath() {
+        return "/myresource";
+    }
+
+    public void getResource(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        response.setContentType("text/plain");
+        
+        String textContent = "This is some text.";
+        
+        String entityTag = createEntityTag(textContent, false); // Hashes the text
+
+        // or if you want to work with time-based validation
+        // Long lastModified = getLastModifiedTimestamp(&lt;path of resource&gt;);
+
+        if (!sendConditional(request, response, entityTag, &lt;lastModified or null&gt;)) {
+            OutputStreamWriter outStream = new OutputStreamWriter(
+                    selectOutputStream(request, response)
+            );
+            outStream.write(textContent);
+            outStream.close();
+        }
+    }
+}</pre> 
+        <p class="wikiPara"> This example uses an entity tag, a hash that uniquely identifies the current state of the resource. The <tt>sendConditional()</tt> method returns true if the browser's conditions could be satisfied, and it will automatically send a <i class="wikiEmphasis">304 Not Modified</i> response. If the browser's conditions could not be satisifed, for example if the browser transmitted a different entity tag or if the last modification time is later than the one the browser has, you need to send the full representation of the resource back to the browser. </p> 
+        <h3 class="wikiHeadline3" id="H-OptimizationsForRichFaces"><a href="HTTPClientserverOptimizationStrategies.html#H-OptimizationsForRichFaces">Optimizations for RichFaces</a></h3> 
+        <p class="wikiPara"> Richfaces content, especially Javascript and CSS for client-side AJAX, is being served compressed, and cached, if the above settings are applied. </p> 
+        <p class="wikiPara"> However, RichFaces resources are not bundled. For example, if you use the Tree component of RichFaces, many more resources will be downloaded from the server as dependencies of the HTML page: </p> 
+        <pre class="wikiPreformatted">tree.js
+tree-selection.js
+tree-item.js
+tree-item-dnd.js
+...</pre> 
+        <p class="wikiPara"> All in all, a page that uses a few RichFaces components may download dozens of dependencies. Note that the content of these resources is cached and subsequent page requests will not download the dependencies again until the cached items expire. The problem is the initial cold cache page request, and the time it takes to download these resources <i class="wikiEmphasis">sequentally</i>. </p> 
+        <p class="wikiPara"> So our goal is to <i class="wikiEmphasis">minimize</i> the number of requests, then <i class="wikiEmphasis">parallelize</i> the remaining requests that are absolutely necessary. Finally, we need to <i class="wikiEmphasis">order</i> the requests properly so that CSS files can be downloaded in parallel. </p> 
+        <p class="wikiPara"> First, RichFaces needs to bundle related resources, probably by type. For example, all Javascript that is required to execute a page should be bundled up in a single resource. On the other hand, although that would create a cacheable resource state, it would be bound to a particular page - and a unique identifier for that resource would have to be generated. Which means that subsequent hits on other pages would require downloading a different bundle. </p> 
+        <p class="wikiPara"> Bundling resources by AJAX functionality seems to make more sense. For example, all Javascript files for a Tree component should be served with one GET request. All CSS files required for the Tree component should be served with one request. All Javascript files related to drag-and-drop should be bundled up so they can be served with one request. This requires categorization of RichFaces resources and changes to the automatically generated HTML header, where dependencies are listed. </p> 
+        <p class="wikiPara"> After minimizing the number of requests, we need to parallelize and order the requests properly for optimal performance. </p> 
+        <p class="wikiPara"> A browser will download CSS files in parallel if they are declared before any Javascript dependencies in the HTML header. Today RichFaces does not do that. </p> 
+        <p class="wikiPara"> Also, a browser will not issue parallel requests for Javascript dependencies because they are usually served from the same host (www.yoursite.tld). The only way to optimize this is outside of the scope of RichFaces, as it would require setup of virtual hosts and major changes to the deployment of the application. However, it's worth considering how RichFaces could support that kind of configuration. </p> 
+       </div>
+       <div id="j_id374" class="documentCreatorHistory undecoratedLink smallFont">
+        <div id="j_id375">
+          Created:&nbsp;14. Jul 2009, 01:39&nbsp;America/New_York&nbsp;(Christian Bauer)
+        </div>
+        <div id="j_id383">
+          Last Modified:&nbsp;21. Jul 2009, 08:19&nbsp;America/New_York&nbsp;(Christian Bauer)
+        </div>
+       </div> 
+      </div>
+      <div id="commentDisplayForm"></div> 
+     </div> 
+     <div class="clear" style="padding-top:15px;"></div> 
+    </div>
+   </div> 
+  </div> 
+  <div id="footer" class="undecoratedLink"> 
+   <p> © Copyright 2009, Red Hat Middleware, LLC. All rights reserved. JBoss and Seam are registered trademarks and servicemarks of <a href="http://www.redhat.com/">Red Hat, Inc</a>. [<a href="http://www.redhat.com/legal/privacy_statement.html">Privacy Policy</a>]</p> 
+  </div>
+  <div id="status">
+   <span id="globalStatus"><span id="globalStatus.start" style="display: none">
+     <div id="j_id423" class="statusStart">
+      <img src="../themes/sfwkorg/img/statusindicator.gif" height="25" width="20">
+     </div></span><span id="globalStatus.stop">
+     <div id="j_id425" class="statusStop">
+      <img src="../themes/sfwkorg/img/blank.gif" height="25" width="20">
+     </div></span></span>
+  </div>  
+  <!-- Mirrored from 127.0.0.1:64444/Documentation/HTTPClientserverOptimizationStrategies by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:50:37 GMT --> 
+  <!-- Added by HTTrack -->
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack --> 
+ </body>
+</html>

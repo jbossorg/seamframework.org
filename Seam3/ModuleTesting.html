@@ -1,0 +1,699 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <!-- Mirrored from 127.0.0.1:64444/Seam3/ModuleTesting by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:54:45 GMT -->
+ <!-- Added by HTTrack -->
+ <head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack -->  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+  <title>Seam Framework - Module Testing</title> 
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/basic_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" rel="stylesheet" type="text/css">
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/extended_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" media="rich-extended-skinning" rel="stylesheet" type="text/css">
+  <script src="../a4j/g/3_3_3.CR1org.ajax4jsf.javascript.AjaxScript" type="text/javascript"></script>
+  <script type="text/javascript">window.RICH_FACES_EXTENDED_SKINNING_ON=true;</script>
+  <script src="../a4j/g/3_3_3.CR1org/richfaces/renderkit/html/scripts/skinning.js" type="text/javascript"></script>
+  <link href="../themes/sfwkorg/css/sfwk.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shCore.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shThemeDefault.css" rel="stylesheet" type="text/css"> 
+  <script type="text/javascript" src="../seam/resource/remoting/resource/remote.js"></script> 
+  <script type="text/javascript" src="../seam/resource/remoting/interface1535.js?httpSessionChecker"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jquery.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jqueryPlugins.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/lacewiki.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shCore.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushBash.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCpp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCSharp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCss.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDelphi.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDiff.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushGroovy.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJava.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJScript.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPhp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPlain.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPython.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushRuby.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushScala.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushSql.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushVb.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushXml.js"></script> 
+  <script type="text/javascript">
+        /* If you really want to load the Flash garbage on every page, go ahead and enable this:
+        SyntaxHighlighter.config.clipboardSwf = '/themes/sfwkorg/js/sh/scripts/clipboard.swf';
+         */
+        SyntaxHighlighter.defaults['gutter'] = false;
+        SyntaxHighlighter.all();
+	</script> 
+  <script type="text/javascript">
+
+        // ###################### Session timeout alert #################################
+
+        var sessionChecker = Seam.Component.getInstance("httpSessionChecker");
+        var timeoutURL = '/Home/JBossSeam';
+        var timeoutMillis = '900'*1000+3000;
+        var sessionTimeoutInterval = null;
+
+        function startSessionTimeoutCheck() {
+            sessionTimeoutInterval = setInterval('sessionChecker.isNewSession(alertTimeout)', timeoutMillis);
+        }
+
+        function stopSessionTimeoutCheck() {
+            if (sessionTimeoutInterval) clearInterval(sessionTimeoutInterval);
+        }
+
+        function resetSessionTimeoutCheck() {
+            if (sessionTimeoutInterval != null) {
+                stopSessionTimeoutCheck();
+                startSessionTimeoutCheck();
+            }
+        }
+
+        function alertTimeout(newSession) {
+            if (newSession) {
+                clearInterval(sessionTimeoutInterval);
+                jQuery(".ajaxSupport")
+                        .removeAttr('onblur')
+                        .removeAttr('onchange')
+                        .removeAttr('onkeyup')
+                        .removeAttr('onclick');
+                jQuery(".sessionEventTrigger").hide();
+                var answer = confirm("Your session has timed out, you will be redirected to the start page.");
+                if (answer) window.location = timeoutURL;
+            }
+        }
+
+        // ###################### Popups #################################
+
+        var fadeInPopupDialog = function(hash) {
+            hash.w.fadeIn('fast',function(){ hash.o.show(); });
+            jQuery(".closeDialog", hash.w).attr("accesskey", "C"); // Dynamically assign accesskey to .closeDialog buttons
+        };
+
+        var fadeOutPopupDialog = function(hash) { hash.w.fadeOut('fast',function(){ hash.o.remove(); }); };
+
+        // ###################### Tabbed Forms #################################
+
+        var formTabErrors = {};
+
+        function formTabRaiseError(tabId, fieldId, message) {
+
+            formTabClearError(tabId, fieldId); // Clear error then re-add
+
+            log("Raise error for tab: '" + tabId + "' field: " + fieldId);
+
+            // Add an error message to the client message box
+            log("Adding error message: " +tabId + fieldId + "ErrorMessage")
+            jQuery("#clientMessageBoxTable").append(
+                '<tr id="' + tabId + fieldId + 'ErrorMessage"><td><img src="/themes/sfwkorg/img/attention.gif" ' +
+                'height="18" width="18" class="clientMessageBoxImage attentionImage"/></td>' +
+                '<td><span id="attentionMessage" class="attentionMessage">'+ message + '</span></td></tr>'
+            );
+            if (formTabErrors[tabId] == null) {
+                formTabErrors[tabId] = 1;
+            } else {
+                formTabErrors[tabId]++;
+            }
+            formTabRenderErrors(tabId);
+        }
+
+        function formTabClearError(tabId, fieldId) {
+            if (document.getElementById(tabId+fieldId+"ErrorMessage") != null) { // This error is displayed
+                log("Clear error for tab: '" + tabId + "' field: " + fieldId);
+                log("Removing error message: " +tabId + fieldId + "ErrorMessage")
+                // Remove the error message on the client message box
+                jQuery("#"+tabId + fieldId + "ErrorMessage").remove();
+
+                formTabErrors[tabId]--;
+                formTabRenderErrors(tabId);
+            }
+        }
+
+        function formTabRenderErrors(tabId) {
+            log("Errors for tab: '" + tabId + "': " + formTabErrors[tabId]);
+
+            if (formTabErrors[tabId] > 0 && document.getElementById(tabId+"InvalidIcon") == null) {
+                log("Showing icon for tab: " + tabId);
+                // Show an icon on the tab and blink it a few times
+                jQuery("#"+tabId)
+                    .prepend('<img id="' + tabId + 'InvalidIcon" ' +
+                            'src="/themes/sfwkorg/img/attention.gif" width="13" height="13" ' +
+                            'alt="!" style="vertical-align:bottom;margin-left:5px;margin-right:5px;"/>');
+                pulsate("#"+tabId);
+            } else if (formTabErrors[tabId] < 1){
+                log("Removing icon of tab: " + tabId);
+                jQuery("#"+tabId + "InvalidIcon").remove();             // Remove the error icon on the tab
+            }
+
+            var tabsHaveErrors = false;
+            for (var tab in formTabErrors) {
+                var numOfErrors = formTabErrors[tab];
+                if (numOfErrors > 0) {
+                    tabsHaveErrors = true;
+                    break;
+                }
+            }
+
+            if (tabsHaveErrors) {
+                log("Hiding save button and showing form message box");
+                jQuery(".saveButton").hide();                       // Hide save button(s)
+                jQuery(".formControls").css("height", "30px");      // Adjust height for missing save button
+                jQuery("#messageBoxContainer").hide();                 // Hide server messages
+                jQuery("#clientMessageBoxContainer").show();           // Show client error messages
+            } else {
+                log("Showing save button and hiding form message box");
+                jQuery(".saveButton").show();                       // Show save button(s)
+                jQuery(".formControls").css("height", "");          // Readjust height for present save button
+                jQuery("#clientMessageBoxContainer").hide();           // Hide client error messages
+            }
+        }
+
+        function formTabClicked() {
+            jQuery("#messageBoxContainer").hide();                 // Hide server messages
+        }
+
+        function log(message) {
+            return; // Remove to enable logging
+            if (!log.window_ || log.window_.closed) {
+                var win = window.open("", null, "width=400,height=200," +
+                                                "scrollbars=yes,resizable=yes,status=no," +
+                                                "location=no,menubar=no,toolbar=no");
+                if (!win) return;
+                var doc = win.document;
+                doc.write("<html><head><title>Debug Log</title></head><body style='font-family: monospace'></body></html>");
+                doc.close();
+                log.window_ = win;
+            }
+            var logLine = log.window_.document.createElement("div");
+            logLine.appendChild(log.window_.document.createTextNode(message));
+            log.window_.document.body.appendChild(logLine);
+        }
+
+        // ###################### Design #################################
+
+        function highlightStars(item, range, end) {
+            for (i = 1; i <= range; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star_grey.gif");
+            }
+            for (i = 1; i <= end; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star.gif");
+            }
+        }
+
+        function pulsate(query) {
+            var blinkCount = 2*2;
+            do {
+                jQuery(query)['fade'+(blinkCount%2==0?'Out':'In')]('fast');
+            } while (--blinkCount);
+        }
+
+        function clearDocumentBackground() {
+            // Noop for this skin
+        }
+
+        // Wrap boxes with border and shadow
+        function wrapBoxes() {
+            // Noop for this skin
+        }
+
+        function initPage() {
+            checkCookieSupport();
+            wrapBoxes();
+        }
+
+        jQuery(function() {
+            initPage();
+        });
+
+    </script> 
+  <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-25106513-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script> 
+ </head> 
+ <body> 
+  <noscript> 
+   <div class="cookieJavaScriptWarning">
+     Please activate JavaScript in your browser. Without it, you will only be able to browse this website but clicking on any advanced feature (any forms or submit buttons) will not work. 
+   </div> 
+  </noscript>
+  <div id="dialogHelp" class="popupDialog">
+   <span id="dialogHelpPopup" title="dialogHelp"></span>
+   <span id="dialogHelpInit"> <script type="text/javascript">
+            function showHelpPopup(width, height, offsetId) {
+                var offset = jQuery("#"+offsetId).offset();
+                jsf('dialogHelpPopup')
+                    .css({width: width+"px", height: height+"px", top: offset.top-100+"px", left: offset.left-150+"px"})
+                    .jqm({
+                        closeClass: "closeDialog",
+                        overlay: 0
+                    });
+
+                jQuery("#dialogHelpContent").css("width", width-20+"px").css("height", height-75+"px");
+                jQuery("#dialogHelpContent").css("overflow", "auto");
+
+                jsf('dialogHelpPopup').jqmShow();
+            }
+        </script></span> 
+   <script type="text/javascript">jQuery(function() {
+        jsf('dialogHelpPopup').Resizable({
+            minTop: 1,
+            dragHandle: "#dialogHelpHead",
+            handlers: { se: "#dialogHelpResizeHandle" }
+        });
+    });</script> 
+   <div class="popupDialogHead" id="dialogHelpHead">
+    Help
+   </div>
+   <div id="dialogHelpContent" class="popupDialogContent"></div>
+   <div id="dialogHelpControls" class="popupDialogControls">
+    <div id="j_id14" style="padding:5px;">
+     <a href="#" class="buttonNonpersistent closeDialog"><span class="buttonLabel">Close Help</span></a>
+    </div>
+   </div>
+  </div> 
+  <div id="wrapper"> 
+   <div id="header">  
+    <div>
+     <a href="http://seamframework.org/"><img src="../themes/sfwkorg/img/blank.gif" height="98" width="210"></a> 
+    </div> 
+   </div>
+   <div id="body"> 
+    <div id="container"> 
+     <div id="leftColumn">
+      <div id="mainMenu" xmlns="http://www.w3.org/1999/xhtml">
+       <div id="j_id121" class="box">
+        <div class="mainMenuContainer"> 
+         <div class="mainMenuHeader"></div> 
+         <div class="mainMenuBody">
+          <div id="j_id125" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Home.html" class="level1Link">Home</a>
+          </div>
+          <div id="j_id132" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Home/WhySeam.html" class="level2Link">Why Seam?</a>
+          </div>
+          <div id="j_id139" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Seam2.html" class="level1Link">Seam 2</a>
+          </div>
+          <div id="j_id146" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/GettingStarted.html" class="level2Link">Getting Started</a>
+          </div>
+          <div id="j_id153" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Downloads.html" class="level2Link">Downloads</a>
+          </div>
+          <div id="j_id160" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Documentation.html" class="level2Link">Documentation</a>
+          </div>
+          <div id="j_id167" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="http://weld.cdi-spec.org/" class="level1Link">Weld</a>
+          </div>
+          <div id="j_id174" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Community.html" class="level1Link">Community</a>
+          </div>
+          <div id="j_id181" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="https://community.jboss.org/" class="level2Link">Forums</a>
+          </div>
+          <div id="j_id188" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/CDIExtensions.html" class="level2Link">CDI Extensions</a>
+          </div>
+          <div id="j_id195" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Contribute.html" class="level2Link">Contribute</a>
+          </div>
+          <div id="j_id202" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/JIRA.html" class="level2Link">JIRA</a>
+          </div>
+          <div id="j_id209" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/MailingLists.html" class="level2Link">Mailing Lists</a>
+          </div>
+          <div id="j_id216" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Events.html" class="level2Link">Events</a>
+          </div>
+          <div id="j_id223" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Links.html" class="level2Link">Links</a>
+          </div>
+          <div id="j_id230" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/SeamInProduction.html" class="level2Link">Seam In Production</a>
+          </div>
+          <div id="j_id237" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Documentation.html" class="level1Link">Documentation</a>
+          </div>
+          <div id="j_id244" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Documentation/FAQs.html" class="level2Link">FAQs</a>
+          </div>
+          <div id="j_id251" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Documentation/KnowledgeBase.html" class="level2Link">Knowledge Base</a>
+          </div>
+          <div id="j_id258" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Documentation/Design.html" class="level2Link">Design</a>
+          </div> 
+         </div> 
+         <div class="mainMenuFooter"></div> 
+        </div>
+       </div> 
+      </div> 
+      <br> 
+      <div style="margin-top: 25px; margin-left: 15px; margin-right: 15px; "> 
+       <h2>Built with Seam</h2> 
+       <p> You can find the full source code for this website in the <a href="/Download.html">Seam package</a> in the directory /examples/wiki. It is licensed under the LGPL. </p> 
+       <div style="text-align:center;">
+        <a href="/Community/GetASeamIcon.html"><img src="../themes/sfwkorg/img/runningon_seamlogo_beige.gif" height="50" width="200"></a> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="rightColumn">
+      <img src="../themes/sfwkorg/img/blank.gif" height="8" width="1">
+      <div id="breadcrumb" class="breadcrumb">
+       <span class="breadcrumbPanel"><a href="../index.html" class="itemLink breadcrumbRoot">Site</a><span class="itemSeparator breadcrumbRoot">·</span><a href="../Seam3.html" class="itemLink">Seam 3</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="ModuleHandbook.html" class="itemLink">Module Handbook</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="ModuleTesting.html" class="itemText">Module Testing</a></span>
+      </div>
+      <div id="messageBoxContainer"></div>
+      <div id="clientMessageBoxContainer" style="display:none;"> 
+       <div id="clientMessageBox" class="messageBox"> 
+        <table id="clientMessageBoxTable" class="messageBoxTable" cellpadding="0" cellspacing="0" border="0"></table> 
+        <script type="text/javascript">jQuery(function() {
+                    jQuery("#clientMessageBoxContainer").css("margin-top", "10px").css("margin-bottom", "10px");
+                    pulsate(".clientMessageBoxImage");
+                });</script> 
+       </div>
+      </div> 
+      <div id="documentDisplayContainer" class="box">
+       <div id="documentDisplay" class="documentDisplay">
+        <h1 class="wikiHeadline1" id="H-TestYourModule"><a href="ModuleTesting.html#H-TestYourModule">Test Your Module</a></h1> 
+        <p class="wikiPara"> When developing any system or software, it's important to test as much of that system as possible. Web frameworks are no exception; comprehensive, well-designed unit tests are critical for long-term success and maintenance. We want to be able to confidently stand behind the stability of Seam 3. So please, <i class="wikiEmphasis">test your module</i>. </p> 
+        <b>Guidelines:</b> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> All use-cases should be accompanied by a test.</li> 
+         <li class="wikiUnorderedListItem"> Tests are code, make sure they are clear and make sense. If they do not, chances are that the architecture needs to be re-thought.</li> 
+         <li class="wikiUnorderedListItem"> A module should not have a final release until it is well-tested.</li> 
+        </ul> 
+        <b>Test structure:</b> 
+        <p class="wikiPara"> Maven follows strict testing practices by executing the tests on every build. All unit tests should be placed in the <q>/src/test/java</q> folder, under the corresponding package to the class under test. </p> 
+        <pre class="wikiPreformatted">module/
+   |- src/
+   |   |- main/
+   |   |   |- java/
+   |   |   |   |- org/
+   |   |   |   |  |- jboss/
+   |   |   |   |  |  |- (ClassUnderTest).java
+   |   |- test/
+   |   |   |- java/
+   |   |   |   |- org/
+   |   |   |   |  |- jboss/
+   |   |   |   |  |  |- test/
+   |   |   |   |  |  |  |- (ClassUnderTest)Test.java
+</pre> 
+        <b>Set up the test suite:</b> 
+        <p class="wikiPara"> Add the following dependencies to pom.xml: </p> 
+        <pre class="wikiPreformatted">   &lt;properties&gt;
+      &lt;arquillian.version&gt;1.0.0.Alpha1&lt;/arquillian.version&gt;
+      &lt;junit.version&gt;4.8.1&lt;/junit.version&gt;
+   &lt;/properties&gt;
+
+   &lt;dependencies&gt;
+      &lt;!-- Test Dependencies --&gt;
+      &lt;dependency&gt;
+         &lt;groupId&gt;junit&lt;/groupId&gt;
+         &lt;artifactId&gt;junit&lt;/artifactId&gt;
+         &lt;version&gt;${junit.version}&lt;/version&gt;
+         &lt;scope&gt;test&lt;/scope&gt;
+      &lt;/dependency&gt;
+      &lt;dependency&gt;
+         &lt;groupId&gt;org.jboss.arquillian&lt;/groupId&gt;
+         &lt;artifactId&gt;arquillian-junit&lt;/artifactId&gt;
+         &lt;version&gt;${arquillian.version}&lt;/version&gt;
+         &lt;scope&gt;test&lt;/scope&gt;
+      &lt;/dependency&gt;
+      &lt;dependency&gt;
+         &lt;groupId&gt;org.jboss.arquillian.container&lt;/groupId&gt;
+         &lt;artifactId&gt;arquillian-weld-embedded&lt;/artifactId&gt;
+         &lt;version&gt;${arquillian.version}&lt;/version&gt;
+         &lt;scope&gt;test&lt;/scope&gt;
+      &lt;/dependency&gt;
+   &lt;/dependencies&gt;</pre> 
+        <h3 class="wikiHeadline3" id="H-JUnit"><a href="ModuleTesting.html#H-JUnit">JUnit</a></h3> 
+        <p class="wikiPara"> JUnit is the Java industry-standard unit-testing framework. It has the best IDE support and it integrates cleanly with Arquillian. Therefore, we recommend that you choose it over TestNG. </p> 
+        <blockquote class="wikiBlockquote">
+          The one feature that TestNG has over JUnit 4 is groups. The 
+         <a href="http://weblogs.java.net/blog/johnsmart/archive/2010/04/25/grouping-tests-using-junit-categories" target="" class="regularLink">categories</a> feature introduced in JUnit 4.8.1 promises to fill this void, but work still needs to allow this feature to work with Arquillian. Stay tuned for details. 
+        </blockquote> 
+        <h2 class="wikiHeadline2" id="H-WriteAJUnitTest"><a href="ModuleTesting.html#H-WriteAJUnitTest">Write a JUnit test</a></h2> 
+        <p class="wikiPara"> Tests are run automatically during a Maven build, such as <q>mvn test</q>, <q>mvn package</q>, or <q>mvn install</q>. It's important to note, that tests are only run if the name of the test class ends in 'Test' -- e.g: SimpleMathTest.java </p> 
+        <p class="wikiPara"> Note the simplicity of the unit test. Each test-case should have only one class under test. E.g: The SimpleMathTest should only test behavior of 'MathImpl.java'... Mixing testable classes in a test-case can lead to missed scenarios, bugs. </p> 
+        <p class="wikiPara"> Math.java </p> 
+        <pre class="wikiPreformatted">public interface Math
+{
+   public int add(int a, int b);
+   public int subtract(int a, int b);
+}</pre> 
+        <p class="wikiPara"> MathImpl.java </p> 
+        <pre class="wikiPreformatted">public class MathImpl implements Math
+{
+   public int add(int a, int b)
+   {
+      return a + b;
+   }
+   public int subtract(int a, int b)
+   {
+      return a - b;
+   }
+}</pre> 
+        <p class="wikiPara"> The unit test case: </p> 
+        <pre class="wikiPreformatted">public class MathImplTest
+{
+   public void testAdd() throws Exception
+   {
+      Math m = new MathImpl();
+      assertEquals(5, m.add(2, 3));
+   }
+
+   public void testSubtract() throws Exception
+   {
+      Math m = new MathImpl();
+      assertEquals(-1, m.subtract(2, 3));
+   }
+}</pre> 
+        <h3 class="wikiHeadline3" id="H-Arquillian"><a href="ModuleTesting.html#H-Arquillian">Arquillian</a></h3> 
+        <p class="wikiPara"> Arquillian is the next-generation in-container integration testing framework. Allowing fully dependency-injected unit testing, even EJB and Web Services. Arquillian can be used to test nearly every Java EE component, but for the purpose of this document, we'll just show you the most common case - how to test managed beans. </p> 
+        <h2 class="wikiHeadline2" id="H-WriteAnArquillianUnitIntegrationTest"><a href="ModuleTesting.html#H-WriteAnArquillianUnitIntegrationTest">Write an Arquillian Unit/Integration Test</a></h2> 
+        <p class="wikiPara"> Arquillian is where unit testing starts to get a little more exciting. This is where we actually test managed beans provided through dependency injection. While still using JUnit as the core testing framework, Arquillian tests a wider scope of the system, typically, than a pure JUnit test would; these are sometimes referred to as integration unit tests, or integration tests. </p> 
+        <h4 class="wikiHeadline4" id="H-YourFirstArquillianJUnitTestcase"><a href="ModuleTesting.html#H-YourFirstArquillianJUnitTestcase">Your first Arquillian JUnit test-case:</a></h4> 
+        <p class="wikiPara"> Here we see the same unit test from above, but this time, using Arquillian to provide injection into the test case. This allows us to test components with many levels of dependency injection, or any other feature in CDI/Weld. </p> 
+        <pre class="wikiPreformatted">@RunWith(Arquillian.class)
+public class ExternalContextProducerTest
+{
+   /**
+    * Since Arquillian actually creates JAR files under the covers with ShrinkWrap,
+    * the @Deployment is your way of controlling what is included in that Archive.
+    * Note, each class utilized in your test case - whether directly or indirectly -
+    * must be added to the deployment archive.
+    */
+   @Deployment
+   public static Archive&lt;?&gt; createTestArchive()
+   {
+      return Archives.create("test.jar", JavaArchive.class).addClass(Math.class).addClass(MathImpl.class)
+         .addManifestResource(new ByteArrayAsset(new byte[0]), ArchivePaths.create("beans.xml"));
+   }
+
+   // Arquillian enables @Inject directly in the test case class itself!
+   @Inject Math m;
+
+   
+   public void testAdd() throws Exception
+   {
+      assertEquals(5, m.add(2, 3));
+   }
+
+   public void testSubtract() throws Exception
+   {
+      assertEquals(-1, m.subtract(2, 3));
+   }
+
+}</pre> 
+        <p class="wikiPara"> Now <i>that's</i> simplicity! However, you might say, <q>Math is so simple, why did we bother to use Arquillian to test it?</q> </p> 
+        <h2 class="wikiHeadline2" id="H-WhenToUseArquillian"><a href="ModuleTesting.html#H-WhenToUseArquillian">When to use Arquillian</a></h2> 
+        <p class="wikiPara"> The answer is simple: In the above example, you probably wouldn't have needed to use Arquillian, you could have just stuck with JUnit, but as soon as you have a situation like the one below, you might decide that it's time for Arquillian; for example, if you wanted to test a <a href="http://docs.jboss.org/weld/reference/1.0.0/en-US/html_single/#decorators" target="" class="regularLink">decorator</a>. </p> 
+        <p class="wikiPara"> Decorators extend the functionality of an existing interface. </p> 
+        <pre class="wikiPreformatted">public class MathDecorator implements Math
+{
+   @Inject Math delegate;
+   @Inject User user;
+   @Inject Logger log;
+
+   public int add(int a, int b)
+   {
+      log.trace("Add was invoked by: " + user);
+      return delegate.add(a, b);
+   }
+
+   public int subtract(int a, int b)
+   {
+      log.trace("Subtract was invoked by: " + user);
+      return delegate.subtract(a, b);
+   }
+}</pre> 
+        <p class="wikiPara"> Now in order to test the functionality here using only JUnit, you would need to create, instantiate, and set mocks for User and Logger, instantiate the decorator, then execute the test code. That's a lot of work that you don't really need to worry about if using Arquillian. </p> 
+        <p class="wikiPara"> For instance, this is what the Arquillian test case would look like: </p> 
+        <pre class="wikiPreformatted">@RunWith(Arquillian.class)
+public class MathDecoratorTest
+{
+   
+   /**
+    * Note in this example, we must add content to "beans.xml" in order to enable 
+    * our decorator in CDI/Weld -- this is done in the deployment using the syntax below:
+    */
+   @Deployment
+   public static Archive&lt;?&gt; createTestArchive()
+   {
+      return Archives.create("test.jar", JavaArchive.class).addClasses(Math.class, MathImpl.class, MathDecorator.class, MockUser.class, MockLogger.class)
+         .addManifestResource(new ByteArrayAsset("&lt;decorators&gt;&lt;class&gt;com.test.MathDecorator&lt;/class&gt;&lt;/decorators&gt;".getBytes()), ArchivePaths.create("beans.xml"));
+   }
+
+   // Arquillian enables @Inject directly in the test case class itself!
+   @Inject Math m;
+   @Inject MockLogger log;
+   @Inject User u;
+   
+   public void testAdd() throws Exception
+   {
+      m.add(2, 3);
+      assertTrue(log.logged("Add was invoked by: " + u);
+   }
+
+   public void testSubtract() throws Exception
+   {
+      m.subtract(2, 3);
+      assertTrue(log.logged("Subtract was invoked by: " + u);
+   }
+
+}</pre> 
+        <p class="wikiPara"> Pretty simple! No more creating chains of mocks -- just make sure all the right classes are included in the deployment, and you're good to go. Test just as you would write code in the system itself. Arquillian will start up CDI and perform all the Dependency injection and container functions for you! </p> 
+        <h3 class="wikiHeadline3" id="H-ContinuousIntegration"><a href="ModuleTesting.html#H-ContinuousIntegration">Continuous integration</a></h3> 
+        <p class="wikiPara"> As soon as you have your tests ready, you'll want them to be run on a regular basis. If something breaks, you'll discover it soon, and you can easily isolate the commit that caused your tests to fail. </p> 
+        <h2 class="wikiHeadline2" id="H-SetupAHudsonJobForYourModule"><a href="ModuleTesting.html#H-SetupAHudsonJobForYourModule">Setup a Hudson job for your module</a></h2> 
+        <p class="wikiPara"> There's an instance of the <a href="http://hudson.jboss.org/hudson/view/Seam/" target="" class="regularLink">Hudson continuous integration server</a> that will run your tests and publish the results. If something fails it will send you a notification email. To learn more, see <a href="BuildJobs.html" target="" class="regularLink">Build Jobs</a> </p> 
+        <p class="wikiPara"> To set up a new Hudson job (or tweak an existing one) contact <a href="QEAndEnterprisePlatformTeams.html#H-WorkingWithQE" target="" class="regularLink">Seam QE team</a>.</p> 
+        <p class="wikiPara"> </p> 
+       </div>
+       <div id="j_id367" class="documentTags undecoratedLink smallFont">
+        <div id="j_id368">
+          Tags:&nbsp;
+         <a href="https://community.jboss.org/tags?recursive=true#/?tags=Arquillian">Arquillian</a>&nbsp;|&nbsp;
+         <a href="https://community.jboss.org/tags?recursive=true#/?tags=Seam+3">Seam 3</a>&nbsp;|&nbsp;
+         <a href="https://community.jboss.org/tags?recursive=true#/?tags=testing">testing</a>
+        </div>
+       </div> 
+      </div>
+      <div id="commentDisplayForm"></div> 
+     </div> 
+     <div class="clear" style="padding-top:15px;"></div> 
+    </div>
+   </div> 
+  </div> 
+  <div id="footer" class="undecoratedLink"> 
+   <p> © Copyright 2009, Red Hat Middleware, LLC. All rights reserved. JBoss and Seam are registered trademarks and servicemarks of <a href="http://www.redhat.com/">Red Hat, Inc</a>. [<a href="http://www.redhat.com/legal/privacy_statement.html">Privacy Policy</a>]</p> 
+  </div>
+  <div id="status">
+   <span id="globalStatus"><span id="globalStatus.start" style="display: none">
+     <div id="j_id423" class="statusStart">
+      <img src="../themes/sfwkorg/img/statusindicator.gif" height="25" width="20">
+     </div></span><span id="globalStatus.stop">
+     <div id="j_id425" class="statusStop">
+      <img src="../themes/sfwkorg/img/blank.gif" height="25" width="20">
+     </div></span></span>
+  </div>  
+  <!-- Mirrored from 127.0.0.1:64444/Seam3/ModuleTesting by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:54:47 GMT --> 
+  <!-- Added by HTTrack -->
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack --> 
+ </body>
+</html>

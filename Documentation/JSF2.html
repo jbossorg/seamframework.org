@@ -1,0 +1,723 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <!-- Mirrored from 127.0.0.1:64444/Documentation/JSF2 by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:39:36 GMT -->
+ <!-- Added by HTTrack -->
+ <head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack -->  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+  <title>Seam Framework - JSF2</title> 
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/basic_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" rel="stylesheet" type="text/css">
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/extended_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" media="rich-extended-skinning" rel="stylesheet" type="text/css">
+  <script src="../a4j/g/3_3_3.CR1org.ajax4jsf.javascript.AjaxScript" type="text/javascript"></script>
+  <script type="text/javascript">window.RICH_FACES_EXTENDED_SKINNING_ON=true;</script>
+  <script src="../a4j/g/3_3_3.CR1org/richfaces/renderkit/html/scripts/skinning.js" type="text/javascript"></script>
+  <link href="../themes/sfwkorg/css/sfwk.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shCore.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shThemeDefault.css" rel="stylesheet" type="text/css"> 
+  <script type="text/javascript" src="../seam/resource/remoting/resource/remote.js"></script> 
+  <script type="text/javascript" src="../seam/resource/remoting/interface1535.js?httpSessionChecker"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jquery.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jqueryPlugins.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/lacewiki.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shCore.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushBash.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCpp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCSharp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCss.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDelphi.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDiff.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushGroovy.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJava.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJScript.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPhp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPlain.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPython.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushRuby.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushScala.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushSql.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushVb.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushXml.js"></script> 
+  <script type="text/javascript">
+        /* If you really want to load the Flash garbage on every page, go ahead and enable this:
+        SyntaxHighlighter.config.clipboardSwf = '/themes/sfwkorg/js/sh/scripts/clipboard.swf';
+         */
+        SyntaxHighlighter.defaults['gutter'] = false;
+        SyntaxHighlighter.all();
+	</script> 
+  <script type="text/javascript">
+
+        // ###################### Session timeout alert #################################
+
+        var sessionChecker = Seam.Component.getInstance("httpSessionChecker");
+        var timeoutURL = '/Home/JBossSeam';
+        var timeoutMillis = '900'*1000+3000;
+        var sessionTimeoutInterval = null;
+
+        function startSessionTimeoutCheck() {
+            sessionTimeoutInterval = setInterval('sessionChecker.isNewSession(alertTimeout)', timeoutMillis);
+        }
+
+        function stopSessionTimeoutCheck() {
+            if (sessionTimeoutInterval) clearInterval(sessionTimeoutInterval);
+        }
+
+        function resetSessionTimeoutCheck() {
+            if (sessionTimeoutInterval != null) {
+                stopSessionTimeoutCheck();
+                startSessionTimeoutCheck();
+            }
+        }
+
+        function alertTimeout(newSession) {
+            if (newSession) {
+                clearInterval(sessionTimeoutInterval);
+                jQuery(".ajaxSupport")
+                        .removeAttr('onblur')
+                        .removeAttr('onchange')
+                        .removeAttr('onkeyup')
+                        .removeAttr('onclick');
+                jQuery(".sessionEventTrigger").hide();
+                var answer = confirm("Your session has timed out, you will be redirected to the start page.");
+                if (answer) window.location = timeoutURL;
+            }
+        }
+
+        // ###################### Popups #################################
+
+        var fadeInPopupDialog = function(hash) {
+            hash.w.fadeIn('fast',function(){ hash.o.show(); });
+            jQuery(".closeDialog", hash.w).attr("accesskey", "C"); // Dynamically assign accesskey to .closeDialog buttons
+        };
+
+        var fadeOutPopupDialog = function(hash) { hash.w.fadeOut('fast',function(){ hash.o.remove(); }); };
+
+        // ###################### Tabbed Forms #################################
+
+        var formTabErrors = {};
+
+        function formTabRaiseError(tabId, fieldId, message) {
+
+            formTabClearError(tabId, fieldId); // Clear error then re-add
+
+            log("Raise error for tab: '" + tabId + "' field: " + fieldId);
+
+            // Add an error message to the client message box
+            log("Adding error message: " +tabId + fieldId + "ErrorMessage")
+            jQuery("#clientMessageBoxTable").append(
+                '<tr id="' + tabId + fieldId + 'ErrorMessage"><td><img src="/themes/sfwkorg/img/attention.gif" ' +
+                'height="18" width="18" class="clientMessageBoxImage attentionImage"/></td>' +
+                '<td><span id="attentionMessage" class="attentionMessage">'+ message + '</span></td></tr>'
+            );
+            if (formTabErrors[tabId] == null) {
+                formTabErrors[tabId] = 1;
+            } else {
+                formTabErrors[tabId]++;
+            }
+            formTabRenderErrors(tabId);
+        }
+
+        function formTabClearError(tabId, fieldId) {
+            if (document.getElementById(tabId+fieldId+"ErrorMessage") != null) { // This error is displayed
+                log("Clear error for tab: '" + tabId + "' field: " + fieldId);
+                log("Removing error message: " +tabId + fieldId + "ErrorMessage")
+                // Remove the error message on the client message box
+                jQuery("#"+tabId + fieldId + "ErrorMessage").remove();
+
+                formTabErrors[tabId]--;
+                formTabRenderErrors(tabId);
+            }
+        }
+
+        function formTabRenderErrors(tabId) {
+            log("Errors for tab: '" + tabId + "': " + formTabErrors[tabId]);
+
+            if (formTabErrors[tabId] > 0 && document.getElementById(tabId+"InvalidIcon") == null) {
+                log("Showing icon for tab: " + tabId);
+                // Show an icon on the tab and blink it a few times
+                jQuery("#"+tabId)
+                    .prepend('<img id="' + tabId + 'InvalidIcon" ' +
+                            'src="/themes/sfwkorg/img/attention.gif" width="13" height="13" ' +
+                            'alt="!" style="vertical-align:bottom;margin-left:5px;margin-right:5px;"/>');
+                pulsate("#"+tabId);
+            } else if (formTabErrors[tabId] < 1){
+                log("Removing icon of tab: " + tabId);
+                jQuery("#"+tabId + "InvalidIcon").remove();             // Remove the error icon on the tab
+            }
+
+            var tabsHaveErrors = false;
+            for (var tab in formTabErrors) {
+                var numOfErrors = formTabErrors[tab];
+                if (numOfErrors > 0) {
+                    tabsHaveErrors = true;
+                    break;
+                }
+            }
+
+            if (tabsHaveErrors) {
+                log("Hiding save button and showing form message box");
+                jQuery(".saveButton").hide();                       // Hide save button(s)
+                jQuery(".formControls").css("height", "30px");      // Adjust height for missing save button
+                jQuery("#messageBoxContainer").hide();                 // Hide server messages
+                jQuery("#clientMessageBoxContainer").show();           // Show client error messages
+            } else {
+                log("Showing save button and hiding form message box");
+                jQuery(".saveButton").show();                       // Show save button(s)
+                jQuery(".formControls").css("height", "");          // Readjust height for present save button
+                jQuery("#clientMessageBoxContainer").hide();           // Hide client error messages
+            }
+        }
+
+        function formTabClicked() {
+            jQuery("#messageBoxContainer").hide();                 // Hide server messages
+        }
+
+        function log(message) {
+            return; // Remove to enable logging
+            if (!log.window_ || log.window_.closed) {
+                var win = window.open("", null, "width=400,height=200," +
+                                                "scrollbars=yes,resizable=yes,status=no," +
+                                                "location=no,menubar=no,toolbar=no");
+                if (!win) return;
+                var doc = win.document;
+                doc.write("<html><head><title>Debug Log</title></head><body style='font-family: monospace'></body></html>");
+                doc.close();
+                log.window_ = win;
+            }
+            var logLine = log.window_.document.createElement("div");
+            logLine.appendChild(log.window_.document.createTextNode(message));
+            log.window_.document.body.appendChild(logLine);
+        }
+
+        // ###################### Design #################################
+
+        function highlightStars(item, range, end) {
+            for (i = 1; i <= range; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star_grey.gif");
+            }
+            for (i = 1; i <= end; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star.gif");
+            }
+        }
+
+        function pulsate(query) {
+            var blinkCount = 2*2;
+            do {
+                jQuery(query)['fade'+(blinkCount%2==0?'Out':'In')]('fast');
+            } while (--blinkCount);
+        }
+
+        function clearDocumentBackground() {
+            // Noop for this skin
+        }
+
+        // Wrap boxes with border and shadow
+        function wrapBoxes() {
+            // Noop for this skin
+        }
+
+        function initPage() {
+            checkCookieSupport();
+            wrapBoxes();
+        }
+
+        jQuery(function() {
+            initPage();
+        });
+
+    </script> 
+  <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-25106513-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script> 
+ </head> 
+ <body> 
+  <noscript> 
+   <div class="cookieJavaScriptWarning">
+     Please activate JavaScript in your browser. Without it, you will only be able to browse this website but clicking on any advanced feature (any forms or submit buttons) will not work. 
+   </div> 
+  </noscript>
+  <div id="dialogHelp" class="popupDialog">
+   <span id="dialogHelpPopup" title="dialogHelp"></span>
+   <span id="dialogHelpInit"> <script type="text/javascript">
+            function showHelpPopup(width, height, offsetId) {
+                var offset = jQuery("#"+offsetId).offset();
+                jsf('dialogHelpPopup')
+                    .css({width: width+"px", height: height+"px", top: offset.top-100+"px", left: offset.left-150+"px"})
+                    .jqm({
+                        closeClass: "closeDialog",
+                        overlay: 0
+                    });
+
+                jQuery("#dialogHelpContent").css("width", width-20+"px").css("height", height-75+"px");
+                jQuery("#dialogHelpContent").css("overflow", "auto");
+
+                jsf('dialogHelpPopup').jqmShow();
+            }
+        </script></span> 
+   <script type="text/javascript">jQuery(function() {
+        jsf('dialogHelpPopup').Resizable({
+            minTop: 1,
+            dragHandle: "#dialogHelpHead",
+            handlers: { se: "#dialogHelpResizeHandle" }
+        });
+    });</script> 
+   <div class="popupDialogHead" id="dialogHelpHead">
+    Help
+   </div>
+   <div id="dialogHelpContent" class="popupDialogContent"></div>
+   <div id="dialogHelpControls" class="popupDialogControls">
+    <div id="j_id14" style="padding:5px;">
+     <a href="#" class="buttonNonpersistent closeDialog"><span class="buttonLabel">Close Help</span></a>
+    </div>
+   </div>
+  </div> 
+  <div id="wrapper"> 
+   <div id="header">  
+    <div>
+     <a href="http://seamframework.org/"><img src="../themes/sfwkorg/img/blank.gif" height="98" width="210"></a> 
+    </div> 
+   </div>
+   <div id="body"> 
+    <div id="container"> 
+     <div id="leftColumn">
+      <div id="mainMenu" xmlns="http://www.w3.org/1999/xhtml">
+       <div id="j_id121" class="box">
+        <div class="mainMenuContainer"> 
+         <div class="mainMenuHeader"></div> 
+         <div class="mainMenuBody">
+          <div id="j_id123" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Home.html" class="level1Link">Home</a>
+          </div>
+          <div id="j_id130" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Home/WhySeam.html" class="level2Link">Why Seam?</a>
+          </div>
+          <div id="j_id137" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Seam2.html" class="level1Link">Seam 2</a>
+          </div>
+          <div id="j_id144" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/GettingStarted.html" class="level2Link">Getting Started</a>
+          </div>
+          <div id="j_id151" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Downloads.html" class="level2Link">Downloads</a>
+          </div>
+          <div id="j_id158" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Documentation.html" class="level2Link">Documentation</a>
+          </div>
+          <div id="j_id165" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="http://weld.cdi-spec.org/" class="level1Link">Weld</a>
+          </div>
+          <div id="j_id172" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Community.html" class="level1Link">Community</a>
+          </div>
+          <div id="j_id179" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="https://community.jboss.org/" class="level2Link">Forums</a>
+          </div>
+          <div id="j_id186" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/CDIExtensions.html" class="level2Link">CDI Extensions</a>
+          </div>
+          <div id="j_id193" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Contribute.html" class="level2Link">Contribute</a>
+          </div>
+          <div id="j_id200" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/JIRA.html" class="level2Link">JIRA</a>
+          </div>
+          <div id="j_id207" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/MailingLists.html" class="level2Link">Mailing Lists</a>
+          </div>
+          <div id="j_id214" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Events.html" class="level2Link">Events</a>
+          </div>
+          <div id="j_id221" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Links.html" class="level2Link">Links</a>
+          </div>
+          <div id="j_id228" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/SeamInProduction.html" class="level2Link">Seam In Production</a>
+          </div>
+          <div id="j_id235" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Documentation.html" class="level1Link">Documentation</a>
+          </div>
+          <div id="j_id242" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="FAQs.html" class="level2Link">FAQs</a>
+          </div>
+          <div id="j_id249" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="KnowledgeBase.html" class="level2Link">Knowledge Base</a>
+          </div>
+          <div id="j_id256" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="Design.html" class="level2Link">Design</a>
+          </div> 
+         </div> 
+         <div class="mainMenuFooter"></div> 
+        </div>
+       </div> 
+      </div> 
+      <br> 
+      <div style="margin-top: 25px; margin-left: 15px; margin-right: 15px; "> 
+       <h2>Built with Seam</h2> 
+       <p> You can find the full source code for this website in the <a href="/Download.html">Seam package</a> in the directory /examples/wiki. It is licensed under the LGPL. </p> 
+       <div style="text-align:center;">
+        <a href="/Community/GetASeamIcon.html"><img src="../themes/sfwkorg/img/runningon_seamlogo_beige.gif" height="50" width="200"></a> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="rightColumn">
+      <img src="../themes/sfwkorg/img/blank.gif" height="8" width="1">
+      <div id="breadcrumb" class="breadcrumb">
+       <span class="breadcrumbPanel"><a href="../index.html" class="itemLink breadcrumbRoot">Site</a><span class="itemSeparator breadcrumbRoot">·</span><a href="../Documentation.html" class="itemLink">Documentation</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="JSF2.html" class="itemText">JSF2</a></span>
+      </div>
+      <div id="messageBoxContainer"></div>
+      <div id="clientMessageBoxContainer" style="display:none;"> 
+       <div id="clientMessageBox" class="messageBox"> 
+        <table id="clientMessageBoxTable" class="messageBoxTable" cellpadding="0" cellspacing="0" border="0"></table> 
+        <script type="text/javascript">jQuery(function() {
+                    jQuery("#clientMessageBoxContainer").css("margin-top", "10px").css("margin-bottom", "10px");
+                    pulsate(".clientMessageBoxImage");
+                });</script> 
+       </div>
+      </div> 
+      <div id="documentDisplayContainer" class="box">
+       <div id="documentDisplay" class="documentDisplay">
+        <div id="j_id362"> 
+         <h1 class="documentTitle"><a href="JSF2.html">JSF2</a> </h1>
+        </div>
+        <h2 class="wikiHeadline2" id="H-MajorIssues"><a href="JSF2.html#H-MajorIssues">Major issues</a></h2> 
+        <p class="wikiPara"> A priority grouped list of more major issues that require extensive design and discussion: </p> 
+        <h3 class="wikiHeadline3" id="H-EasyComponentCreationStandardizationOfFaceletsSimpleDevelopmentOfJSFUIComponentsP1"><a href="JSF2.html#H-EasyComponentCreationStandardizationOfFaceletsSimpleDevelopmentOfJSFUIComponentsP1">Easy Component Creation, standardization of Facelets, Simple development of JSF UIComponents (P1)</a></h3> 
+        <p class="wikiPara"> <i class="wikiEmphasis">(In progress)</i> </p> 
+        <p class="wikiPara"> It needs to be easy to create register new components written in Java, preferably through annotations </p> 
+        <p class="wikiPara"> JSF needs its own templating language. Facelets is the perfect starting point. Support for JSP should be deprecated. </p> 
+        <p class="wikiPara"> It's lucky that there are so many JSF component libraries out there, since developing controls yourself is a huge pain. The biggest problem is JSP, so introducing a standard JSF-specific template language should improve the situation dramatically and make JSF UI component development much more accessible to regular users. The template language could also make it easy to define components which are composed of other components, just like Facelets does today. </p> 
+        <p class="wikiPara"> <i class="wikiEmphasis">Issues:</i> </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=287" target="" class="regularLink">287</a> - Defining components via annotations umbrella issue</li> 
+         <li class="wikiUnorderedListItem"> <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=274" target="" class="regularLink">274</a> - PDL Umbrella issue</li> 
+         <li class="wikiUnorderedListItem"> <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=280" target="" class="regularLink">280</a> - Declarative PDL renderers</li> 
+        </ul> 
+        <h3 class="wikiHeadline3" id="H-ViewSyntaxP1"><a href="JSF2.html#H-ViewSyntaxP1">View Syntax (P1)</a></h3> 
+        <p class="wikiPara"> First and foremost, the preferred view syntax should be 100% valid XML and not some pseudo-XML that JSP let in the door. Going beyond basic XML syntax, standard and custom tags should be described using XML Schema, not another proprietary tag descriptor language (TLD). Nearly every XML editor on the planet understands, supports, and can provide tag completion with documentation for the XML document when an XML Schema is associated with it. </p> 
+        <p class="wikiPara"> XML Schema also has the most advanced facility for describing the valid syntax for an element or attribute (permitted child elements, presence of EL expressions, etc). By standardizing on XML Schema, which itself is a W3C standard, developers don't have to wait for vendors to create tooling for basic XML editing capabilities. Also, developers have become very used to XML schema with it being supported in the Seam component and pages descriptor and Spring and Spring Web Flow configuration files. </p> 
+        <p class="wikiPara"> In summary, importing a custom tag into a view template would involve defining an XML namespace and optionally (though preferably) associating that namespace with an XML schema document. Component libraries would be required to provide this XML Schema document (perhaps generated; and yes, it is worth doing!). Also, view templates should use the file extension .xml and not try to pretend like it is XHTML by using the .xhtml extension. A longer suffix like .view.xml might be even better. Thus, a view ID would be users.view.xml. </p> 
+        <h3 class="wikiHeadline3" id="H-AJAXP1"><a href="JSF2.html#H-AJAXP1">AJAX (P1)</a></h3> 
+        <p class="wikiPara"> <i class="wikiEmphasis">(In progress)</i> </p> 
+        <p class="wikiPara"> <i class="wikiEmphasis">Issues:</i> </p> 
+        <h3 class="wikiHeadline3" id="H-PluggabilityP1"><a href="JSF2.html#H-PluggabilityP1">Pluggability (P1)</a></h3> 
+        <p class="wikiPara"> <i class="wikiEmphasis">This is a meta issue</i> </p> 
+        <p class="wikiPara"> One of JSF's key strengths is the ability to easily swap out bits (e.g. the EL resolver, the navigation handler, even the Application. This needs to continue and be made stronger in JSF 2.0 </p> 
+        <p class="wikiPara"> For example, passing values from page-to-page could be good, but, if you are using another framework like Seam, you might want to swap out the implementation for your own. Another example is that the spec proposes solving the concurrent/lost submit problem - again, any solution MUST be pluggable. </p> 
+        <h3 class="wikiHeadline3" id="H-ExceptionErrorHandlingP1"><a href="JSF2.html#H-ExceptionErrorHandlingP1">Exception/Error Handling (P1)</a></h3> 
+        <p class="wikiPara"> <i class="wikiEmphasis">(In progress)</i> </p> 
+        <p class="wikiPara"> JSF's lack of facilities for exception handling is a major embarrassment, and totally ignorant of current best practices for exception handling in Java. It is impossible to do any centralized handling of exceptions without writing a servlet filter. Specifically, JSF should provide a declarative exception handling facility, and in addition provide a way for an application/framework developer to register an exception handler class for more control. </p> 
+        <p class="wikiPara"> Even worse than the lack of exception handling in JSF, Unified EL has the totally pathological behaviour of wrapping all exceptions (even runtime exceptions) that occur during invocation of the managed beans in a totally useless <tt>ELEvaluationException</tt>. Both of these problems should be fixed. </p> 
+        <p class="wikiPara"> <i class="wikiEmphasis">Issues:</i> </p> 
+        <p class="wikiPara"> (P3) One very exciting and interesting solution to the first problem would be to redesign the JSF Lifecycle object using a chain-of-responsibility pattern. Each lifecycle phase would be an element of the chain and would be responsible for delegating to the next phase. The application would be able to add in new <q>phases</q> at any point in the chain, which would provide for the possibility of centralized exception handling via around-style interception. We could then deprecate the <tt>PhaseListener</tt> extension point which is useful but limited and inelegant. This approach would make JSF much more extensible. </p> 
+        <h3 class="wikiHeadline3" id="H-EnhancedLifecycleForNonfacesRequestsP1"><a href="JSF2.html#H-EnhancedLifecycleForNonfacesRequestsP1">Enhanced lifecycle for non-faces requests (P1)</a></h3> 
+        <p class="wikiPara"> JSF devotes much love and attention to the <q>faces request</q> lifecycle for JSF form submissions. It also talks briefly about something called a <q>non-faces request</q>. The most interesting kind of non-faces request is a HTTP GET request, which - when you think about it - is actually the most common kind of request. Here, the spec is a great disappointment. It's certainly possible to create bookmarkable JSF pages with request parameters, but you lose a level of abstraction, and end up writing servlet-like code. </p> 
+        <p class="wikiPara"> Seam solves this problem by providing <q>page actions</q> and <q>page parameters</q>, which are similar to the abstractions provided for faces requests. (They also look a lot like the functionality provided by an action-based web framework such as Struts or WebWork.) </p> 
+        <p class="wikiPara"> JSF 2.0 should define a lifecycle for non-faces requests that includes: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> validation and model update for request parameters</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> some mechanism for handling validation failures</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> action invocation (<i class="wikiEmphasis">Discussion started</i>)</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> some facility to redirect the request to a different URL</li> 
+        </ul> 
+        <p class="wikiPara"> In other words, non-faces requests are going to need to provide all the things that faces requests currently provide. The only difference being that the submitted values are not coming from JSF input components, but rather from plain HTTP parameters (in a bookmarkable URL, for example). </p> 
+        <p class="wikiPara"> The interesting question is exactly where should these actions, the mapping of request parameters to model attributes and validation be declared. The solution provided by Seam today is to declare this in an XML document along with the orchestration logic (navigation). But I'm increasingly favorable to the idea of embedding this in the page definition. For example: </p> 
+        <pre class="wikiPreformatted">
+&lt;f:view&gt;
+   &lt;f:parameter name="customerName" value="#{customerFinder.name}" required="true"&gt;
+      &lt;f:validateLength max="100"/&gt;
+   &lt;/f:parameter&gt;
+   &lt;f:onRender action="#{customerFinder.findByName}"/&gt;
+   ...
+&lt;/f:view&gt;
+</pre> 
+        <p class="wikiPara"> This ties into navigation controls and improvements to the navigation system </p> 
+        <h3 class="wikiHeadline3" id="H-ImprovedOrchestrationAndNavigationControlsP1"><a href="JSF2.html#H-ImprovedOrchestrationAndNavigationControlsP1">Improved orchestration and Navigation controls(P1)</a></h3> 
+        <p class="wikiPara"> JSF navigation rules provide the basic functionality you expect if you've ever used something like Struts or WebWork. You can write an action method which returns a String-valued <q>outcome</q>, and define navigation rules in XML that determine the view to be rendered or redirected to. The following improvements are sorely needed: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <del>Outcomes shouldn't need to be Strings - anything with a <tt>toString()</tt> method should work</del> Done in JSF 1.2</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> It's much more transparent and elegant if the action method does not need to return an outcome at all - instead, the navigation rule could specify a value expression to be evaluated</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Navigation rules which perform redirects should be able to specify a list of request parameters to use in the redirect (where the parameter values are defined using value expressions)</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <del>Navigation rules should be able to specify a HTTP error code as the result</del> Won't fix.</li> 
+        </ul> 
+        <p class="wikiPara"> The following kind of thing would be possible: </p> 
+        <pre class="wikiPreformatted">
+&lt;navigation-rule&gt;
+   &lt;from-action&gt;#{customerFinder.findByName}&lt;/from-action&gt;
+   &lt;navigation-case&gt;
+      &lt;if&gt;#{customerFinder.result!=null}&lt;/if&gt;
+      &lt;to-view-id&gt;/displayCustomer.xhtml&lt;/to-view-id&gt;
+      &lt;redirect&gt;
+         &lt;parameter-name&gt;customerId&lt;/parameter-name&gt;
+         &lt;parameter-value&gt;#{customerFinder.result.id}&lt;/parameter-value&gt;
+      &lt;/redirect&gt;
+   &lt;/navigation-case&gt;
+&lt;/navigation-rule&gt;
+</pre> 
+        <p class="wikiPara"> (Seam provides all this functionality today by defining it's own XML-based language for navigation rules.) </p> 
+        <p class="wikiPara"> JSF is currently missing <i class="wikiEmphasis">navigation</i> controls - you want to call an action or navigate to an outcome BUT you don't need to submit a form, and should be restful! Lots of toolkits have implemented these (e.g. Trinidad, Seam UI) </p> 
+        <p class="wikiPara"> <i class="wikiEmphasis">Issues:</i> </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=454" target="" class="regularLink">454</a> - add <tt>&lt;if /&gt;</tt> element</li> 
+         <li class="wikiUnorderedListItem"> <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=484" target="" class="regularLink">484</a> - Parameters on redirect rules</li> 
+         <li class="wikiUnorderedListItem"> <del><a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=170" target="" class="regularLink">170</a></del> - allow <tt>&lt;f:param /&gt;</tt> as a child of <tt>&lt;h:commandButton /&gt;</tt></li> 
+         <li class="wikiUnorderedListItem"> <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=179" target="" class="regularLink">179</a> - alterations to navigation handler API</li> 
+         <li class="wikiUnorderedListItem"> <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=487" target="" class="regularLink">487</a> - add navigation controls</li> 
+         <li class="wikiUnorderedListItem"> <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=359" target="" class="regularLink">359</a> - allow EL in <tt>&lt;to-view-id /&gt;</tt></li> 
+        </ul> 
+        <h3 class="wikiHeadline3" id="H-ValidationP1"><a href="JSF2.html#H-ValidationP1">Validation (P1)</a></h3> 
+        <p class="wikiPara"> The following proposals and discussions relate to improvements to the validation system. There are many styles of validation and these issues try to address poor assumptions made in JSF and ways to make validation more DRY. </p> 
+        <h2 class="wikiHeadline2" id="H-SubtreeValidation481"><a href="JSF2.html#H-SubtreeValidation481">Subtree validation (481)</a></h2> 
+        <p class="wikiPara"> Moved to <a href="FileNotFound.html" target="" class="brokenLink">Subtree validation</a> on the JSF 2.1 page. </p> 
+        <h2 class="wikiHeadline2" id="H-IntercomponentValidation"><a href="JSF2.html#H-IntercomponentValidation">Inter-component validation</a></h2> 
+        <p class="wikiPara"> Inter-component validation is a big hole currently - it's fine to do more complex validations in the action method apart from the fact it means validation errors occur in two phases which is confusing for the user. </p> 
+        <hr> 
+        <p class="wikiPara"> I (Dan) don't think that cross-field validation is a difficult problem to solve from the specification level. The reason cross-field validation is difficult today is because each field is converted individually, just prior to being validated. Therefore, when the validate() method is called on a UIInput component, there is no guarantee that any other component in the form will have been converted at that time. It depends on the relative placement of the components in the form, a fact which should not be relied on in a validator. </p> 
+        <p class="wikiPara"> The current strategy puts the onus of having to convert the related field(s) on the validator that is attempting to perform a cross-field check. Naive developers will simply ignore the converters on that field. The developers that do use the proper converter logic may still get sloppy with exception handling. Refer to either the <a href="http://anonsvn.jboss.org/repos/seam/trunk/ui/src/main/java/org/jboss/seam/ui/validator/EqualityValidator.java" target="" class="regularLink">EqualityValidator</a> in Seam or Tomahawk to witness the ridiculous amount of code that must be used to handle all of these concerns properly. </p> 
+        <p class="wikiPara"> A better way to implement validation is to first convert all of the components in the form. Once all the conversions are complete, then the validators run. An extra walk of the component tree can be avoided by putting the input components that were converted into an ordered collection (or map) and then iterating over that collection (or map) to apply the validators. Using this suggested strategy, implementing a multi-component validator is no more difficult than implementing a validator on a single component. The validator tag would need to provide some way to declaratively refer to the related components, such as by ID or value expression. </p> 
+        <p class="wikiPara"> Frankly, I don't feel it is the responsibility of the specification to create a multi-component validator solution. What the specification should do is make it easy to create such a solution. With that said, I do believe it would be a good idea to implement a couple of basic multi-component validators to demonstrate 1) how it's done and 2) the ease in which it can be done with conversion and validation happening in distinct steps. Reference validators would include an equality validator (one or more components), a greater and less than validator, and perhaps a switch validator (a boolean component toggles the required flag on another component). </p> 
+        <hr> 
+        <p class="wikiPara"> I'm not a fan of client side validation - but I really like Ajax-style validation (use server side validation, and just re-render the relevant field). But <i class="wikiEmphasis">if</i> client-side validation was used where possible (e.g. required fields) and then Ajax was used if not possible, and the messages just completed as necessary this would be cool! </p> 
+        <p class="wikiPara"> CRUD - Field decoration, validation and conversion - easy CRUD is certainly good, field decoration - like Trinidad's label, help and message placement BUT it should templatable (for example, Facelets ui:decorate) so that you can easily change the layout of the decoration. </p> 
+        <p class="wikiPara"> Handling of JSF messages is also weak: A message is either global or bound to a particular component. On the view, you can show either all global messages or the message for a particular component. There is no way to say, <q>convert</q> a component-bound message to a global message. I should be able to display and bundle whatever messages I feel necessary to show in whatever location. What would really be cool is to be able to assign tags to a message so that it would be possible to group them by different aspects and possibility even use the same message in multiple places on the page by tag. <i class="wikiEmphasis">Issues:</i> </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=426" target="" class="regularLink">426</a> - Integration with Bean Validation</li> 
+         <li class="wikiUnorderedListItem"> <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=480" target="" class="regularLink">480</a> - Validate null fields</li> 
+         <li class="wikiUnorderedListItem"> <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=481" target="" class="regularLink">481</a> - Validate entire subtrees</li> 
+         <li class="wikiUnorderedListItem"> <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=482" target="" class="regularLink">482</a> - A default validator</li> 
+         <li class="wikiUnorderedListItem"> <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=483" target="" class="regularLink">483</a> - s:decorate</li> 
+        </ul> 
+        <h3 class="wikiHeadline3" id="H-AlternativeStatelessUIComponentLifecycleAndViewExipryP1"><a href="JSF2.html#H-AlternativeStatelessUIComponentLifecycleAndViewExipryP1">Alternative stateless UI component lifecycle and View Exipry (P1)</a></h3> 
+        <p class="wikiPara"> JSF's UI component tree is stateful, meaning that the tree of components is maintained across faces requests (form submissions). This is a nice feature that lets JSF handle forms with conditionally rendered and repeated inputs, and forms with components that are manipulated programmatically. However, in the simple (and common) case, statefulness is overkill. Most forms don't have conditionally rendered controls or grids of controls. JSF needs an alternative stateless lifecycle to deal with the common case. </p> 
+        <p class="wikiPara"> One possible option would be to copy Tapestry. Tapestry distinguishes between <q>simple</q> forms (which have no repeated or conditional controls) and <q>complex</q> forms (which do). For simple forms, Tapestry uses a stateless lifecycle. For complex forms, Tapestry serializes some information about the component tree to and from the client, and uses this when reconstructing the component tree during the <q>rewind</q> phase. (The handling of complex forms in Tapestry is very conceptually similar to the stateful model used in JSF.) </p> 
+        <p class="wikiPara"> <i class="wikiEmphasis">Issues:</i> </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=139" target="" class="regularLink">139</a> - Stateless lifecycle</li> 
+         <li class="wikiUnorderedListItem"> <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=272" target="" class="regularLink">272</a> - State management revision</li> 
+         <li class="wikiUnorderedListItem"> <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=476" target="" class="regularLink">476</a> - View expiry problems</li> 
+        </ul> 
+        <h3 class="wikiHeadline3" id="H-ProperCoverageOfCollectionsInUIDataP2"><a href="JSF2.html#H-ProperCoverageOfCollectionsInUIDataP2">Proper coverage of collections in UIData (P2)</a></h3> 
+        <p class="wikiPara"> The root of the Java collections class structure is java.util.Collection, yet this interface is not supported in the UIData family of components. Instead, developers are forced to use a List or wrap their collection in a custom DataModel implementation (which is what Seam does). The impedance mismatch is introduced by the fact that java.util.Set is likely the most common association mapping in ORM. Since the UIData model and ORM go hand-in-hand, there should be support for java.util.Set (and preferably java.util.Collection) in UIData. Granted, only a java.util.List can be accessed by index, which is why it would be acceptable to wrap any other collection in a List implementation internally. Basically, the developer should not have to care that they are creating a data table from a Set vs a List. This is an area where the JSF abstract just bleeds. </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=479" target="" class="regularLink">479</a> Collections in UIData</li> 
+        </ul> 
+        <h3 class="wikiHeadline3" id="H-SelectItemsP2"><a href="JSF2.html#H-SelectItemsP2">SelectItems (P2)</a></h3> 
+        <p class="wikiPara"> Move s:selectItems functionality into the spec and other minor selection enhancements </p> 
+        <p class="wikiPara"> <i class="wikiEmphasis">Related issues:</i> </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"><a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=450" target="" class="regularLink">450</a> - Allow f:selectItems to reference any Collection or array (not just those of SelectItem)</li> 
+         <li class="wikiUnorderedListItem"><del><a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=451" target="" class="regularLink">451</a></del> - Support for a <q>noSelection</q> in h:select*</li> 
+         <li class="wikiUnorderedListItem"><del><a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=226" target="" class="regularLink">226</a></del> - Decoding of SelectOne</li> 
+         <li class="wikiUnorderedListItem"><del><a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=230" target="" class="regularLink">230</a></del> Native support for Collections</li> 
+        </ul> 
+        <h3 class="wikiHeadline3" id="H-RESTP2"><a href="JSF2.html#H-RESTP2">REST (P2)</a></h3> 
+        <p class="wikiPara"> The JSF2 expert group should work closely with the JSR 311 expert group to define overlapping integration points (unified configuration) and programming models, so that a JSF implementation can work seamlessly with a JAX-RS implementation. For example, a <tt>@Path</tt> annotated POJO should work as a JSF backing bean without any additional configuration. A JSF application programmer should be able to expose RESTful remote APIs easily. </p> 
+        <p class="wikiPara"> <i class="wikiEmphasis">Related Issues</i>: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=146" target="" class="regularLink">146</a> - Add a pathinfo handling &amp; URL friendly state/param holding</li> 
+         <li class="wikiUnorderedListItem"> <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=485" target="" class="regularLink">485</a> - REST umbrella issue</li> 
+         <li class="wikiUnorderedListItem"> <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=486" target="" class="regularLink">487</a> - Integration with JAX-RS</li> 
+        </ul> 
+        <h3 class="wikiHeadline3" id="H-ThemingSkinningP3"><a href="JSF2.html#H-ThemingSkinningP3">Theming/Skinning (P3)</a></h3> 
+        <p class="wikiPara"> <i class="wikiEmphasis">(IMO we are out of time to address this, so should be slipped)</i> </p> 
+        <p class="wikiPara"> Currently there are themes/skins for most component sets - so that using e.g. Trinidad and RichFaces together looks nasty, without considerable CSS hacking. </p> 
+        <p class="wikiPara"> <i class="wikiEmphasis">Issues:</i> </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=316" target="" class="regularLink">316</a> - Skinning umbrella issue</li> 
+        </ul> 
+        <h3 class="wikiHeadline3" id="H-DefaultApplicationTimeZoneP2"><a href="JSF2.html#H-DefaultApplicationTimeZoneP2">Default Application Time Zone (P2)</a></h3> 
+        <p class="wikiPara"> Moved to <a href="FileNotFound.html" target="" class="brokenLink">Default application time zone</a> on the JSF 2.1 page </p> 
+        <hr> 
+        <h2 class="wikiHeadline2" id="H-MinorIssues"><a href="JSF2.html#H-MinorIssues">Minor Issues</a></h2> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> (P1) <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=323" target="" class="regularLink">323</a> Empty fields are submitted as an empty string, not null. Default should be null, with an option to override. <i class="wikiEmphasis">Workaround implemented in JSF, try to get it fixed in EL properly</i></li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> (P1) <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=428" target="" class="regularLink">428</a> - Deprecate <tt>required="true"</tt> in favour of proper validation</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> (P1) <i class="wikiEmphasis">Meta issue</i> In general the proposed draft at times appears to be drifting from being a user interface orientated to addressing other problems (for example persistence integration) - sure, make integration possible or even easy, but don't spend too much time on this!</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> (P1) <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=478" target="" class="regularLink">478</a> Rendered attribute is overloaded</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> (P1) <del><a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=161" target="" class="regularLink">161</a></del> Allow alteration of naming container separator character</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> (P1) <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=475" target="" class="regularLink">475</a>Ensure converters are run even if the value is null</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> (P2) <del><a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=456" target="" class="regularLink">456</a></del> <tt>saveAttachedState</tt> and <tt>restoreAttachedState</tt> should automatically iterate over any java.lang.Iterable and attach/restore the state of each item (currently it just does this for lists)</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> (P2) <del><a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=358" target="" class="regularLink">358</a></del> Amazing as it seems, JSF provides no API for invalidating the HTTPSession.</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> (P2) <del><a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=447" target="" class="regularLink">447</a></del> Make FacesEvent parameters optional</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> (P2) <del><a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=456" target="" class="regularLink">456</a></del> Native support for Collections</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> (P3) <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=477" target="" class="regularLink">477</a>There should be convenience methods to render a JSF view programmatically - this would set up the lifecycle and render the view - after all, you can easily use an alternative ResponseWriter to writer to a StringBuffer. We do this in Seam to allow you to send an email (templated using facelets) from your backing beans - but, unless the request originated in a JSF request (it might be from another source like an MDB, a timer), we have to create our own JSF context.</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> (P3) <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=143" target="" class="regularLink">143</a> - Use generics in validators and converters - very minor, but would save a few casts!</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> (P3) <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=457" target="" class="regularLink">457</a> Allow use of EL in messages - JSF's use of EL is a really strong point of the whole architecture. However, one minor thing is missing: messages defined in resource bundles and in FacesMessages should support interpolation of embedded value expressions. (Seam already supports this.)</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> (P3) <del>JSF doesn't provide any special functionality for authentication or authorization. I'm not sure what we should do here (if anything), but we need to at least discuss the problem.</del> Spoke to Shane, no need for anything here</li> 
+        </ul> 
+        <h2 class="wikiHeadline2" id="H-Key"><a href="JSF2.html#H-Key">Key</a></h2> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem">P1 - top priority, the problem must be solved for JSF 2 to be a success in our opinion</li> 
+         <li class="wikiUnorderedListItem">P2 - middle priority, problem should be solved e.g. if other matters are more pressing or the EG is opposed to the idea</li> 
+         <li class="wikiUnorderedListItem">P3 - low priority, would be nice to get a solution in</li> 
+        </ul> 
+        <h2 class="wikiHeadline2" id="H-Links"><a href="JSF2.html#H-Links">Links</a></h2> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"><a href="http://weblogs.java.net/blog/edburns/archive/2007/03/prejcpfiled_dra_1.html" target="" class="regularLink">Ideas from Ed Burns</a></li> 
+         <li class="wikiUnorderedListItem"><a href="http://in.relation.to/Bloggers/EE6WishlistPartIIJSF" target="" class="regularLink">Gavin's Blog</a></li>
+        </ul> 
+       </div>
+       <div id="j_id374" class="documentCreatorHistory undecoratedLink smallFont">
+        <div id="j_id375">
+          Created:&nbsp;28. Apr 2008, 06:56&nbsp;America/New_York&nbsp;(Pete Muir)
+        </div>
+        <div id="j_id383">
+          Last Modified:&nbsp;14. Sep 2011, 08:33&nbsp;America/New_York&nbsp;(Shane Bryzak)
+        </div>
+       </div> 
+      </div>
+      <div id="commentDisplayForm">
+       <div id="comments" class="commentsDisplay"></div>
+      </div> 
+     </div> 
+     <div class="clear" style="padding-top:15px;"></div> 
+    </div>
+   </div> 
+  </div> 
+  <div id="footer" class="undecoratedLink"> 
+   <p> © Copyright 2009, Red Hat Middleware, LLC. All rights reserved. JBoss and Seam are registered trademarks and servicemarks of <a href="http://www.redhat.com/">Red Hat, Inc</a>. [<a href="http://www.redhat.com/legal/privacy_statement.html">Privacy Policy</a>]</p> 
+  </div>
+  <div id="status">
+   <span id="globalStatus"><span id="globalStatus.start" style="display: none">
+     <div id="j_id608" class="statusStart">
+      <img src="../themes/sfwkorg/img/statusindicator.gif" height="25" width="20">
+     </div></span><span id="globalStatus.stop">
+     <div id="j_id610" class="statusStop">
+      <img src="../themes/sfwkorg/img/blank.gif" height="25" width="20">
+     </div></span></span>
+  </div>  
+  <!-- Mirrored from 127.0.0.1:64444/Documentation/JSF2 by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:39:37 GMT --> 
+  <!-- Added by HTTrack -->
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack --> 
+ </body>
+</html>

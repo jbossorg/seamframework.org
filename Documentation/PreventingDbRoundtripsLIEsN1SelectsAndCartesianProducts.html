@@ -1,0 +1,624 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <!-- Mirrored from 127.0.0.1:64444/Documentation/PreventingDbRoundtripsLIEsN1SelectsAndCartesianProducts by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:50:13 GMT -->
+ <!-- Added by HTTrack -->
+ <head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack -->  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+  <title>Seam Framework - Preventing db roundtrips, LIEs, n+1 selects and Cartesian products</title> 
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/basic_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" rel="stylesheet" type="text/css">
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/extended_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" media="rich-extended-skinning" rel="stylesheet" type="text/css">
+  <script src="../a4j/g/3_3_3.CR1org.ajax4jsf.javascript.AjaxScript" type="text/javascript"></script>
+  <script type="text/javascript">window.RICH_FACES_EXTENDED_SKINNING_ON=true;</script>
+  <script src="../a4j/g/3_3_3.CR1org/richfaces/renderkit/html/scripts/skinning.js" type="text/javascript"></script>
+  <link href="../themes/sfwkorg/css/sfwk.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shCore.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shThemeDefault.css" rel="stylesheet" type="text/css"> 
+  <script type="text/javascript" src="../seam/resource/remoting/resource/remote.js"></script> 
+  <script type="text/javascript" src="../seam/resource/remoting/interface1535.js?httpSessionChecker"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jquery.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jqueryPlugins.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/lacewiki.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shCore.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushBash.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCpp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCSharp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCss.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDelphi.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDiff.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushGroovy.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJava.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJScript.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPhp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPlain.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPython.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushRuby.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushScala.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushSql.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushVb.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushXml.js"></script> 
+  <script type="text/javascript">
+        /* If you really want to load the Flash garbage on every page, go ahead and enable this:
+        SyntaxHighlighter.config.clipboardSwf = '/themes/sfwkorg/js/sh/scripts/clipboard.swf';
+         */
+        SyntaxHighlighter.defaults['gutter'] = false;
+        SyntaxHighlighter.all();
+	</script> 
+  <script type="text/javascript">
+
+        // ###################### Session timeout alert #################################
+
+        var sessionChecker = Seam.Component.getInstance("httpSessionChecker");
+        var timeoutURL = '/Home/JBossSeam';
+        var timeoutMillis = '900'*1000+3000;
+        var sessionTimeoutInterval = null;
+
+        function startSessionTimeoutCheck() {
+            sessionTimeoutInterval = setInterval('sessionChecker.isNewSession(alertTimeout)', timeoutMillis);
+        }
+
+        function stopSessionTimeoutCheck() {
+            if (sessionTimeoutInterval) clearInterval(sessionTimeoutInterval);
+        }
+
+        function resetSessionTimeoutCheck() {
+            if (sessionTimeoutInterval != null) {
+                stopSessionTimeoutCheck();
+                startSessionTimeoutCheck();
+            }
+        }
+
+        function alertTimeout(newSession) {
+            if (newSession) {
+                clearInterval(sessionTimeoutInterval);
+                jQuery(".ajaxSupport")
+                        .removeAttr('onblur')
+                        .removeAttr('onchange')
+                        .removeAttr('onkeyup')
+                        .removeAttr('onclick');
+                jQuery(".sessionEventTrigger").hide();
+                var answer = confirm("Your session has timed out, you will be redirected to the start page.");
+                if (answer) window.location = timeoutURL;
+            }
+        }
+
+        // ###################### Popups #################################
+
+        var fadeInPopupDialog = function(hash) {
+            hash.w.fadeIn('fast',function(){ hash.o.show(); });
+            jQuery(".closeDialog", hash.w).attr("accesskey", "C"); // Dynamically assign accesskey to .closeDialog buttons
+        };
+
+        var fadeOutPopupDialog = function(hash) { hash.w.fadeOut('fast',function(){ hash.o.remove(); }); };
+
+        // ###################### Tabbed Forms #################################
+
+        var formTabErrors = {};
+
+        function formTabRaiseError(tabId, fieldId, message) {
+
+            formTabClearError(tabId, fieldId); // Clear error then re-add
+
+            log("Raise error for tab: '" + tabId + "' field: " + fieldId);
+
+            // Add an error message to the client message box
+            log("Adding error message: " +tabId + fieldId + "ErrorMessage")
+            jQuery("#clientMessageBoxTable").append(
+                '<tr id="' + tabId + fieldId + 'ErrorMessage"><td><img src="/themes/sfwkorg/img/attention.gif" ' +
+                'height="18" width="18" class="clientMessageBoxImage attentionImage"/></td>' +
+                '<td><span id="attentionMessage" class="attentionMessage">'+ message + '</span></td></tr>'
+            );
+            if (formTabErrors[tabId] == null) {
+                formTabErrors[tabId] = 1;
+            } else {
+                formTabErrors[tabId]++;
+            }
+            formTabRenderErrors(tabId);
+        }
+
+        function formTabClearError(tabId, fieldId) {
+            if (document.getElementById(tabId+fieldId+"ErrorMessage") != null) { // This error is displayed
+                log("Clear error for tab: '" + tabId + "' field: " + fieldId);
+                log("Removing error message: " +tabId + fieldId + "ErrorMessage")
+                // Remove the error message on the client message box
+                jQuery("#"+tabId + fieldId + "ErrorMessage").remove();
+
+                formTabErrors[tabId]--;
+                formTabRenderErrors(tabId);
+            }
+        }
+
+        function formTabRenderErrors(tabId) {
+            log("Errors for tab: '" + tabId + "': " + formTabErrors[tabId]);
+
+            if (formTabErrors[tabId] > 0 && document.getElementById(tabId+"InvalidIcon") == null) {
+                log("Showing icon for tab: " + tabId);
+                // Show an icon on the tab and blink it a few times
+                jQuery("#"+tabId)
+                    .prepend('<img id="' + tabId + 'InvalidIcon" ' +
+                            'src="/themes/sfwkorg/img/attention.gif" width="13" height="13" ' +
+                            'alt="!" style="vertical-align:bottom;margin-left:5px;margin-right:5px;"/>');
+                pulsate("#"+tabId);
+            } else if (formTabErrors[tabId] < 1){
+                log("Removing icon of tab: " + tabId);
+                jQuery("#"+tabId + "InvalidIcon").remove();             // Remove the error icon on the tab
+            }
+
+            var tabsHaveErrors = false;
+            for (var tab in formTabErrors) {
+                var numOfErrors = formTabErrors[tab];
+                if (numOfErrors > 0) {
+                    tabsHaveErrors = true;
+                    break;
+                }
+            }
+
+            if (tabsHaveErrors) {
+                log("Hiding save button and showing form message box");
+                jQuery(".saveButton").hide();                       // Hide save button(s)
+                jQuery(".formControls").css("height", "30px");      // Adjust height for missing save button
+                jQuery("#messageBoxContainer").hide();                 // Hide server messages
+                jQuery("#clientMessageBoxContainer").show();           // Show client error messages
+            } else {
+                log("Showing save button and hiding form message box");
+                jQuery(".saveButton").show();                       // Show save button(s)
+                jQuery(".formControls").css("height", "");          // Readjust height for present save button
+                jQuery("#clientMessageBoxContainer").hide();           // Hide client error messages
+            }
+        }
+
+        function formTabClicked() {
+            jQuery("#messageBoxContainer").hide();                 // Hide server messages
+        }
+
+        function log(message) {
+            return; // Remove to enable logging
+            if (!log.window_ || log.window_.closed) {
+                var win = window.open("", null, "width=400,height=200," +
+                                                "scrollbars=yes,resizable=yes,status=no," +
+                                                "location=no,menubar=no,toolbar=no");
+                if (!win) return;
+                var doc = win.document;
+                doc.write("<html><head><title>Debug Log</title></head><body style='font-family: monospace'></body></html>");
+                doc.close();
+                log.window_ = win;
+            }
+            var logLine = log.window_.document.createElement("div");
+            logLine.appendChild(log.window_.document.createTextNode(message));
+            log.window_.document.body.appendChild(logLine);
+        }
+
+        // ###################### Design #################################
+
+        function highlightStars(item, range, end) {
+            for (i = 1; i <= range; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star_grey.gif");
+            }
+            for (i = 1; i <= end; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star.gif");
+            }
+        }
+
+        function pulsate(query) {
+            var blinkCount = 2*2;
+            do {
+                jQuery(query)['fade'+(blinkCount%2==0?'Out':'In')]('fast');
+            } while (--blinkCount);
+        }
+
+        function clearDocumentBackground() {
+            // Noop for this skin
+        }
+
+        // Wrap boxes with border and shadow
+        function wrapBoxes() {
+            // Noop for this skin
+        }
+
+        function initPage() {
+            checkCookieSupport();
+            wrapBoxes();
+        }
+
+        jQuery(function() {
+            initPage();
+        });
+
+    </script> 
+  <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-25106513-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script> 
+ </head> 
+ <body> 
+  <noscript> 
+   <div class="cookieJavaScriptWarning">
+     Please activate JavaScript in your browser. Without it, you will only be able to browse this website but clicking on any advanced feature (any forms or submit buttons) will not work. 
+   </div> 
+  </noscript>
+  <div id="dialogHelp" class="popupDialog">
+   <span id="dialogHelpPopup" title="dialogHelp"></span>
+   <span id="dialogHelpInit"> <script type="text/javascript">
+            function showHelpPopup(width, height, offsetId) {
+                var offset = jQuery("#"+offsetId).offset();
+                jsf('dialogHelpPopup')
+                    .css({width: width+"px", height: height+"px", top: offset.top-100+"px", left: offset.left-150+"px"})
+                    .jqm({
+                        closeClass: "closeDialog",
+                        overlay: 0
+                    });
+
+                jQuery("#dialogHelpContent").css("width", width-20+"px").css("height", height-75+"px");
+                jQuery("#dialogHelpContent").css("overflow", "auto");
+
+                jsf('dialogHelpPopup').jqmShow();
+            }
+        </script></span> 
+   <script type="text/javascript">jQuery(function() {
+        jsf('dialogHelpPopup').Resizable({
+            minTop: 1,
+            dragHandle: "#dialogHelpHead",
+            handlers: { se: "#dialogHelpResizeHandle" }
+        });
+    });</script> 
+   <div class="popupDialogHead" id="dialogHelpHead">
+    Help
+   </div>
+   <div id="dialogHelpContent" class="popupDialogContent"></div>
+   <div id="dialogHelpControls" class="popupDialogControls">
+    <div id="j_id14" style="padding:5px;">
+     <a href="#" class="buttonNonpersistent closeDialog"><span class="buttonLabel">Close Help</span></a>
+    </div>
+   </div>
+  </div> 
+  <div id="wrapper"> 
+   <div id="header">  
+    <div>
+     <a href="http://seamframework.org/"><img src="../themes/sfwkorg/img/blank.gif" height="98" width="210"></a> 
+    </div> 
+   </div>
+   <div id="body"> 
+    <div id="container"> 
+     <div id="leftColumn">
+      <div id="mainMenu" xmlns="http://www.w3.org/1999/xhtml">
+       <div id="j_id121" class="box">
+        <div class="mainMenuContainer"> 
+         <div class="mainMenuHeader"></div> 
+         <div class="mainMenuBody">
+          <div id="j_id125" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Home.html" class="level1Link">Home</a>
+          </div>
+          <div id="j_id132" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Home/WhySeam.html" class="level2Link">Why Seam?</a>
+          </div>
+          <div id="j_id139" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Seam2.html" class="level1Link">Seam 2</a>
+          </div>
+          <div id="j_id146" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/GettingStarted.html" class="level2Link">Getting Started</a>
+          </div>
+          <div id="j_id153" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Downloads.html" class="level2Link">Downloads</a>
+          </div>
+          <div id="j_id160" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Documentation.html" class="level2Link">Documentation</a>
+          </div>
+          <div id="j_id167" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="http://weld.cdi-spec.org/" class="level1Link">Weld</a>
+          </div>
+          <div id="j_id174" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Community.html" class="level1Link">Community</a>
+          </div>
+          <div id="j_id181" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="https://community.jboss.org/" class="level2Link">Forums</a>
+          </div>
+          <div id="j_id188" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/CDIExtensions.html" class="level2Link">CDI Extensions</a>
+          </div>
+          <div id="j_id195" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Contribute.html" class="level2Link">Contribute</a>
+          </div>
+          <div id="j_id202" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/JIRA.html" class="level2Link">JIRA</a>
+          </div>
+          <div id="j_id209" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/MailingLists.html" class="level2Link">Mailing Lists</a>
+          </div>
+          <div id="j_id216" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Events.html" class="level2Link">Events</a>
+          </div>
+          <div id="j_id223" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Links.html" class="level2Link">Links</a>
+          </div>
+          <div id="j_id230" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/SeamInProduction.html" class="level2Link">Seam In Production</a>
+          </div>
+          <div id="j_id237" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Documentation.html" class="level1Link">Documentation</a>
+          </div>
+          <div id="j_id244" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="FAQs.html" class="level2Link">FAQs</a>
+          </div>
+          <div id="j_id251" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="KnowledgeBase.html" class="level2Link">Knowledge Base</a>
+          </div>
+          <div id="j_id258" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="Design.html" class="level2Link">Design</a>
+          </div> 
+         </div> 
+         <div class="mainMenuFooter"></div> 
+        </div>
+       </div> 
+      </div> 
+      <br> 
+      <div style="margin-top: 25px; margin-left: 15px; margin-right: 15px; "> 
+       <h2>Built with Seam</h2> 
+       <p> You can find the full source code for this website in the <a href="/Download.html">Seam package</a> in the directory /examples/wiki. It is licensed under the LGPL. </p> 
+       <div style="text-align:center;">
+        <a href="/Community/GetASeamIcon.html"><img src="../themes/sfwkorg/img/runningon_seamlogo_beige.gif" height="50" width="200"></a> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="rightColumn">
+      <img src="../themes/sfwkorg/img/blank.gif" height="8" width="1">
+      <div id="breadcrumb" class="breadcrumb">
+       <span class="breadcrumbPanel"><a href="../index.html" class="itemLink breadcrumbRoot">Site</a><span class="itemSeparator breadcrumbRoot">·</span><a href="../Documentation.html" class="itemLink">Documentation</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="KnowledgeBase.html" class="itemLink">Knowledge Base</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="Persistence.html" class="itemLink">Persistence</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="PreventingDbRoundtripsLIEsN1SelectsAndCartesianProducts.html" class="itemText">Preventing db roundtrips, LIEs, n+...</a></span>
+      </div>
+      <div id="messageBoxContainer"></div>
+      <div id="clientMessageBoxContainer" style="display:none;"> 
+       <div id="clientMessageBox" class="messageBox"> 
+        <table id="clientMessageBoxTable" class="messageBoxTable" cellpadding="0" cellspacing="0" border="0"></table> 
+        <script type="text/javascript">jQuery(function() {
+                    jQuery("#clientMessageBoxContainer").css("margin-top", "10px").css("margin-bottom", "10px");
+                    pulsate(".clientMessageBoxImage");
+                });</script> 
+       </div>
+      </div> 
+      <div id="documentDisplayContainer" class="box">
+       <div id="documentDisplay" class="documentDisplay">
+        <div id="j_id362"> 
+         <h1 class="documentTitle"><a href="PreventingDbRoundtripsLIEsN1SelectsAndCartesianProducts.html">Preventing db roundtrips, LIEs, n+1 selects and Cartesian products</a> </h1>
+        </div>
+        <p class="wikiPara"> NOTE: This is a work in progress and is meant to be constantly updated with different scenarios so we have a single place for best practices and strategies regarding ORM persistence problems and their solutions for Seam/JPA/Hibernate apps. Much of the material in this article is based on chapter 13 of JPA/Hibernate book, <q>Optimizing fetching and caching</q> and Chapter 19 <q>Improving performance</q> of Hibernate Community Documentation. </p> 
+        <h1 class="wikiHeadline1" id="H-Intro"><a href="PreventingDbRoundtripsLIEsN1SelectsAndCartesianProducts.html#H-Intro">Intro</a></h1> 
+        <p class="wikiPara"> In any database-driven application, the goal is to <u>always minimize database roundtrips</u>. Ted Neward stated this over and over again in my Intro to J2EE developmentor course several years ago. It's generally accepted for n-tier web architectures that the database is the least scalable part of your system. </p> 
+        <p class="wikiPara"> In Seam apps, we need to minimize db roundtrips, avoid Hibernate <tt>LazyInitializationException</tt>s (LIEs) and also avoid <tt>n+1 selects</tt> problem and Cartesian products problem. </p> 
+        <p class="wikiPara"> How best can we achieve these goals? </p> 
+        <p class="wikiPara"> The purpose of this article is to summarize the problems and some general guidelines for optimizing performance in your Seam apps while using the Seam-managed Persistence Context (SMPC) to solve the LIEs problem. </p> 
+        <blockquote class="wikiBlockquote">
+          Your goal is to find the best retrieval method and fetching strategy for every use case in your application; at the same time, you also want to minimize the number of SQL queries for best performance. 
+        </blockquote> 
+        <p class="wikiPara"> pg. 561 JPA/Hibernate </p> 
+        <h1 class="wikiHeadline1" id="H-Definitions"><a href="PreventingDbRoundtripsLIEsN1SelectsAndCartesianProducts.html#H-Definitions">Definitions</a></h1> 
+        <p class="wikiPara"> <i class="wikiEmphasis">default fetch plan</i>: default fetch plan that applies to a particular entity association or collection. </p> 
+        <p class="wikiPara"> <i class="wikiEmphasis">fetching strategy</i>: a strategy used by Hibernate to retrieve associated objects if the application needs to navigate the association. Fetch strategies can be declared in the O/R mapping metadata, or over-ridden by a particular HQL or Criteria query. </p> 
+        <p class="wikiPara"> <i class="wikiEmphasis">Join fetching</i>: Hibernate retrieves the associated instance or collection in the same SELECT, using an OUTER JOIN. </p> 
+        <p class="wikiPara"> <i class="wikiEmphasis">Select fetching</i>: a second SELECT is used to retrieve the associated entity or collection. Unless you explicitly disable lazy fetching by specifying <tt>lazy="false"</tt>, this second select will only be executed when you access the association. </p> 
+        <p class="wikiPara"> <i class="wikiEmphasis">Subselect fetching</i>: a second SELECT is used to retrieve the associated collections for all entities retrieved in a previous query or fetch. Unless you explicitly disable lazy fetching by specifying <tt>lazy="false"</tt>, this second select will only be executed when you access the association. </p> 
+        <p class="wikiPara"> <i class="wikiEmphasis">Batch fetching</i>: an optimization strategy for select fetching. Hibernate retrieves a batch of entity instances or collections in a single SELECT by specifying a list of primary or foreign keys. </p> 
+        <p class="wikiPara"> <i class="wikiEmphasis">LazyInitializationException (LIE)</i>: A LazyInitializationException will be thrown by Hibernate if an uninitialized collection or proxy is accessed outside of the scope of the Session, i.e., when the entity owning the collection or having the reference to the proxy is in the detached state. </p> 
+        <p class="wikiPara"> <i class="wikiEmphasis">Cartesian product</i>: produces a new table consisting of all possible combinations of rows of two existing tables. In SQL, you express a Cartesian product by listing tables in the <tt>from</tt> clause: <tt>select * from ITEM i, BID b</tt> </p> 
+        <p class="wikiPara"> <i class="wikiEmphasis">Seam-managed persistence context (SMPC)</i>: A Seam-managed persistence context is just a built-in Seam component that manages an instance of <tt>EntityManager</tt> or <tt>Session</tt> in the conversation context. You can inject it with <tt>@In</tt>. Prevents LIEs from occurring because the <tt>EntityManager</tt> or <tt>Session</tt> is not closed until the end of the conversation (entities do not become detached prematurely). </p> 
+        <p class="wikiPara"> <i class="wikiEmphasis">Second Level Cache</i>: a Hibernate feature that allows entities, collections and queries to be cached in memory beyond the scope of a transaction, reducing the number of trips to the database </p> 
+        <h1 class="wikiHeadline1" id="H-LIEs"><a href="PreventingDbRoundtripsLIEsN1SelectsAndCartesianProducts.html#H-LIEs">LIEs</a></h1> 
+        <p class="wikiPara"> <tt>LazyInitializationException</tt>s occur when an unitialized proxy or collection is attempted to be loaded lazily by Hibernate but the <tt>Session</tt> (or <tt>PersistenceContext</tt>) is closed. Two classical solutions to this problem have been using Open Session in View (OSIV) pattern using a servlet filter or simply eagerly loading your entities. </p> 
+        <p class="wikiPara"> Because Seam is a stateful framework supporting conversations that span multiple screens or HTTP request/response cycles, it's important to keep the Persistence Context open until the LRC has ended. If the PC closed after each request/response cycle, then when object navigation occurs in the JSF EL, for example, Hibernate may throw a LIE because it is trying to access an uninitialized proxy or collection but the PC is already closed. </p> 
+        <p class="wikiPara"> In Seam, the recommended solution to the LIE problem is using a SMPC. The SMPC is conversation-scoped and thus remains open until your LRC ends. In contrast, the EJB container-managed Persistence Context is either tx-scoped (default) or component-scoped (extended). Instead of injecting your <tt>EntityManager</tt> instance using <tt>@PersistenceContext</tt>, you use <tt>@In</tt> and the Seam container will inject <tt>EntityManager</tt> instance via the manager component pattern (i.e. <tt>@Unwrap</tt>) from <tt>org.jboss.seam.persistence.ManagedPersistenceContext</tt> core class into your Seam component. This means that every component that is part of the LRC will be using the same SMPC. Note that it is possible to inject more than one SMPC into the same component with each SMPC associated with a different <tt>EntityManagerFactory</tt> but that is outside the scope of this discussion - we are assuming one local RDBMS per Seam app. </p> 
+        <h1 class="wikiHeadline1" id="H-Ttn1SelectsttProblem"><a href="PreventingDbRoundtripsLIEsN1SelectsAndCartesianProducts.html#H-Ttn1SelectsttProblem"><tt>n+1 selects</tt> problem</a></h1> 
+        <p class="wikiPara"> To describe the <tt>n+1 selects</tt> problem, let's consider an example. We have a <tt>Customer</tt> entity. Each <tt>Customer</tt> has 1 or more (i.e. a collection) of <tt>Order</tt> entities. And we have a <tt>Product</tt> entity. Each <tt>Order</tt> may have a collection of <tt>Product</tt>s. </p> 
+        <p class="wikiPara"> Via dot-notation in JSF EL expression in a JSF page, we may see something like this: </p> 
+        <pre class="wikiPreformatted">&lt;h:outputText value="#{myBean.customer.orders.products}"/&gt;</pre> 
+        <p class="wikiPara"> If we are using Hibernate as our persistence provider, and assuming all relationships are LAZY by default and we do not override the global fetch plan using fetch join syntax in our HQL or JPQL query, there will be <tt>n+1 selects</tt> to get our final value of products. </p> 
+        <p class="wikiPara"> The following three methods in our entity classes will be executed: </p> 
+        <p class="wikiPara"> getCustomer() getOrders() getProducts() </p> 
+        <p class="wikiPara"> The <tt>n+1 selects</tt> problem is a problem because there are excessive numbers of db roundtrips (extra selects being executed). </p> 
+        <p class="wikiPara"> There are a few approaches you can take to remedy this problem, one of which is using EAGER fetch plan via fetch join syntax in your queries. The opposite problem with this approach is that you may end up loading too much data into your SMPC, thus taking up more memory on the server and also taking a performance hit to load the extra possibly unneeded data. </p> 
+        <p class="wikiPara"> So there needs to be a balance. </p> 
+        <h1 class="wikiHeadline1" id="H-CartesianProductsProblem"><a href="PreventingDbRoundtripsLIEsN1SelectsAndCartesianProducts.html#H-CartesianProductsProblem">Cartesian products problem</a></h1> 
+        <p class="wikiPara"> The opposite of the <tt>n+1 selects</tt> problem are SELECT statements that fetch <i class="wikiEmphasis">too much</i> data. This Cartesian product problem always appears if you try to fetch several <q>parallel</q> collections. More than one eagerly fetched collection per persistent class creates a product. </p> 
+        <h1 class="wikiHeadline1" id="H-Strategies"><a href="PreventingDbRoundtripsLIEsN1SelectsAndCartesianProducts.html#H-Strategies">Strategies</a></h1> 
+        <p class="wikiPara"> begin Strategies... </p> 
+        <h2 class="wikiHeadline2" id="H-EAGERFetchPlan"><a href="PreventingDbRoundtripsLIEsN1SelectsAndCartesianProducts.html#H-EAGERFetchPlan">EAGER fetch plan</a></h2> 
+        <p class="wikiPara"> Batch fetching </p> 
+        <p class="wikiPara"> If you have a Foo proxy that must be initialized, initialize several in the same SELECT. Batching fetching is called a blind-guess optimization because you don't know how many unitialized Foo proxies may be in a particular persistence context. You make a guess and apply a batch-size fetching strategy to your Foo class mapping. </p> 
+        <h2 class="wikiHeadline2" id="H-PrefetchingWithSubselects"><a href="PreventingDbRoundtripsLIEsN1SelectsAndCartesianProducts.html#H-PrefetchingWithSubselects">Prefetching with subselects</a></h2> 
+        <p class="wikiPara"> A better optimization is <i class="wikiEmphasis">subselect fetching</i> for a collection mapping. Hibernate now initializes <i class="wikiEmphasis">all</i> <tt>bars</tt> collections for all loaded <tt>Foo</tt> objects, as soon as you force the initialization of one <tt>bars</tt> collection. </p> 
+        <h2 class="wikiHeadline2" id="H-EagerFetchingWithJoins"><a href="PreventingDbRoundtripsLIEsN1SelectsAndCartesianProducts.html#H-EagerFetchingWithJoins">Eager fetching with joins</a></h2> 
+        <blockquote class="wikiBlockquote">
+          Every time I need an 
+         <tt>Item</tt>, I also need the 
+         <tt>seller</tt> of that 
+         <tt>Item</tt>. 
+        </blockquote> 
+        <p class="wikiPara"> If you can make that statement, you should go into your mapping metadata, enable <i class="wikiEmphasis">eager fetching</i> for the <tt>seller</tt> assocation, and utilize SQL joins. Hibernate will now load both an <tt>Item</tt> and its <tt>seller</tt> in a single SQL statement. </p> 
+        <p class="wikiPara"> If you switch from the default strategy to queries that eagerly fetch data with joins, you may run into another problem, the Cartesian product issue. Instead of executing too many SQL statements, you may now (often as a side effect) create statements that retrieve too much data. <u>You need to find the middle ground between the two extremes: the correct fetching strategy for each procedure and use case in your application.</u> </p> 
+        <h1 class="wikiHeadline1" id="H-CachingStrategies"><a href="PreventingDbRoundtripsLIEsN1SelectsAndCartesianProducts.html#H-CachingStrategies">Caching strategies</a></h1> 
+        <p class="wikiPara"> In most cases, effective caching strategies for your Seam application when using Hibernate as your persistence provider are critical to successfully performance tune your app. For example, if you have read-mostly or read-only data (e.g. the 50 US states, zipcodes, area codes, etc.), then these are good candidates for Hibernate 2nd level cache with the goal being to minimize db roundtrips when possible. </p> 
+        <p class="wikiPara"> Hibernate uses different types of caches. Each type of cache is used for different purposes. </p> 
+        <p class="wikiPara"> 1) The first cache type is the session cache. The session cache caches objects within the current session. This is analogous to first-level cache in JPA's persistence context. </p> 
+        <p class="wikiPara"> 2) The second cache type is the query Cache. The query cache is responsible for caching queries and their results. </p> 
+        <p class="wikiPara"> 3) The third cache type is the second level cache. The second level cache is responsible for caching objects across sessions. </p> 
+        <p class="wikiPara"> Here is a good article describing how to set up a 2nd level cache using EHCache (you must select a cache provider): </p> 
+        <p class="wikiPara"> <tt>http://solutionsfit.com/blog/2009/04/06/second-level-caching-still-an-effective-performance-tuning-technique/</tt> </p> 
+        <p class="wikiPara"> In addition, you may also want to look into using query caches for your queries. Query caches require a 2nd level cache and cache provider to be configured and setup. </p> 
+        <p class="wikiPara"> This is a good article on these topics as well: <tt>http://www.javalobby.org/java/forums/t48846.html</tt> </p> 
+        <h2 class="wikiHeadline2" id="H-FirstlevelCache"><a href="PreventingDbRoundtripsLIEsN1SelectsAndCartesianProducts.html#H-FirstlevelCache">First-level cache</a></h2> 
+        <p class="wikiPara"> The persistence manager's persistence context serves as a first-level cache. When a JPQL/HQL query loads entities into the persistence context, they are in managed state. The persistence manager makes a copy of the loaded data to enable dirty checking (for transparent updates at flush time). Because the entity has been loaded into memory, it will be available for the duration of the life of the persistence context (i.e. until it is closed). </p> 
+        <h2 class="wikiHeadline2" id="H-ConversationalCache"><a href="PreventingDbRoundtripsLIEsN1SelectsAndCartesianProducts.html#H-ConversationalCache">Conversational cache</a></h2> 
+        <p class="wikiPara"> Using SMPC and Hibernate manual flush, you can queue up your CUD operations while the user is executing their use case in the various JSF pages, and then flush the persistence context manually when the conversation ends. This avoids unnecessary round trips to the db during the conversation and thus serves as a cache. </p> 
+        <h2 class="wikiHeadline2" id="H-HibernateSecondlevelCache"><a href="PreventingDbRoundtripsLIEsN1SelectsAndCartesianProducts.html#H-HibernateSecondlevelCache">Hibernate second-level cache</a></h2> 
+        <p class="wikiPara"> A completely different approach to problems with <tt>N+1 selects</tt> is to use the second-level cache. A second-level cache is useful for read-only or read-mostly data. Examples include states, zip codes, credit card types, etc. You must choose a cache provider. Examples include terracotta, Ehcache, JBoss Cache. Then you must configure your persistence-unit in persistence.xml as well as add appropriate metadata for your entities that need to be cached (typically using <tt>@Cache</tt> at the entity class level). Here is an example: </p> 
+        <p class="wikiPara"> <tt>@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)</tt> </p> 
+        <p class="wikiPara"> The advantages of L2 caching are: </p> 
+        <p class="wikiPara"> - avoids database access for already loaded entities </p> 
+        <p class="wikiPara"> - faster for reading frequently accessed unmodified entities </p> 
+        <p class="wikiPara"> The disadvantages of L2 caching are: </p> 
+        <p class="wikiPara"> - memory consumption for large amount of objects </p> 
+        <p class="wikiPara"> - Stale data for updated objects </p> 
+        <p class="wikiPara"> - Concurrency for write (optimistic lock exception, or pessimistic lock) </p> 
+        <p class="wikiPara"> - Bad scalability for frequent or concurrently updated entities </p> 
+        <p class="wikiPara"> You should configure L2 caching for entities that are: </p> 
+        <p class="wikiPara"> - read often </p> 
+        <p class="wikiPara"> - modified infrequently </p> 
+        <p class="wikiPara"> - Not critical if stale </p> 
+        <p class="wikiPara"> You should protect any data that can be concurrently modified with a locking strategy: </p> 
+        <p class="wikiPara"> - Must handle optimistic lock failures on flush/commit </p> 
+        <p class="wikiPara"> - configure expiration, refresh policy to minimize lock failures </p> 
+        <p class="wikiPara"> The Query cache is useful for queries that are run frequently with the same parameters, for not modified tables. </p> 
+        <h2 class="wikiHeadline2" id="H-SeamCacheComponents"><a href="PreventingDbRoundtripsLIEsN1SelectsAndCartesianProducts.html#H-SeamCacheComponents">Seam cache components</a></h2> 
+        <p class="wikiPara"> <tt>&lt;s:cache&gt;</tt> </p> 
+        <p class="wikiPara"> Use this Seam tag to cache JSF page fragments. </p> 
+        <h1 class="wikiHeadline1" id="H-References"><a href="PreventingDbRoundtripsLIEsN1SelectsAndCartesianProducts.html#H-References">References</a></h1> 
+        <p class="wikiPara"> The following is a list of references used while researching and writing this article. </p> 
+        <h2 class="wikiHeadline2" id="H-Books"><a href="PreventingDbRoundtripsLIEsN1SelectsAndCartesianProducts.html#H-Books">Books</a></h2> 
+        <p class="wikiPara"> JPA with Hibernate by CBauer, GKing </p> 
+        <p class="wikiPara"> Seam in Action by DAllen </p> 
+        <p class="wikiPara"> Seam Framework: Experience the Evolution of Java EE (2nd Edition) by MYuan, JOrshalick, THeute </p> 
+        <h2 class="wikiHeadline2" id="H-Articles"><a href="PreventingDbRoundtripsLIEsN1SelectsAndCartesianProducts.html#H-Articles">Articles</a></h2> 
+        <p class="wikiPara"> Hibernate: Understanding Lazy Fetching <tt>http://www.javalobby.org/java/forums/t20533.html</tt> </p> 
+        <p class="wikiPara"> Second-level caching: Still an effective performance tuning technique <tt>http://solutionsfit.com/blog/2009/04/06/second-level-caching-still-an-effective-performance-tuning-technique/</tt> </p> 
+        <p class="wikiPara"> Hibernate: Truly Understanding the Second-Level and Query Caches <tt>http://www.javalobby.org/java/forums/t48846.html</tt> </p> 
+        <p class="wikiPara"> Understanding Caching in Hibernate – Part One : The Session Cache <tt>http://blog.dynatrace.com/2009/02/16/understanding-caching-in-hibernate-part-one-the-session-cache/</tt> </p> 
+        <p class="wikiPara"> Understanding Caching in Hibernate – Part Two : The Query Cache <tt>http://blog.dynatrace.com/2009/02/16/understanding-caching-in-hibernate-part-two-the-query-cache/</tt> </p> 
+        <p class="wikiPara"> Understanding Caching in Hibernate – Part Three : The Second Level Cache <tt>http://blog.dynatrace.com/2009/03/24/understanding-caching-in-hibernate-part-three-the-second-level-cache/</tt> </p> 
+        <p class="wikiPara"> With Read-Write hibernate 2nd level Cache strategy, why use transactional one at all <tt>http://clustermania.blogspot.com/2009/07/with-read-write-hibernate-2nd-level.html</tt> </p> 
+        <p class="wikiPara"> MySQL for Developers <tt>http://blogs.sun.com/carolmcdonald/entry/mysql_for_developers</tt> </p> 
+        <p class="wikiPara"> JPA Performance, Don't Ignore the Database <tt>http://weblogs.java.net/blog/caroljmcdonald/archive/2009/08/28/jpa-performance-dont-ignore-database-0</tt> </p> 
+        <p class="wikiPara"> JPA Caching <tt>http://weblogs.java.net/blog/caroljmcdonald/archive/2009/08/jpa_caching.html</tt> </p> 
+        <h2 class="wikiHeadline2" id="H-ReferenceDocumentation"><a href="PreventingDbRoundtripsLIEsN1SelectsAndCartesianProducts.html#H-ReferenceDocumentation">Reference documentation</a></h2> 
+        <p class="wikiPara"> Hibernate reference: 19.1 fetching strategies <tt>http://docs.jboss.org/hibernate/stable/core/reference/en/html/performance.html#performance-fetching</tt> </p> 
+        <p class="wikiPara"> Hibernate Community Documentation: Chapter 19. Improving performance <tt>http://docs.jboss.org/hibernate/stable/core/reference/en/html/performance.html</tt> </p> 
+        <p class="wikiPara"> Seam reference documentation <tt>http://docs.jboss.org/seam/2.2.0.GA/reference/en-US/html_single/</tt> </p> 
+        <p class="wikiPara"> Ehcache User Guide <tt>http://ehcache.org/EhcacheUserGuide.html</tt> </p> 
+        <p class="wikiPara"> Using JBoss Cache 2 as a Hibernate Second Level Cache <tt>http://galder.zamarreno.com/wp-content/uploads/2008/09/hibernate-jbosscache-guide.pdf</tt> </p> 
+        <h2 class="wikiHeadline2" id="H-WikisForums"><a href="PreventingDbRoundtripsLIEsN1SelectsAndCartesianProducts.html#H-WikisForums">Wikis/Forums</a></h2> 
+        <p class="wikiPara"> Open Session in View Pattern <tt>https://www.hibernate.org/43.html</tt> </p> 
+        <p class="wikiPara"> SMPC and ORM problems discussion <tt>http://seamframework.org/Community/SeamAProductInInfancyOrJustAnotherFramework#comment92557</tt> </p> 
+       </div>
+       <div id="j_id374" class="documentCreatorHistory undecoratedLink smallFont">
+        <div id="j_id375">
+          Created:&nbsp;25. Aug 2009, 19:27&nbsp;America/New_York&nbsp;(Arbi Sookazian)
+        </div>
+        <div id="j_id383">
+          Last Modified:&nbsp;04. Sep 2009, 18:51&nbsp;America/New_York&nbsp;(Arbi Sookazian)
+        </div>
+       </div> 
+      </div>
+      <div id="commentDisplayForm">
+       <div id="comments" class="commentsDisplay"></div>
+      </div> 
+     </div> 
+     <div class="clear" style="padding-top:15px;"></div> 
+    </div>
+   </div> 
+  </div> 
+  <div id="footer" class="undecoratedLink"> 
+   <p> © Copyright 2009, Red Hat Middleware, LLC. All rights reserved. JBoss and Seam are registered trademarks and servicemarks of <a href="http://www.redhat.com/">Red Hat, Inc</a>. [<a href="http://www.redhat.com/legal/privacy_statement.html">Privacy Policy</a>]</p> 
+  </div>
+  <div id="status">
+   <span id="globalStatus"><span id="globalStatus.start" style="display: none">
+     <div id="j_id608" class="statusStart">
+      <img src="../themes/sfwkorg/img/statusindicator.gif" height="25" width="20">
+     </div></span><span id="globalStatus.stop">
+     <div id="j_id610" class="statusStop">
+      <img src="../themes/sfwkorg/img/blank.gif" height="25" width="20">
+     </div></span></span>
+  </div>  
+  <!-- Mirrored from 127.0.0.1:64444/Documentation/PreventingDbRoundtripsLIEsN1SelectsAndCartesianProducts by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:50:14 GMT --> 
+  <!-- Added by HTTrack -->
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack --> 
+ </body>
+</html>

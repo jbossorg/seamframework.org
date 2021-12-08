@@ -1,0 +1,1003 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <!-- Mirrored from 127.0.0.1:64444/Seam3/FacesModule by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:52:39 GMT -->
+ <!-- Added by HTTrack -->
+ <head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack -->  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+  <title>Seam Framework - Faces Module Home</title> 
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/basic_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" rel="stylesheet" type="text/css">
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/extended_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" media="rich-extended-skinning" rel="stylesheet" type="text/css">
+  <script src="../a4j/g/3_3_3.CR1org.ajax4jsf.javascript.AjaxScript" type="text/javascript"></script>
+  <script type="text/javascript">window.RICH_FACES_EXTENDED_SKINNING_ON=true;</script>
+  <script src="../a4j/g/3_3_3.CR1org/richfaces/renderkit/html/scripts/skinning.js" type="text/javascript"></script>
+  <link href="../themes/sfwkorg/css/sfwk.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shCore.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shThemeDefault.css" rel="stylesheet" type="text/css"> 
+  <script type="text/javascript" src="../seam/resource/remoting/resource/remote.js"></script> 
+  <script type="text/javascript" src="../seam/resource/remoting/interface1535.js?httpSessionChecker"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jquery.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jqueryPlugins.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/lacewiki.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shCore.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushBash.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCpp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCSharp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCss.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDelphi.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDiff.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushGroovy.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJava.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJScript.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPhp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPlain.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPython.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushRuby.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushScala.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushSql.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushVb.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushXml.js"></script> 
+  <script type="text/javascript">
+        /* If you really want to load the Flash garbage on every page, go ahead and enable this:
+        SyntaxHighlighter.config.clipboardSwf = '/themes/sfwkorg/js/sh/scripts/clipboard.swf';
+         */
+        SyntaxHighlighter.defaults['gutter'] = false;
+        SyntaxHighlighter.all();
+	</script> 
+  <script type="text/javascript">
+
+        // ###################### Session timeout alert #################################
+
+        var sessionChecker = Seam.Component.getInstance("httpSessionChecker");
+        var timeoutURL = '/Home/JBossSeam';
+        var timeoutMillis = '900'*1000+3000;
+        var sessionTimeoutInterval = null;
+
+        function startSessionTimeoutCheck() {
+            sessionTimeoutInterval = setInterval('sessionChecker.isNewSession(alertTimeout)', timeoutMillis);
+        }
+
+        function stopSessionTimeoutCheck() {
+            if (sessionTimeoutInterval) clearInterval(sessionTimeoutInterval);
+        }
+
+        function resetSessionTimeoutCheck() {
+            if (sessionTimeoutInterval != null) {
+                stopSessionTimeoutCheck();
+                startSessionTimeoutCheck();
+            }
+        }
+
+        function alertTimeout(newSession) {
+            if (newSession) {
+                clearInterval(sessionTimeoutInterval);
+                jQuery(".ajaxSupport")
+                        .removeAttr('onblur')
+                        .removeAttr('onchange')
+                        .removeAttr('onkeyup')
+                        .removeAttr('onclick');
+                jQuery(".sessionEventTrigger").hide();
+                var answer = confirm("Your session has timed out, you will be redirected to the start page.");
+                if (answer) window.location = timeoutURL;
+            }
+        }
+
+        // ###################### Popups #################################
+
+        var fadeInPopupDialog = function(hash) {
+            hash.w.fadeIn('fast',function(){ hash.o.show(); });
+            jQuery(".closeDialog", hash.w).attr("accesskey", "C"); // Dynamically assign accesskey to .closeDialog buttons
+        };
+
+        var fadeOutPopupDialog = function(hash) { hash.w.fadeOut('fast',function(){ hash.o.remove(); }); };
+
+        // ###################### Tabbed Forms #################################
+
+        var formTabErrors = {};
+
+        function formTabRaiseError(tabId, fieldId, message) {
+
+            formTabClearError(tabId, fieldId); // Clear error then re-add
+
+            log("Raise error for tab: '" + tabId + "' field: " + fieldId);
+
+            // Add an error message to the client message box
+            log("Adding error message: " +tabId + fieldId + "ErrorMessage")
+            jQuery("#clientMessageBoxTable").append(
+                '<tr id="' + tabId + fieldId + 'ErrorMessage"><td><img src="/themes/sfwkorg/img/attention.gif" ' +
+                'height="18" width="18" class="clientMessageBoxImage attentionImage"/></td>' +
+                '<td><span id="attentionMessage" class="attentionMessage">'+ message + '</span></td></tr>'
+            );
+            if (formTabErrors[tabId] == null) {
+                formTabErrors[tabId] = 1;
+            } else {
+                formTabErrors[tabId]++;
+            }
+            formTabRenderErrors(tabId);
+        }
+
+        function formTabClearError(tabId, fieldId) {
+            if (document.getElementById(tabId+fieldId+"ErrorMessage") != null) { // This error is displayed
+                log("Clear error for tab: '" + tabId + "' field: " + fieldId);
+                log("Removing error message: " +tabId + fieldId + "ErrorMessage")
+                // Remove the error message on the client message box
+                jQuery("#"+tabId + fieldId + "ErrorMessage").remove();
+
+                formTabErrors[tabId]--;
+                formTabRenderErrors(tabId);
+            }
+        }
+
+        function formTabRenderErrors(tabId) {
+            log("Errors for tab: '" + tabId + "': " + formTabErrors[tabId]);
+
+            if (formTabErrors[tabId] > 0 && document.getElementById(tabId+"InvalidIcon") == null) {
+                log("Showing icon for tab: " + tabId);
+                // Show an icon on the tab and blink it a few times
+                jQuery("#"+tabId)
+                    .prepend('<img id="' + tabId + 'InvalidIcon" ' +
+                            'src="/themes/sfwkorg/img/attention.gif" width="13" height="13" ' +
+                            'alt="!" style="vertical-align:bottom;margin-left:5px;margin-right:5px;"/>');
+                pulsate("#"+tabId);
+            } else if (formTabErrors[tabId] < 1){
+                log("Removing icon of tab: " + tabId);
+                jQuery("#"+tabId + "InvalidIcon").remove();             // Remove the error icon on the tab
+            }
+
+            var tabsHaveErrors = false;
+            for (var tab in formTabErrors) {
+                var numOfErrors = formTabErrors[tab];
+                if (numOfErrors > 0) {
+                    tabsHaveErrors = true;
+                    break;
+                }
+            }
+
+            if (tabsHaveErrors) {
+                log("Hiding save button and showing form message box");
+                jQuery(".saveButton").hide();                       // Hide save button(s)
+                jQuery(".formControls").css("height", "30px");      // Adjust height for missing save button
+                jQuery("#messageBoxContainer").hide();                 // Hide server messages
+                jQuery("#clientMessageBoxContainer").show();           // Show client error messages
+            } else {
+                log("Showing save button and hiding form message box");
+                jQuery(".saveButton").show();                       // Show save button(s)
+                jQuery(".formControls").css("height", "");          // Readjust height for present save button
+                jQuery("#clientMessageBoxContainer").hide();           // Hide client error messages
+            }
+        }
+
+        function formTabClicked() {
+            jQuery("#messageBoxContainer").hide();                 // Hide server messages
+        }
+
+        function log(message) {
+            return; // Remove to enable logging
+            if (!log.window_ || log.window_.closed) {
+                var win = window.open("", null, "width=400,height=200," +
+                                                "scrollbars=yes,resizable=yes,status=no," +
+                                                "location=no,menubar=no,toolbar=no");
+                if (!win) return;
+                var doc = win.document;
+                doc.write("<html><head><title>Debug Log</title></head><body style='font-family: monospace'></body></html>");
+                doc.close();
+                log.window_ = win;
+            }
+            var logLine = log.window_.document.createElement("div");
+            logLine.appendChild(log.window_.document.createTextNode(message));
+            log.window_.document.body.appendChild(logLine);
+        }
+
+        // ###################### Design #################################
+
+        function highlightStars(item, range, end) {
+            for (i = 1; i <= range; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star_grey.gif");
+            }
+            for (i = 1; i <= end; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star.gif");
+            }
+        }
+
+        function pulsate(query) {
+            var blinkCount = 2*2;
+            do {
+                jQuery(query)['fade'+(blinkCount%2==0?'Out':'In')]('fast');
+            } while (--blinkCount);
+        }
+
+        function clearDocumentBackground() {
+            // Noop for this skin
+        }
+
+        // Wrap boxes with border and shadow
+        function wrapBoxes() {
+            // Noop for this skin
+        }
+
+        function initPage() {
+            checkCookieSupport();
+            wrapBoxes();
+        }
+
+        jQuery(function() {
+            initPage();
+        });
+
+    </script> 
+  <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-25106513-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script> 
+ </head> 
+ <body> 
+  <noscript> 
+   <div class="cookieJavaScriptWarning">
+     Please activate JavaScript in your browser. Without it, you will only be able to browse this website but clicking on any advanced feature (any forms or submit buttons) will not work. 
+   </div> 
+  </noscript>
+  <div id="dialogHelp" class="popupDialog">
+   <span id="dialogHelpPopup" title="dialogHelp"></span>
+   <span id="dialogHelpInit"> <script type="text/javascript">
+            function showHelpPopup(width, height, offsetId) {
+                var offset = jQuery("#"+offsetId).offset();
+                jsf('dialogHelpPopup')
+                    .css({width: width+"px", height: height+"px", top: offset.top-100+"px", left: offset.left-150+"px"})
+                    .jqm({
+                        closeClass: "closeDialog",
+                        overlay: 0
+                    });
+
+                jQuery("#dialogHelpContent").css("width", width-20+"px").css("height", height-75+"px");
+                jQuery("#dialogHelpContent").css("overflow", "auto");
+
+                jsf('dialogHelpPopup').jqmShow();
+            }
+        </script></span> 
+   <script type="text/javascript">jQuery(function() {
+        jsf('dialogHelpPopup').Resizable({
+            minTop: 1,
+            dragHandle: "#dialogHelpHead",
+            handlers: { se: "#dialogHelpResizeHandle" }
+        });
+    });</script> 
+   <div class="popupDialogHead" id="dialogHelpHead">
+    Help
+   </div>
+   <div id="dialogHelpContent" class="popupDialogContent"></div>
+   <div id="dialogHelpControls" class="popupDialogControls">
+    <div id="j_id14" style="padding:5px;">
+     <a href="#" class="buttonNonpersistent closeDialog"><span class="buttonLabel">Close Help</span></a>
+    </div>
+   </div>
+  </div> 
+  <div id="wrapper"> 
+   <div id="header">  
+    <div>
+     <a href="http://seamframework.org/"><img src="../themes/sfwkorg/img/blank.gif" height="98" width="210"></a> 
+    </div> 
+   </div>
+   <div id="body"> 
+    <div id="container"> 
+     <div id="leftColumn">
+      <div id="mainMenu" xmlns="http://www.w3.org/1999/xhtml">
+       <div id="j_id121" class="box">
+        <div class="mainMenuContainer"> 
+         <div class="mainMenuHeader"></div> 
+         <div class="mainMenuBody">
+          <div id="j_id125" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Home.html" class="level1Link">Home</a>
+          </div>
+          <div id="j_id132" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Home/WhySeam.html" class="level2Link">Why Seam?</a>
+          </div>
+          <div id="j_id139" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Seam2.html" class="level1Link">Seam 2</a>
+          </div>
+          <div id="j_id146" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/GettingStarted.html" class="level2Link">Getting Started</a>
+          </div>
+          <div id="j_id153" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Downloads.html" class="level2Link">Downloads</a>
+          </div>
+          <div id="j_id160" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Documentation.html" class="level2Link">Documentation</a>
+          </div>
+          <div id="j_id167" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="http://weld.cdi-spec.org/" class="level1Link">Weld</a>
+          </div>
+          <div id="j_id174" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Community.html" class="level1Link">Community</a>
+          </div>
+          <div id="j_id181" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="https://community.jboss.org/" class="level2Link">Forums</a>
+          </div>
+          <div id="j_id188" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/CDIExtensions.html" class="level2Link">CDI Extensions</a>
+          </div>
+          <div id="j_id195" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Contribute.html" class="level2Link">Contribute</a>
+          </div>
+          <div id="j_id202" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/JIRA.html" class="level2Link">JIRA</a>
+          </div>
+          <div id="j_id209" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/MailingLists.html" class="level2Link">Mailing Lists</a>
+          </div>
+          <div id="j_id216" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Events.html" class="level2Link">Events</a>
+          </div>
+          <div id="j_id223" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Links.html" class="level2Link">Links</a>
+          </div>
+          <div id="j_id230" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/SeamInProduction.html" class="level2Link">Seam In Production</a>
+          </div>
+          <div id="j_id237" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Documentation.html" class="level1Link">Documentation</a>
+          </div>
+          <div id="j_id244" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Documentation/FAQs.html" class="level2Link">FAQs</a>
+          </div>
+          <div id="j_id251" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Documentation/KnowledgeBase.html" class="level2Link">Knowledge Base</a>
+          </div>
+          <div id="j_id258" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Documentation/Design.html" class="level2Link">Design</a>
+          </div> 
+         </div> 
+         <div class="mainMenuFooter"></div> 
+        </div>
+       </div> 
+      </div> 
+      <br> 
+      <div style="margin-top: 25px; margin-left: 15px; margin-right: 15px; "> 
+       <h2>Built with Seam</h2> 
+       <p> You can find the full source code for this website in the <a href="/Download.html">Seam package</a> in the directory /examples/wiki. It is licensed under the LGPL. </p> 
+       <div style="text-align:center;">
+        <a href="/Community/GetASeamIcon.html"><img src="../themes/sfwkorg/img/runningon_seamlogo_beige.gif" height="50" width="200"></a> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="rightColumn">
+      <img src="../themes/sfwkorg/img/blank.gif" height="8" width="1">
+      <div id="breadcrumb" class="breadcrumb">
+       <span class="breadcrumbPanel"><a href="../index.html" class="itemLink breadcrumbRoot">Site</a><span class="itemSeparator breadcrumbRoot">·</span><a href="../Seam3.html" class="itemLink">Seam 3</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="FacesModule.html" class="itemLink">Faces Module</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="FacesModuleHome.html" class="itemText">Faces Module Home</a></span>
+      </div>
+      <div id="messageBoxContainer"></div>
+      <div id="clientMessageBoxContainer" style="display:none;"> 
+       <div id="clientMessageBox" class="messageBox"> 
+        <table id="clientMessageBoxTable" class="messageBoxTable" cellpadding="0" cellspacing="0" border="0"></table> 
+        <script type="text/javascript">jQuery(function() {
+                    jQuery("#clientMessageBoxContainer").css("margin-top", "10px").css("margin-bottom", "10px");
+                    pulsate(".clientMessageBoxImage");
+                });</script> 
+       </div>
+      </div> 
+      <div id="documentDisplayContainer" class="box">
+       <div id="documentDisplay" class="documentDisplay">
+        <p class="wikiPara"> </p> 
+        <h1 style="font-size:48px">Active development of Seam Faces has been halted by Red Hat. This project has been migrated over to <a href="http://incubator.apache.org/deltaspike/" target="" class="regularLink">Apache DeltaSpike </a>.</h1> 
+        <h1 style="display: none;">Seam Faces</h1> 
+        <div>
+         <img src="../service/File/144982.png" width="431" height="85"> 
+         <img src="../service/File/147460.png" style="margin-left: -2px; margin-bottom: -2px;"> 
+         <a href="https://hudson.jboss.org/jenkins/view/Seam/job/Seam-3.X-faces-CI/lastBuild/" title="Hudson build status" style="float: right;"><img src="https://hudson.jboss.org/jenkins/view/Seam/job/Seam-3.X-faces-CI/lastBuild/buildStatus"></a>
+        </div> 
+        <p class="wikiPara" style="font-style: italic; margin-top: 0px; margin-left: 60px; width: 500px;">Further unifies JSF and CDI, brings enhancements to the JSF programming model left out of the specification and integrates JSF with other Seam modules </p> 
+        <hr> 
+        <div style="display:block; background: #ccc; width: 100%; padding: 5px;">
+          Note: At the moment, Seam Faces requires CDI 1.0 as implemented by 
+         <a href="https://repository.jboss.org/nexus/content/groups/public/org/jboss/weld/" target="" class="regularLink">Weld 1.1.0</a> (GlassFish 3.1, JBoss 6, JBoss 7) and JBoss-Logging 
+         <a href="https://repository.jboss.org/nexus/content/groups/public/org/jboss/logging/" target="" class="regularLink">3.0.0.Beta4</a> or higher.
+        </div> 
+        <h2 class="wikiHeadline2" id="H-KeyLinks"><a href="FacesModuleHome.html#H-KeyLinks">Key links</a></h2> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <strong>Bookmark:</strong> <a href="http://sfwk.org/Seam3/Faces" target="" class="regularLink">http://sfwk.org/Seam3/Faces</a></li> 
+         <li class="wikiUnorderedListItem"> <strong>Git repository:</strong> <a href="http://github.com/seam/faces" target="" class="regularLink">http://github.com/seam/faces</a></li> 
+         <li class="wikiUnorderedListItem"> <strong>Source analyzer:</strong> <a href="http://fisheye.jboss.org/browse/SeamFaces" target="" class="regularLink">http://fisheye.jboss.org/browse/SeamFaces</a></li> 
+         <li class="wikiUnorderedListItem"> <strong>Issue tracker:</strong> <a href="https://issues.jboss.org/browse/SEAMFACES" target="" class="regularLink">https://issues.jboss.org/browse/SEAMFACES</a> (SEAMFACES)</li> 
+         <li class="wikiUnorderedListItem"> <strong>Documentation:</strong> <a href="http://docs.jboss.org/seam/3/faces/latest/reference/en-US/html" target="" class="regularLink">Reference guide</a> | <a href="http://docs.jboss.org/seam/3/faces/latest/api/" target="" class="regularLink">API</a> | <img src="http://seamframework.org/service/File/146541" style="vertical-align: middle; margin-top: -2px; margin-bottom: -2px;"> <a href="http://docs.jboss.org/seam/3/faces/latest/reference/en-US/html/artifacts.html#enhanced_artifacts" target="" class="regularLink">Example usage</a></li> 
+         <li class="wikiUnorderedListItem"> <strong>Download:</strong> <a href="http://sourceforge.net/projects/jboss/files/Seam/Faces/3.0.2.Final/seam-faces-3.0.2.Final.zip/download" target="" class="regularLink">Distribution</a></li> 
+         <li class="wikiUnorderedListItem"> <strong>Maven artifacts:</strong> <a href="https://repository.jboss.org/nexus/index.html#nexus-search;quick~seam-faces" target="" class="regularLink">seam-faces</a> (or <a href="https://repository.jboss.org/nexus/index.html#nexus-search;quick~seam-faces-api" target="" class="regularLink">seam-faces-api</a> &amp; <a href="https://repository.jboss.org/nexus/index.html#nexus-search;quick~seam-faces-impl" target="" class="regularLink">seam-faces-impl</a>)*</li> 
+        </ul> 
+        <p class="wikiPara"> To get started, add the following dependencies to your pom.xml: </p> 
+        <table> 
+         <tbody>
+          <tr>
+           <td style="vertical-align: top; padding: 0;"> <pre class="wikiPreformatted">&lt;dependency&gt;
+   &lt;groupId&gt;org.jboss.seam.faces&lt;/groupId&gt;
+   &lt;artifactId&gt;seam-faces-api&lt;/artifactId&gt;
+   &lt;version&gt;3.1.0.Final&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;dependency&gt;
+   &lt;groupId&gt;org.jboss.seam.faces&lt;/groupId&gt;
+   &lt;artifactId&gt;seam-faces&lt;/artifactId&gt;
+   &lt;version&gt;3.1.0.Final&lt;/version&gt;
+   &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;</pre> </td>
+          </tr>
+         </tbody>
+        </table> 
+        <div>
+         * 
+         <i class="wikiEmphasis">Maven artifacts are located in the <a href="http://repository.jboss.org/nexus/content/groups/public" target="" class="regularLink">JBoss Community Repository</a>. <a href="http://community.jboss.org/wiki/MavenGettingStarted-Users" target="" class="regularLink">Find out more about this repository</a>.</i>
+        </div>
+        <p class="wikiPara"> </p> 
+        <h2 class="wikiHeadline2" id="H-ModuleTeam"><a href="FacesModuleHome.html#H-ModuleTeam">Module team</a></h2> 
+        <table class="datatable topLeftBottomBorder rightBorder" border="0" cellspacing="0" cellpadding="5"> 
+         <tbody>
+          <tr class="regularHeader alignLeft"> 
+           <th class="rightBorder">Name</th> 
+           <th class="rightBorder">Module role</th> 
+           <th class="rightBorder">Commit username (Git)</th> 
+           <th class="rightBorder">Organization</th> 
+           <th>Hometown (Time zone)</th> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="http://community.jboss.org/people/bleathem"><img src="http://gravatar.com/userimage/13521104/c993765fb551953197ea79472b97f2b2.jpg" style="width: 50px; height: 50px; vertical-align: middle; margin-right: 3px;"> Brian Leathem</a></td> 
+           <td class="rightBorder">Lead</td> 
+           <td class="rightBorder"><a href="http://github.com/bleathem" target="" class="regularLink">bleathem</a></td> 
+           <td class="rightBorder">TRIUMF</td> 
+           <td>Vancouver, Canada (<a href="http://timeanddate.com/library/abbreviations/timezones/na/pst.html" target="" class="regularLink">UTC-8</a>)</td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="http://community.jboss.org/people/dan.j.allen"><img src="http://a2.twimg.com/profile_images/53703885/twitter_normal.jpg" style="width: 50px; height: 50px; vertical-align: middle; margin-right: 3px;"> Dan Allen</a></td> 
+           <td class="rightBorder">Contributor</td> 
+           <td class="rightBorder"><a href="http://github.com/mojavelinux" target="" class="regularLink">mojavelinux</a></td> 
+           <td class="rightBorder">Red Hat, Inc.</td> 
+           <td>Laurel, MD, USA (<a href="http://timeanddate.com/library/abbreviations/timezones/na/est.html" target="" class="regularLink">UTC-5</a>)</td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="http://community.jboss.org/people/lincolnthree"><img src="http://gravatar.com/avatar/be9be712febc4e422694a3a284421f66?s=50" style="width: 50px; height: 50px; vertical-align: middle; margin-right: 3px;"> Lincoln Baxter, III</a></td> 
+           <td class="rightBorder">Contributor</td> 
+           <td class="rightBorder"><a href="http://github.com/lincolnthree" target="" class="regularLink">lincolnthree</a></td> 
+           <td class="rightBorder">Red Hat, Inc.</td> 
+           <td>Philadelphia, PA (<a href="http://timeanddate.com/library/abbreviations/timezones/na/est.html" target="" class="regularLink">UTC-5</a>)</td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="http://community.jboss.org/people/swd847"><img src="http://gravatar.com/avatar/c3cc797e76ad63e206555f5520f603a0" style="width: 50px; height: 50px; vertical-align: middle; margin-right: 3px;"></a> <a href="http://community.jboss.org/people/swd847" target="" class="regularLink">Stuart Douglas</a></td> 
+           <td class="rightBorder">Contributor</td> 
+           <td class="rightBorder"><a href="http://github.com/stuartwdouglas" target="" class="regularLink">stuartwdouglas</a></td> 
+           <td class="rightBorder">Red Hat, Inc.</td> 
+           <td>Sydney, AU (<a href="http://timeanddate.com/library/abbreviations/timezones/au/edt.html" target="" class="regularLink">UTC+10</a>)</td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="http://community.jboss.org/people/nickarls"><img src="http://seamframework.org/seam/resource/wikiUserPortrait/1888/l" style="width: 50px; height: 50px; vertical-align: middle; margin-right: 3px;"> Nicklas Karlsson</a></td> 
+           <td class="rightBorder">Contributor</td> 
+           <td class="rightBorder"><a href="http://github.com/nickarls" target="" class="regularLink">nickarls</a></td> 
+           <td class="rightBorder">Independent</td> 
+           <td>Turku, Finland (UTC+02)</td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="http://community.jboss.org/people/struberg"><img src="http://a3.twimg.com/profile_images/904168997/msxpic-2010_bigger.png" style="width: 50px; height: 50px; vertical-align: middle; margin-right: 3px;"> Mark Struberg</a></td> 
+           <td class="rightBorder">Contributor</td> 
+           <td class="rightBorder"><a href="http://github.com/struberg" target="" class="regularLink">struberg</a></td> 
+           <td class="rightBorder">Apache PMC</td> 
+           <td>Vienna, Austria (UTC+01)</td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="http://community.jboss.org/people/spinner"><img src="https://secure.gravatar.com/avatar/b5214a657d4818d6826aec35a303f75d" style="width: 50px; height: 50px; vertical-align: middle; margin-right: 3px;"> José Rodolfo Freitas</a></td> 
+           <td class="rightBorder">Contributor</td> 
+           <td class="rightBorder"><a href="https://github.com/joserodolfofreitas" target="" class="regularLink">joserodolfofreitas</a></td> 
+           <td class="rightBorder">Independent</td> 
+           <td>Brazil (UTC-03)</td> 
+          </tr> 
+         </tbody>
+        </table> 
+        <div style="margin-top: .5em;">
+         <i class="wikiEmphasis">Want your name to appear in this list? Join us in <a href="Chat.html" target="" class="regularLink">#seam-dev on freenode</a> and let us know you want to get involved.</i>
+        </div> 
+        <h2 class="wikiHeadline2" id="H-Description"><a href="FacesModuleHome.html#H-Description">Description</a></h2> 
+        <p class="wikiPara"> In many cases, the functionality provided by this module are prototypes for future versions of the JSF or CDI specifications. </p> 
+        <p class="wikiPara"> Included in this package is the ability to interoperate with Seam's i18n support, debugging output for JSF, context implementations for JSF's flash scope (<tt>@FlashScoped</tt>) and view scope (<tt>@ViewScoped</tt>) (and look into Window scope, see <a href="http://wiki.icefaces.org/display/ICE/Using+Window+Scope" target="" class="regularLink">ICEFaces Window Scope</a> or <a href="http://www.portletfaces.org/web/fw/scopes" target="" class="regularLink">PortletFaces scopes</a>), <tt>@Inject</tt> into JSF system event listeners, converters and validators, support for nested conversations, view metadata components such as viewAction and restrictView, etc. </p> 
+        <p class="wikiPara"> Any rendering UIComponent should be introduced into RichFaces rather than Seam, a change in policy from Seam 2. The Seam project doesn't want to be in the business of maintaining a component library since we already have a whole team for that work. </p> 
+        <p class="wikiPara"> Further, this module contains <q>Seam Managed Transactions</q>. </p> 
+        <h2 class="wikiHeadline2" id="H-ReleasePlan"><a href="FacesModuleHome.html#H-ReleasePlan">Release plan</a></h2> 
+        <p class="wikiPara"> (status: draft) - This plan is still being defined. </p> 
+        <table class="datatable topLeftBottomBorder rightBorder" border="0" cellspacing="0" cellpadding="5"> 
+         <tbody>
+          <tr class="regularHeader alignLeft"> 
+           <th class="rightBorder">Version</th> 
+           <th class="rightBorder">Time frame</th> 
+           <th>Focus</th> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="https://issues.jboss.org/browse/SEAMFACES/fixforversion/12316069" target="" class="regularLink">3.1.0.Final</a></td> 
+           <td class="rightBorder">January 16, 2012</td> 
+           <td> </td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="https://issues.jboss.org/browse/SEAMFACES/fixforversion/12318270" target="" class="regularLink">3.1.0.CR1</a></td> 
+           <td class="rightBorder">December 1, 2011</td> 
+           <td> </td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="https://issues.jboss.org/browse/SEAMFACES/fixforversion/12318417" target="" class="regularLink">3.1.0.Beta5</a></td> 
+           <td class="rightBorder">November 19, 2011</td> 
+           <td> 
+            <ul class="wikiUnorderedList"> 
+             <li class="wikiUnorderedListItem"> Object and Entity converters</li> 
+            </ul> </td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="https://issues.jboss.org/browse/SEAMFACES/fixforversion/12318381" target="" class="regularLink">3.1.0.Beta4</a></td> 
+           <td class="rightBorder">October 25, 2011</td> 
+           <td> 
+            <ul class="wikiUnorderedList"> 
+             <li class="wikiUnorderedListItem"> Activating beans based on the JSF project stage</li> 
+            </ul> </td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="https://issues.jboss.org/browse/SEAMFACES/fixforversion/12318269" target="" class="regularLink">3.1.0.Beta3</a></td> 
+           <td class="rightBorder">October 4, 2011</td> 
+           <td> 
+            <ul class="wikiUnorderedList"> 
+             <li class="wikiUnorderedListItem"> Fixed integration with Seam International</li> 
+            </ul> </td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="https://issues.jboss.org/browse/SEAMFACES/fixforversion/12317975" target="" class="regularLink">3.1.0.Beta2</a></td> 
+           <td class="rightBorder">August 26, 2011</td> 
+           <td> 
+            <ul class="wikiUnorderedList"> 
+             <li class="wikiUnorderedListItem"> Seam Security integration improvements</li> 
+             <li class="wikiUnorderedListItem"> Removed the Faces Context initializer</li> 
+            </ul> </td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="https://issues.jboss.org/browse/SEAMFACES/fixforversion/12318076" target="" class="regularLink">3.1.0.Beta1</a></td> 
+           <td class="rightBorder">August 15, 2011</td> 
+           <td> 
+            <ul class="wikiUnorderedList"> 
+             <li class="wikiUnorderedListItem"> Removed combined maven module</li> 
+             <li class="wikiUnorderedListItem"> Seam Catch integration improvements</li> 
+            </ul> </td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="https://issues.jboss.org/browse/SEAMFACES/fixforversion/12316287" target="" class="regularLink">3.0.2</a></td> 
+           <td class="rightBorder">June 20, 2011</td> 
+           <td> 
+            <ul class="wikiUnorderedList"> 
+             <li class="wikiUnorderedListItem"> MyFaces compatibility improvements</li> 
+             <li class="wikiUnorderedListItem"> UIInputContianer fixes</li> 
+            </ul> </td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="https://issues.jboss.org/browse/SEAMFACES/fixforversion/12316068" target="" class="regularLink">3.0.1</a></td> 
+           <td class="rightBorder">April 17, 2011</td> 
+           <td> 
+            <ul class="wikiUnorderedList"> 
+             <li class="wikiUnorderedListItem"> URL-rewriting support (<a href="http://ocpsoft.org/prettyfaces/" target="" class="regularLink">http://ocpsoft.org/prettyfaces/</a>)</li> 
+             <li class="wikiUnorderedListItem"> faces-redirect=true by default</li> 
+             <li class="wikiUnorderedListItem"> @ViewConfig API improvements</li> 
+            </ul> </td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="https://issues.jboss.org/browse/SEAMFACES/fixforversion/12316171" target="" class="regularLink">3.0.0.Final</a></td> 
+           <td class="rightBorder">April 1, 2011</td> 
+           <td> 
+            <ul class="wikiUnorderedList"> 
+             <li class="wikiUnorderedListItem"> Consolidated configuration of View Security</li> 
+            </ul> </td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="https://issues.jboss.org/browse/SEAMFACES/fixforversion/12315873" target="" class="regularLink">3.0.0.CR2</a></td> 
+           <td class="rightBorder">March 19, 2011</td> 
+           <td> 
+            <ul class="wikiUnorderedList"> 
+             <li class="wikiUnorderedListItem"> Use InputElement&lt;T&gt; instead of @InputField for injection of form input</li> 
+             <li class="wikiUnorderedListItem"> Convenience classes for Validators/Converters</li> 
+             <li class="wikiUnorderedListItem"> Bug fixes</li> 
+            </ul> </td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="https://issues.jboss.org/browse/SEAMFACES/fixforversion/12315872" target="" class="regularLink">3.0.0.CR1</a></td> 
+           <td class="rightBorder">February 23, 2011</td> 
+           <td> 
+            <ul class="wikiUnorderedList"> 
+             <li class="wikiUnorderedListItem"> Create a JSF bridge to Seam Catch</li> 
+             <li class="wikiUnorderedListItem"> Bug fixes</li> 
+            </ul> </td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="https://issues.jboss.org/browse/SEAMFACES/fixforversion/12315871" target="" class="regularLink">3.0.0.Beta3</a></td> 
+           <td class="rightBorder">February 13, 2011</td> 
+           <td> 
+            <ul class="wikiUnorderedList"> 
+             <li class="wikiUnorderedListItem"> Declarative Exception Handling via Integration with Seam Catch <img src="../service/File/121802.png" width="16" height="16"></li> 
+            </ul> </td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="https://issues.jboss.org/browse/SEAMFACES/fixforversion/12315615" target="" class="regularLink">3.0.0.Beta2</a></td> 
+           <td class="rightBorder">December 23, 2010</td> 
+           <td> 
+            <ul class="wikiUnorderedList"> 
+             <li class="wikiUnorderedListItem"> Combined JAR (API + impl) <img src="../service/File/121802.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> Automatic registration of FacesServlet <img src="../service/File/121802.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> Migration to Seam Solder <img src="../service/File/121802.png" width="16" height="16"></li> 
+            </ul> </td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="https://jira.jboss.org/browse/SEAMFACES/fixforversion/12315615" target="" class="regularLink">3.0.0.Beta1</a></td> 
+           <td class="rightBorder">November 2, 2010</td> 
+           <td> 
+            <ul class="wikiUnorderedList"> 
+             <li class="wikiUnorderedListItem"> UIInputContainer tag for automatically adding label and message components to input fields <img src="../service/File/121802.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> Support for CDI managed Converters/Validators (@Inject, @Scoped) <img src="../service/File/121802.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> Seam Managed Transactions for JSF lifecycle integration in place <img src="../service/File/121802.png" width="16" height="16"> (depends on persistence module)</li> 
+            </ul> </td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="https://jira.jboss.org/jira/browse/SEAMFACES/fixforversion/12314770" target="" class="regularLink">3.0.0.Alpha3</a></td> 
+           <td class="rightBorder">May 19, 2010</td> 
+           <td> 
+            <ul class="wikiUnorderedList"> 
+             <li class="wikiUnorderedListItem"> i18n Seam Messages to FacesMessage adapter (w/Redirect support) <img src="../service/File/121802.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> Cross-field form validation. <img src="../service/File/121802.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> Load Facelets template files from classpath <img src="../service/File/121802.png" width="16" height="16"></li> 
+            </ul> </td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="https://jira.jboss.org/jira/browse/SEAMFACES/fixforversion/12314769" target="" class="regularLink">3.0.0.Alpha2</a></td> 
+           <td class="rightBorder">April 15, 2010</td> 
+           <td> 
+            <ul class="wikiUnorderedList"> 
+             <li class="wikiUnorderedListItem"> View actions <img src="../service/File/121802.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> <tt>javax.faces.bean.*Scoped</tt> aliases <img src="../service/File/121802.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> <tt>@FlashScoped</tt> and <tt>@ViewScoped</tt> <img src="../service/File/121802.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> Conversation boundary annotations and UI components <img src="../service/File/121802.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> CDI / Faces Phase &amp; System Event bridge <img src="../service/File/121802.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> JSF API producers (FacesContext, ExternalContext, NavigationHandler, etc...) <img src="../service/File/121802.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> Simplified EL name to conversation: #{conversation.transient} <img src="../service/File/121802.png" width="16" height="16"></li> 
+            </ul> </td> 
+          </tr> 
+         </tbody>
+        </table> 
+        <h2 class="wikiHeadline2" id="H-DesignWhiteboard"><a href="FacesModuleHome.html#H-DesignWhiteboard">Design whiteboard</a></h2> 
+        <table style="border: 0;"> 
+         <tbody>
+          <tr> 
+           <td style="padding: 0;"><img src="http://seamframework.org/service/File/144128" style="width: 250px; height: 140px; margin-right: 10px;"></td> 
+           <td style="vertical-align: top; padding: 0;"> This section serves as a whiteboard for design and ideas for this module. Once you've decided to pursue a feature, it should be added to JIRA as a feature request and optionally linked from this page. </td> 
+          </tr> 
+         </tbody>
+        </table> 
+        <h3 class="wikiHeadline3" id="H-AQKillerqScope"><a href="FacesModuleHome.html#H-AQKillerqScope">A <q>Killer</q> Scope</a></h3> 
+        <p class="wikiPara"> Seam Faces needs to implement a <q>Killer</q> scope to enable developers to write applications with RESTful URLs in a straight forward manner. Other Scope implementations will be discussed and evaluated here, and the design of Seam's <q>Killer</q> scope will evolve. </p> 
+        <h3 class="wikiHeadline3" id="H-DeclarativeExceptionHandlingAndEasyExceptionAccessForErrorPagesViaELStatusWhiteboard"><a href="FacesModuleHome.html#H-DeclarativeExceptionHandlingAndEasyExceptionAccessForErrorPagesViaELStatusWhiteboard">Declarative exception handling and easy exception access for error pages via EL (status: whiteboard)</a></h3> 
+        <pre class="wikiPreformatted">#{exceptionContext.cause} : Cause retrieved from the exception
+#{exceptionContext.stackTrace} : Stack trace of the exception
+#{exceptionContext.exception} : Exception handled by this page
+#{exceptionContext.tree} : Print the component tree of the page that cause the error
+#{exceptionContext.vars} : Enviroment variables from the request</pre> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Handle specific exception types</li> 
+         <li class="wikiUnorderedListItem"> Handle HTTP errors</li> 
+         <li class="wikiUnorderedListItem"> Adding exception handlers needs to be easier than what's already provided in JSF.</li> 
+         <li class="wikiUnorderedListItem"> Exception Handler Priority controls?</li> 
+         <li class="wikiUnorderedListItem"> Exception handlers should be CDI-managed beans, and need to provide hooks into navigation.</li> 
+         <li class="wikiUnorderedListItem"> Ability to fire CDI <q>Exception Events</q></li> 
+         <li class="wikiUnorderedListItem"> Transaction controls?</li> 
+        </ul> 
+        <p class="wikiPara"> Servlet: (Request, Response, CDI Lifecycle)<br> Faces: (ViewRoot, FacesContext, EL, NavigationHandler) </p> 
+        <pre class="wikiPreformatted">public interface ExceptionHandler&lt;E extends Exception, S extends State&gt;
+{
+  int getPriority();
+  void handle(HandlerChain chain, S state, E e);
+}</pre> 
+        <p class="wikiPara"> HandlerChain </p> 
+        <pre class="wikiPreformatted">public interface HandlerChain
+{
+  void next();
+}</pre> 
+        <p class="wikiPara"> State (The base State is empty, but there will be different implementations for the various uses) </p> 
+        <pre class="wikiPreformatted">public interface State
+{
+}</pre> 
+        <p class="wikiPara"> FacesState </p> 
+        <pre class="wikiPreformatted">public interface FacesState extends State
+{
+  FacesContext getFacesContext();
+  // Shortcut method for the users
+  void navigate(String viewId);
+}</pre> 
+        <h3 class="wikiHeadline3" id="H-Events"><a href="FacesModuleHome.html#H-Events">Events</a></h3> 
+        <p class="wikiPara"> JSF 2.0 introduces the concept of system events, which through Seam Faces are now bridged to CDI events. But JSF overlooks several important events that would be useful: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> PreNavigateEvent - raised immediately before navigation occurs, perhaps to allow the developer to add context variables or query parameters (see <a href="https://jira.jboss.org/browse/SEAMFACES-21" target="" class="regularLink">SEAMFACES-21</a>)</li> 
+         <li class="wikiUnorderedListItem"> BeforeRequestEvent - at the very start of the request</li> 
+         <li class="wikiUnorderedListItem"> AfterRequestEvent - at the very end of the request (may not be that useful)</li> 
+        </ul> 
+        <p class="wikiPara"> These can be renamed or turned into annotations as needed. </p> 
+        <h3 class="wikiHeadline3" id="H-ConversationBoundaryControlStatusInprogress"><a href="FacesModuleHome.html#H-ConversationBoundaryControlStatusInprogress">Conversation boundary control (status: in-progress)</a></h3> 
+        <p class="wikiPara"> Allow the use of <tt>@Begin</tt> and <tt>@End</tt> on a method to transition a conversation from transient to long-running and back. Also consider requiring a conversation to be running when a method is called with the <tt>@Conversational</tt> annotation, similar in nature to <tt>@TransactionAttribute(REQUIRED)</tt>. </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Allow timeout of conversation to be set using <tt>@Begin</tt> annotation</li> 
+         <li class="wikiUnorderedListItem"> Set the default conversation timeout globally. This can be done using XML Bean configuration as soon as interface config is supported:</li> 
+        </ul> 
+        <pre class="wikiPreformatted">&lt;beans xmlns="http://java.sun.com/xml/ns/javaee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:s="urn:java:seam:core" 
+   xsi:schemaLocation="
+      http://java.sun.com/xml/ns/javaee 
+      http://java.sun.com/xml/ns/javaee/beans_1_0.xsd"&gt;
+   
+   &lt;s:Conversation&gt;
+      &lt;s:specializes/&gt;
+      &lt;s:timeout&gt;5000&lt;/s:timeout&gt;
+   &lt;/s:Conversation&gt;
+   
+&lt;/beans&gt;</pre> 
+        <h3 class="wikiHeadline3" id="H-AdvancedConversationAPIStatusWhiteboard"><a href="FacesModuleHome.html#H-AdvancedConversationAPIStatusWhiteboard">Advanced Conversation API (status: whiteboard)</a></h3> 
+        <pre class="wikiPreformatted">org.jboss.seam.context.Conversation implements javax.enterprise.context.Conversation:</pre> 
+        <p class="wikiPara"> References can be obtained via Qualified @Injection: </p> 
+        <pre class="wikiPreformatted">@Inject org.jboss.seam.context.Conversation c;
+@Inject @Seam org.jboss.seam.conversation.Conversation c;
+@Inject @Seam javax.enterprise.context.Conversation c;</pre> 
+        <h3 class="wikiHeadline3" id="H-InjectionPointsForJSFSystemComponentsObjectsStatusInProgress"><a href="FacesModuleHome.html#H-InjectionPointsForJSFSystemComponentsObjectsStatusInProgress">Injection points for JSF System Components/Objects (status: in progress)</a></h3> 
+        <p class="wikiPara"> Here are the issues that need to be completed in order to get this working without the need for Seam enhancements, both short term and long term: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <a href="https://glassfish.dev.java.net/issues/show_bug.cgi?id=11655" target="" class="regularLink">https://glassfish.dev.java.net/issues/show_bug.cgi?id=11655</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=763" target="" class="regularLink">https://javaserverfaces-spec-public.dev.java.net/issues/show_bug.cgi?id=763</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=1578" target="" class="regularLink">https://javaserverfaces.dev.java.net/issues/show_bug.cgi?id=1578</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="https://issues.apache.org/jira/browse/MYFACES-2590" target="" class="regularLink">https://issues.apache.org/jira/browse/MYFACES-2590</a></li> 
+        </ul> 
+        <p class="wikiPara"> <i class="wikiEmphasis">Other than the above, We have a couple of options:</i> </p> 
+        <ol class="wikiOrderedList"> 
+         <li class="wikiOrderedListItem"> Patch/hack/decorate into the JSF factories, replacing them with our implementations that provide injection, wherever necessary and possible in a portable way.</li> 
+         <li class="wikiOrderedListItem"> Fix JSF (namely the WebContainerInjectionProvider - InjectionProvider interface) extension points to require implementations to provide such injection so that we don't need to hack and wrap.</li> 
+        </ol> 
+        <h4 class="wikiHeadline4" id="H-InTheMeanTimeWhileTheSpecIssueGoesThrough"><a href="FacesModuleHome.html#H-InTheMeanTimeWhileTheSpecIssueGoesThrough">In the mean time, while the spec issue goes through...</a></h4> 
+        <p class="wikiPara"> javax.faces.application.ApplicationWrapper can be used to provide injection for: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Validator</li> 
+         <li class="wikiUnorderedListItem"> Converter</li> 
+         <li class="wikiUnorderedListItem"> Component</li> 
+        </ul> 
+        <p class="wikiPara"> Similar to a <a href="http://opensource.atlassian.com/confluence/spring/display/JSF/Configuring+JSF+Validators,+Converters,+and+UIComponents+in+Spring" target="" class="regularLink">concept</a> that Spring had going until they dropped it. </p> 
+        <p class="wikiPara"> Fortunately, these are the most common use-cases; however... </p> 
+        <h4 class="wikiHeadline4" id="H-PhaseSystemEventListeners"><a href="FacesModuleHome.html#H-PhaseSystemEventListeners">Phase/SystemEvent Listeners</a></h4> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> SystemEventListener</li> 
+         <li class="wikiUnorderedListItem"> PhaseListener</li> 
+        </ul> 
+        <p class="wikiPara"> It would be possible, to implement and register a Seam phase listener that would automatically delegate to any @Typed(PhaseListener.class) beans that are registered with CDI. This would be implemented as a chain (simply provide each listener the chance to take action via passthrough.) </p> 
+        <p class="wikiPara"> The same could be done for event listeners. Simple add a global listener that would delegate to Seam-registered/injected listeners. </p> 
+        <h4 class="wikiHeadline4" id="H-ActionValueChangeListeners"><a href="FacesModuleHome.html#H-ActionValueChangeListeners">Action/ValueChange Listeners</a></h4> 
+        <p class="wikiPara"> These classes are not specifically injectable unless the developer provides them to JSF in an injectable way. Because <q>live instances</q> are required when binding to beans and supplying eventListeners to the system, this means you'd need to ask for an injected instance in your managedBean, or configurer, then pass that already injected instance into the component or system events system. </p> 
+        <p class="wikiPara"> A simple user-solution would be to @Inject the listener directly into the ManagedBean from which it is referenced, or possibly specify the class as a @Named bean: </p> 
+        <pre class="wikiPreformatted">@Named
+public MyListener implements ActionListener 
+{   ...   }
+
+@Named
+public MyBean 
+{
+   @Inject @New MyListener listener;
+   //...getters/setters
+}
+
+&lt;h:commandButton listener="#{myBean.listener}" /&gt;
+
+or
+
+&lt;h:commandButton listener="#{myListener}" /&gt; -- this solution would mean that the same listener is re-used by all components.
+</pre> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> ValueChangeListener</li> 
+         <li class="wikiUnorderedListItem"> ActionListener</li> 
+        </ul> 
+        <h3 class="wikiHeadline3" id="H-SeamManagedTransactionsStatusWhiteboard"><a href="FacesModuleHome.html#H-SeamManagedTransactionsStatusWhiteboard">Seam Managed Transactions (status: whiteboard)</a></h3> 
+        <p class="wikiPara"> PhaseListener, Starts transaction for request before Restore View Phase, commits/rolls back transaction before Render Response, then opens a new Read Only transaction for Render Response and closes it after rendering is complete. </p> 
+        <h3 class="wikiHeadline3" id="H-ConversationScopeAndNestedConversationsStatusInProgress"><a href="FacesModuleHome.html#H-ConversationScopeAndNestedConversationsStatusInProgress">Conversation Scope and Nested Conversations (status: in progress)</a></h3> 
+        <p class="wikiPara"> Leverage CDI Conversation Contexts providing managed children and nesting: </p> 
+        <p class="wikiPara"> Lincoln: I would like to investigate a method of attaching specific bean types to a specific qualified conversation, thus allowing / restricting access to specific beans depending on which qualified conversation is active. (E.g: In an instance of Conv. A, you have a potential instance of Bean A and Bean B. In an instance of Conv. B, you have a potential instance of Bean B and Bean C. Bean B may be instantiated to participate in either conversation, but instances of Beans A and C are exclusive to their respectively qualified conversations.) </p> 
+        <h3 class="wikiHeadline3" id="H-FullScopingSupportViaAnnotationsStatusAlpha"><a href="FacesModuleHome.html#H-FullScopingSupportViaAnnotationsStatusAlpha">Full Scoping Support via Annotations (status: alpha)</a></h3> 
+        <p class="wikiPara"> I think it's important that we put view/flash scoped beans high on the priority list for Seam Faces. The idea is to be able to annotate a class with the @javax.faces.bean.ViewScoped, @javax.faces.bean.FlashScoped annotation and have it use the JSF 2 view or flash scope as a backing store. They would be a regular CDI beans, not JSF managed beans. We are just reusing the scope annotations. </p> 
+        <blockquote class="wikiBlockquote">
+          Note: We are supporting the javax.faces.bean.ViewScoped (and a new javax.faces.bean.FlashScoped) annotation so far, but do we already have support for @javax.faces.bean.xxx ? There are a lot of scoping annotations. Is this something that's already part of Weld, or do we need to support it for consistencies sake? I'd hate for people to use @ViewScoped, then try to use @javax.faces.bean.RequestScoped, and wonder why it's not working. 
+        </blockquote> 
+        <h4 class="wikiHeadline4" id="H-JavaxfacesbeanViewScoped"><a href="FacesModuleHome.html#H-JavaxfacesbeanViewScoped">@javax.faces.bean.ViewScoped</a></h4> 
+        <p class="wikiPara"> Mark Struberg put together an impl of this, which he referenced at JSFDays. There is also another guy who put together a much simpler impl in a blog entry. </p> 
+        <ol class="wikiOrderedList"> 
+         <li class="wikiOrderedListItem"><a href="http://github.com/struberg/myfaces-ext-cdi/tree/master/impl/src/main/java/org/apache/myfaces/extensions/cdi/impl/scopes/viewscoped/" target="" class="regularLink">http://github.com/struberg/myfaces-ext-cdi/tree/master/impl/src/main/java/org/apache/myfaces/extensions/cdi/impl/scopes/viewscoped/</a></li> 
+         <li class="wikiOrderedListItem"><a href="http://www.verborgh.be/articles/2010/01/06/porting-the-viewscoped-jsf-annotation-to-cdi/" target="" class="regularLink">http://www.verborgh.be/articles/2010/01/06/porting-the-viewscoped-jsf-annotation-to-cdi/</a></li> 
+        </ol> 
+        <h4 class="wikiHeadline4" id="H-JavaxfacesbeanFlashScopedNew"><a href="FacesModuleHome.html#H-JavaxfacesbeanFlashScopedNew">@javax.faces.bean.FlashScoped (new)</a></h4> 
+        <p class="wikiPara"> @FlashScoped is also something work implementing with annotation support. Right now, the only way to access Flash Scope is through a programmatic API. We need to get the <tt>@javax.faces.bean.FlashScoped</tt> annotation introduced into the JSF specification. @FlashScoped is the new, better solution for <q>Transient Conversations</q> spanning over page requests in Seam 2. FlashScoped should be used for FacesMessage propagation, etc... </p> 
+        <p class="wikiPara"> We are now looking into providing our own flash scope implementation (tentatively called interaction scope) because we are not happy with the one in JSF 2.0). </p> 
+        <h3 class="wikiHeadline3" id="H-CrossfieldValidationStatusALPHA"><a href="FacesModuleHome.html#H-CrossfieldValidationStatusALPHA">Cross-field Validation (status: ALPHA)</a></h3> 
+        <p class="wikiPara"> Options discussion and analysis to come. </p> 
+        <h3 class="wikiHeadline3" id="H-EnhancedNavigationPagesxmlAndPrettyFacesStatusWhiteboard"><a href="FacesModuleHome.html#H-EnhancedNavigationPagesxmlAndPrettyFacesStatusWhiteboard">Enhanced Navigation, pages.xml, and PrettyFaces (status: whiteboard)</a></h3> 
+        <p class="wikiPara"> Tracking overlap between pages.xml and PrettyFaces. </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"><a href="http://old.nabble.com/Replacing-pages.xml-to27649799.html" target="" class="regularLink">http://old.nabble.com/Replacing-pages.xml-to27649799.html</a></li> 
+         <li class="wikiUnorderedListItem"><a href="http://docs.jboss.org/seam/2.2.0.GA/reference/en-US/html/events.html" target="" class="regularLink">http://docs.jboss.org/seam/2.2.0.GA/reference/en-US/html/events.html</a></li> 
+        </ul> 
+        <h3 class="wikiHeadline3" id="H-PageCacheStatusWhiteboard"><a href="FacesModuleHome.html#H-PageCacheStatusWhiteboard">Page cache (status: whiteboard)</a></h3> 
+        <p class="wikiPara"> Support Seam 2's <tt>s:cache</tt> tag. </p> 
+        <h3 class="wikiHeadline3" id="H-SensibleDefaultsAndGlobalSettingsStatusWhiteboard"><a href="FacesModuleHome.html#H-SensibleDefaultsAndGlobalSettingsStatusWhiteboard">Sensible defaults and global settings (status: whiteboard)</a></h3> 
+        <p class="wikiPara"> Allow setting the default values for <q>includeViewParams=true</q> and <q>facesRedirect=true</q> -- facesRedirect should probably be true by default. </p> 
+        <h3 class="wikiHeadline3" id="H-FaceletsOnClasspathStatusALPHA"><a href="FacesModuleHome.html#H-FaceletsOnClasspathStatusALPHA">Facelets on classpath (Status: ALPHA)</a></h3> 
+        <p class="wikiPara"> Load a Facelets template from a shared JAR as described in <a href="../Documentation/HowDoILoadAFaceletsViewTemplateFromASharedJAR.html" target="" class="regularLink">How do I load a Facelets view template from a shared JAR?</a> </p> 
+        <p class="wikiPara"> It appears this is unnecessary. JSF 2.0 will automatically resolve templates inside the META-INF directory of any classpath entry. </p> 
+        <h3 class="wikiHeadline3" id="H-Stoken"><a href="FacesModuleHome.html#H-Stoken">s:token</a></h3> 
+        <p class="wikiPara"> Implement the <tt>&lt;s:token&gt;</tt> tag from Seam 2 to guard against CSRF </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <a href="/Documentation/CrossSiteRequestForgery#H-SeamsTtltstokengtttProtectionFeature.html" target="" class="regularLink">s:token explanation </a></li> 
+         <li class="wikiUnorderedListItem"> <a href="http://http//www.seamframework.org/Community/NewComponentTagStokenAimedToGuardAgainstCSRF" target="" class="regularLink">forum thread on s:token</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="http://anonsvn.jboss.org/repos/seam/branches/community/Seam_2_2/ui/src/main/java/org/jboss/seam/ui/component/UIToken.java" target="" class="regularLink">UIToken.java</a></li> 
+        </ul> 
+        <h3 class="wikiHeadline3" id="H-RESTComponentTags"><a href="FacesModuleHome.html#H-RESTComponentTags">REST component tags</a></h3> 
+        <p class="wikiPara"> Similar in spirit to the old JSP SQL tags, we could provide UI component tags that read from a REST API and spit the data back out onto the page, sort of like a pass-through. We would either allow XPath to consume the data or allow the JSON to be accessed with EL graph notation. </p> 
+        <h3 class="wikiHeadline3" id="H-OtherIdeasStatusWhiteboard"><a href="FacesModuleHome.html#H-OtherIdeasStatusWhiteboard">Other Ideas (status: whiteboard)</a></h3> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Headless JSF (JSF removed from servlet lifecycle, via mocks, etc.)</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Stateless JSF (JSF which does not ever rely on session to preserve state.)</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <a href="http://wiki.apache.org/myfaces/Extensions/CDI/DevDoc/Drafts" target="" class="regularLink">http://wiki.apache.org/myfaces/Extensions/CDI/DevDoc/Drafts</a></li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <a href="/Community/PersistAndPassFacesMessagesOverMultiplePageRedirects.html" target="" class="regularLink">http://www.seamframework.org/Community/PersistAndPassFacesMessagesOverMultiplePageRedirects</a></li> 
+        </ul> 
+        <h3 class="wikiHeadline3" id="H-DefinteComponentNamespacesViaAnnotationsStatusWhiteboard"><a href="FacesModuleHome.html#H-DefinteComponentNamespacesViaAnnotationsStatusWhiteboard">Definte component namespaces via Annotations (status: whiteboard)</a></h3> 
+        <p class="wikiPara"> The ability to somehow declare the Facelets tag attributes as well as the tag name and name space of any Java based custom component using annotations. </p> 
+        <p class="wikiPara"> So something like: </p> 
+        <pre class="wikiPreformatted">@FacesComponent
+@Facelets(name="Foo", name-space="com.bar.kaz/components")
+public class Foo extends UIComponentBase {
+}</pre> 
+        <p class="wikiPara"> With maybe some clever defaults, so you can omit the tag name and then the class name will be used instead. </p> 
+        <h3 class="wikiHeadline3" id="H-ValidationConversion"><a href="FacesModuleHome.html#H-ValidationConversion">Validation/Conversion</a></h3> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Implement ValidatorStateHelper and ConverterStateHelper to make state saving simpler in these behavior classes</li> 
+        </ul> 
+        <h3 class="wikiHeadline3" id="H-ServingAlternateContentTypesInFacelets"><a href="FacesModuleHome.html#H-ServingAlternateContentTypesInFacelets">Serving alternate content types in Facelets</a></h3> 
+        <p class="wikiPara"> Facelets supports setting the Content-type of the response using the contentType attribute of f:view. However, this isn't always enough to get the browser to recognize that it's receiving non-HTML content. It may be necessary to support the Content-disposition as well as described in the forum post <a href="https://community.jboss.org/oldurl/redirect.jspa?sid=1&amp;p1=HowToSetContentTypeHeader" target="" class="regularLink">How to set Content-Type header?</a> This should be easier to accomplish w/ Seam Faces. </p> 
+        <h3 class="wikiHeadline3" id="H-SmartInjectionSupportInComponentsStatusWhiteboard"><a href="FacesModuleHome.html#H-SmartInjectionSupportInComponentsStatusWhiteboard">Smart injection support in components (status: whiteboard)</a></h3> 
+        <p class="wikiPara"> Additionally, some smart injection might be used to inject the dynamic values from the value expressions in the attribute map of the component, which at the same time could be read by the editors to help in content assisting: </p> 
+        <pre class="wikiPreformatted">@FacesComponent
+@Facelets(name-space="com.bar.kaz/components")
+public class Foo extends UIComponentBase {
+
+@Inject
+@Attribute
+String color; // will be injected with getAttributes("color") 
+
+@Inject
+@Attribute(shortDescription="This will determine the ...", required=true)
+String style;
+
+}</pre> 
+        <p class="wikiPara"> </p> 
+       </div>
+       <div id="j_id367" class="documentTags undecoratedLink smallFont">
+        <div id="j_id368">
+          Tags:&nbsp;
+         <a href="https://community.jboss.org/tags?recursive=true#/?tags=Faces">Faces</a>&nbsp;|&nbsp;
+         <a href="https://community.jboss.org/tags?recursive=true#/?tags=JSF">JSF</a>&nbsp;|&nbsp;
+         <a href="https://community.jboss.org/tags?recursive=true#/?tags=Seam+3">Seam 3</a>
+        </div>
+       </div> 
+      </div>
+      <div id="commentDisplayForm"></div> 
+     </div> 
+     <div class="clear" style="padding-top:15px;"></div> 
+    </div>
+   </div> 
+  </div> 
+  <div id="footer" class="undecoratedLink"> 
+   <p> © Copyright 2009, Red Hat Middleware, LLC. All rights reserved. JBoss and Seam are registered trademarks and servicemarks of <a href="http://www.redhat.com/">Red Hat, Inc</a>. [<a href="http://www.redhat.com/legal/privacy_statement.html">Privacy Policy</a>]</p> 
+  </div>
+  <div id="status">
+   <span id="globalStatus"><span id="globalStatus.start" style="display: none">
+     <div id="j_id423" class="statusStart">
+      <img src="../themes/sfwkorg/img/statusindicator.gif" height="25" width="20">
+     </div></span><span id="globalStatus.stop">
+     <div id="j_id425" class="statusStop">
+      <img src="../themes/sfwkorg/img/blank.gif" height="25" width="20">
+     </div></span></span>
+  </div>  
+  <!-- Mirrored from 127.0.0.1:64444/Seam3/FacesModule by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:52:39 GMT --> 
+  <!-- Added by HTTrack -->
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack --> 
+ </body>
+</html>

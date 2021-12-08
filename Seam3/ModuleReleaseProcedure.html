@@ -1,0 +1,906 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <!-- Mirrored from 127.0.0.1:64444/Seam3/ModuleReleaseProcedure by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:54:47 GMT -->
+ <!-- Added by HTTrack -->
+ <head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack -->  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+  <title>Seam Framework - Module Release Procedure</title> 
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/basic_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" rel="stylesheet" type="text/css">
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/extended_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" media="rich-extended-skinning" rel="stylesheet" type="text/css">
+  <script src="../a4j/g/3_3_3.CR1org.ajax4jsf.javascript.AjaxScript" type="text/javascript"></script>
+  <script type="text/javascript">window.RICH_FACES_EXTENDED_SKINNING_ON=true;</script>
+  <script src="../a4j/g/3_3_3.CR1org/richfaces/renderkit/html/scripts/skinning.js" type="text/javascript"></script>
+  <link href="../themes/sfwkorg/css/sfwk.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shCore.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shThemeDefault.css" rel="stylesheet" type="text/css"> 
+  <script type="text/javascript" src="../seam/resource/remoting/resource/remote.js"></script> 
+  <script type="text/javascript" src="../seam/resource/remoting/interface1535.js?httpSessionChecker"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jquery.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jqueryPlugins.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/lacewiki.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shCore.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushBash.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCpp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCSharp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCss.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDelphi.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDiff.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushGroovy.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJava.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJScript.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPhp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPlain.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPython.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushRuby.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushScala.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushSql.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushVb.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushXml.js"></script> 
+  <script type="text/javascript">
+        /* If you really want to load the Flash garbage on every page, go ahead and enable this:
+        SyntaxHighlighter.config.clipboardSwf = '/themes/sfwkorg/js/sh/scripts/clipboard.swf';
+         */
+        SyntaxHighlighter.defaults['gutter'] = false;
+        SyntaxHighlighter.all();
+	</script> 
+  <script type="text/javascript">
+
+        // ###################### Session timeout alert #################################
+
+        var sessionChecker = Seam.Component.getInstance("httpSessionChecker");
+        var timeoutURL = '/Home/JBossSeam';
+        var timeoutMillis = '900'*1000+3000;
+        var sessionTimeoutInterval = null;
+
+        function startSessionTimeoutCheck() {
+            sessionTimeoutInterval = setInterval('sessionChecker.isNewSession(alertTimeout)', timeoutMillis);
+        }
+
+        function stopSessionTimeoutCheck() {
+            if (sessionTimeoutInterval) clearInterval(sessionTimeoutInterval);
+        }
+
+        function resetSessionTimeoutCheck() {
+            if (sessionTimeoutInterval != null) {
+                stopSessionTimeoutCheck();
+                startSessionTimeoutCheck();
+            }
+        }
+
+        function alertTimeout(newSession) {
+            if (newSession) {
+                clearInterval(sessionTimeoutInterval);
+                jQuery(".ajaxSupport")
+                        .removeAttr('onblur')
+                        .removeAttr('onchange')
+                        .removeAttr('onkeyup')
+                        .removeAttr('onclick');
+                jQuery(".sessionEventTrigger").hide();
+                var answer = confirm("Your session has timed out, you will be redirected to the start page.");
+                if (answer) window.location = timeoutURL;
+            }
+        }
+
+        // ###################### Popups #################################
+
+        var fadeInPopupDialog = function(hash) {
+            hash.w.fadeIn('fast',function(){ hash.o.show(); });
+            jQuery(".closeDialog", hash.w).attr("accesskey", "C"); // Dynamically assign accesskey to .closeDialog buttons
+        };
+
+        var fadeOutPopupDialog = function(hash) { hash.w.fadeOut('fast',function(){ hash.o.remove(); }); };
+
+        // ###################### Tabbed Forms #################################
+
+        var formTabErrors = {};
+
+        function formTabRaiseError(tabId, fieldId, message) {
+
+            formTabClearError(tabId, fieldId); // Clear error then re-add
+
+            log("Raise error for tab: '" + tabId + "' field: " + fieldId);
+
+            // Add an error message to the client message box
+            log("Adding error message: " +tabId + fieldId + "ErrorMessage")
+            jQuery("#clientMessageBoxTable").append(
+                '<tr id="' + tabId + fieldId + 'ErrorMessage"><td><img src="/themes/sfwkorg/img/attention.gif" ' +
+                'height="18" width="18" class="clientMessageBoxImage attentionImage"/></td>' +
+                '<td><span id="attentionMessage" class="attentionMessage">'+ message + '</span></td></tr>'
+            );
+            if (formTabErrors[tabId] == null) {
+                formTabErrors[tabId] = 1;
+            } else {
+                formTabErrors[tabId]++;
+            }
+            formTabRenderErrors(tabId);
+        }
+
+        function formTabClearError(tabId, fieldId) {
+            if (document.getElementById(tabId+fieldId+"ErrorMessage") != null) { // This error is displayed
+                log("Clear error for tab: '" + tabId + "' field: " + fieldId);
+                log("Removing error message: " +tabId + fieldId + "ErrorMessage")
+                // Remove the error message on the client message box
+                jQuery("#"+tabId + fieldId + "ErrorMessage").remove();
+
+                formTabErrors[tabId]--;
+                formTabRenderErrors(tabId);
+            }
+        }
+
+        function formTabRenderErrors(tabId) {
+            log("Errors for tab: '" + tabId + "': " + formTabErrors[tabId]);
+
+            if (formTabErrors[tabId] > 0 && document.getElementById(tabId+"InvalidIcon") == null) {
+                log("Showing icon for tab: " + tabId);
+                // Show an icon on the tab and blink it a few times
+                jQuery("#"+tabId)
+                    .prepend('<img id="' + tabId + 'InvalidIcon" ' +
+                            'src="/themes/sfwkorg/img/attention.gif" width="13" height="13" ' +
+                            'alt="!" style="vertical-align:bottom;margin-left:5px;margin-right:5px;"/>');
+                pulsate("#"+tabId);
+            } else if (formTabErrors[tabId] < 1){
+                log("Removing icon of tab: " + tabId);
+                jQuery("#"+tabId + "InvalidIcon").remove();             // Remove the error icon on the tab
+            }
+
+            var tabsHaveErrors = false;
+            for (var tab in formTabErrors) {
+                var numOfErrors = formTabErrors[tab];
+                if (numOfErrors > 0) {
+                    tabsHaveErrors = true;
+                    break;
+                }
+            }
+
+            if (tabsHaveErrors) {
+                log("Hiding save button and showing form message box");
+                jQuery(".saveButton").hide();                       // Hide save button(s)
+                jQuery(".formControls").css("height", "30px");      // Adjust height for missing save button
+                jQuery("#messageBoxContainer").hide();                 // Hide server messages
+                jQuery("#clientMessageBoxContainer").show();           // Show client error messages
+            } else {
+                log("Showing save button and hiding form message box");
+                jQuery(".saveButton").show();                       // Show save button(s)
+                jQuery(".formControls").css("height", "");          // Readjust height for present save button
+                jQuery("#clientMessageBoxContainer").hide();           // Hide client error messages
+            }
+        }
+
+        function formTabClicked() {
+            jQuery("#messageBoxContainer").hide();                 // Hide server messages
+        }
+
+        function log(message) {
+            return; // Remove to enable logging
+            if (!log.window_ || log.window_.closed) {
+                var win = window.open("", null, "width=400,height=200," +
+                                                "scrollbars=yes,resizable=yes,status=no," +
+                                                "location=no,menubar=no,toolbar=no");
+                if (!win) return;
+                var doc = win.document;
+                doc.write("<html><head><title>Debug Log</title></head><body style='font-family: monospace'></body></html>");
+                doc.close();
+                log.window_ = win;
+            }
+            var logLine = log.window_.document.createElement("div");
+            logLine.appendChild(log.window_.document.createTextNode(message));
+            log.window_.document.body.appendChild(logLine);
+        }
+
+        // ###################### Design #################################
+
+        function highlightStars(item, range, end) {
+            for (i = 1; i <= range; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star_grey.gif");
+            }
+            for (i = 1; i <= end; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star.gif");
+            }
+        }
+
+        function pulsate(query) {
+            var blinkCount = 2*2;
+            do {
+                jQuery(query)['fade'+(blinkCount%2==0?'Out':'In')]('fast');
+            } while (--blinkCount);
+        }
+
+        function clearDocumentBackground() {
+            // Noop for this skin
+        }
+
+        // Wrap boxes with border and shadow
+        function wrapBoxes() {
+            // Noop for this skin
+        }
+
+        function initPage() {
+            checkCookieSupport();
+            wrapBoxes();
+        }
+
+        jQuery(function() {
+            initPage();
+        });
+
+    </script> 
+  <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-25106513-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script> 
+ </head> 
+ <body> 
+  <noscript> 
+   <div class="cookieJavaScriptWarning">
+     Please activate JavaScript in your browser. Without it, you will only be able to browse this website but clicking on any advanced feature (any forms or submit buttons) will not work. 
+   </div> 
+  </noscript>
+  <div id="dialogHelp" class="popupDialog">
+   <span id="dialogHelpPopup" title="dialogHelp"></span>
+   <span id="dialogHelpInit"> <script type="text/javascript">
+            function showHelpPopup(width, height, offsetId) {
+                var offset = jQuery("#"+offsetId).offset();
+                jsf('dialogHelpPopup')
+                    .css({width: width+"px", height: height+"px", top: offset.top-100+"px", left: offset.left-150+"px"})
+                    .jqm({
+                        closeClass: "closeDialog",
+                        overlay: 0
+                    });
+
+                jQuery("#dialogHelpContent").css("width", width-20+"px").css("height", height-75+"px");
+                jQuery("#dialogHelpContent").css("overflow", "auto");
+
+                jsf('dialogHelpPopup').jqmShow();
+            }
+        </script></span> 
+   <script type="text/javascript">jQuery(function() {
+        jsf('dialogHelpPopup').Resizable({
+            minTop: 1,
+            dragHandle: "#dialogHelpHead",
+            handlers: { se: "#dialogHelpResizeHandle" }
+        });
+    });</script> 
+   <div class="popupDialogHead" id="dialogHelpHead">
+    Help
+   </div>
+   <div id="dialogHelpContent" class="popupDialogContent"></div>
+   <div id="dialogHelpControls" class="popupDialogControls">
+    <div id="j_id14" style="padding:5px;">
+     <a href="#" class="buttonNonpersistent closeDialog"><span class="buttonLabel">Close Help</span></a>
+    </div>
+   </div>
+  </div> 
+  <div id="wrapper"> 
+   <div id="header">  
+    <div>
+     <a href="http://seamframework.org/"><img src="../themes/sfwkorg/img/blank.gif" height="98" width="210"></a> 
+    </div> 
+   </div>
+   <div id="body"> 
+    <div id="container"> 
+     <div id="leftColumn">
+      <div id="mainMenu" xmlns="http://www.w3.org/1999/xhtml">
+       <div id="j_id121" class="box">
+        <div class="mainMenuContainer"> 
+         <div class="mainMenuHeader"></div> 
+         <div class="mainMenuBody">
+          <div id="j_id125" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Home.html" class="level1Link">Home</a>
+          </div>
+          <div id="j_id132" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Home/WhySeam.html" class="level2Link">Why Seam?</a>
+          </div>
+          <div id="j_id139" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Seam2.html" class="level1Link">Seam 2</a>
+          </div>
+          <div id="j_id146" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/GettingStarted.html" class="level2Link">Getting Started</a>
+          </div>
+          <div id="j_id153" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Downloads.html" class="level2Link">Downloads</a>
+          </div>
+          <div id="j_id160" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Documentation.html" class="level2Link">Documentation</a>
+          </div>
+          <div id="j_id167" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="http://weld.cdi-spec.org/" class="level1Link">Weld</a>
+          </div>
+          <div id="j_id174" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Community.html" class="level1Link">Community</a>
+          </div>
+          <div id="j_id181" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="https://community.jboss.org/" class="level2Link">Forums</a>
+          </div>
+          <div id="j_id188" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/CDIExtensions.html" class="level2Link">CDI Extensions</a>
+          </div>
+          <div id="j_id195" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Contribute.html" class="level2Link">Contribute</a>
+          </div>
+          <div id="j_id202" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/JIRA.html" class="level2Link">JIRA</a>
+          </div>
+          <div id="j_id209" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/MailingLists.html" class="level2Link">Mailing Lists</a>
+          </div>
+          <div id="j_id216" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Events.html" class="level2Link">Events</a>
+          </div>
+          <div id="j_id223" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Links.html" class="level2Link">Links</a>
+          </div>
+          <div id="j_id230" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/SeamInProduction.html" class="level2Link">Seam In Production</a>
+          </div>
+          <div id="j_id237" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Documentation.html" class="level1Link">Documentation</a>
+          </div>
+          <div id="j_id244" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Documentation/FAQs.html" class="level2Link">FAQs</a>
+          </div>
+          <div id="j_id251" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Documentation/KnowledgeBase.html" class="level2Link">Knowledge Base</a>
+          </div>
+          <div id="j_id258" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Documentation/Design.html" class="level2Link">Design</a>
+          </div> 
+         </div> 
+         <div class="mainMenuFooter"></div> 
+        </div>
+       </div> 
+      </div> 
+      <br> 
+      <div style="margin-top: 25px; margin-left: 15px; margin-right: 15px; "> 
+       <h2>Built with Seam</h2> 
+       <p> You can find the full source code for this website in the <a href="/Download.html">Seam package</a> in the directory /examples/wiki. It is licensed under the LGPL. </p> 
+       <div style="text-align:center;">
+        <a href="/Community/GetASeamIcon.html"><img src="../themes/sfwkorg/img/runningon_seamlogo_beige.gif" height="50" width="200"></a> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="rightColumn">
+      <img src="../themes/sfwkorg/img/blank.gif" height="8" width="1">
+      <div id="breadcrumb" class="breadcrumb">
+       <span class="breadcrumbPanel"><a href="../index.html" class="itemLink breadcrumbRoot">Site</a><span class="itemSeparator breadcrumbRoot">·</span><a href="../Seam3.html" class="itemLink">Seam 3</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="ModuleHandbook.html" class="itemLink">Module Handbook</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="ModuleReleaseProcedure.html" class="itemText">Module Release Procedure</a></span>
+      </div>
+      <div id="messageBoxContainer"></div>
+      <div id="clientMessageBoxContainer" style="display:none;"> 
+       <div id="clientMessageBox" class="messageBox"> 
+        <table id="clientMessageBoxTable" class="messageBoxTable" cellpadding="0" cellspacing="0" border="0"></table> 
+        <script type="text/javascript">jQuery(function() {
+                    jQuery("#clientMessageBoxContainer").css("margin-top", "10px").css("margin-bottom", "10px");
+                    pulsate(".clientMessageBoxImage");
+                });</script> 
+       </div>
+      </div> 
+      <div id="documentDisplayContainer" class="box">
+       <div id="documentDisplay" class="documentDisplay">
+        <div id="j_id362"> 
+         <h1 class="documentTitle"><a href="ModuleReleaseProcedure.html">Module Release Procedure</a> </h1>
+        </div>
+        <p class="wikiPara"> This document describes (in frightening detail) the release procedure for releasing an individual Seam module and provides a checklist of steps that must be completed for a successful release. </p> 
+        <p class="wikiPara"> Let's begin with that checklist: </p> 
+        <ol class="wikiOrderedList"> 
+         <li class="wikiOrderedListItem"> <a href="ModuleReleaseProcedure.html#H-SCMRepositoryDefinition" target="" class="regularLink">Check your SCM repository definition</a></li> 
+         <li class="wikiOrderedListItem"> <a href="ModuleReleaseProcedure.html#H-CheckYourDependencies" target="" class="regularLink">Ensure all dependencies are released</a></li> 
+         <li class="wikiOrderedListItem"> <a href="ModuleReleaseProcedure.html#H-GetLicensed" target="" class="regularLink">Get licensed</a></li> 
+         <li class="wikiOrderedListItem"> <a href="ModuleReleaseProcedure.html#H-CoordinateWithQE" target="" class="regularLink">Coordinate with QE to have your release tested</a> (CR and Final releases only)</li> 
+         <li class="wikiOrderedListItem"> <a href="ModuleReleaseProcedure.html#H-SelectAVersion" target="" class="regularLink">Select a version that adheres to the version guidelines</a></li> 
+         <li class="wikiOrderedListItem"> If this is your first time releasing, <a href="ModuleReleaseProcedure.html#H-GettingSetupOnJBossNexus" target="" class="regularLink">get setup on JBoss Nexus</a></li> 
+         <li class="wikiOrderedListItem"> <a href="ModuleReleaseProcedure.html#H-DrivingTheReleaseWithMaven" target="" class="regularLink">Prepare, tag and publish the release with Maven</a></li> 
+         <li class="wikiOrderedListItem"> <a href="ModuleReleaseProcedure.html#H-BuildingTheDistribution" target="" class="regularLink">Build and publish the distribution</a></li> 
+         <li class="wikiOrderedListItem"> <a href="ModuleReleaseProcedure.html#H-UploadingTheDocumentation" target="" class="regularLink">Upload the documentation</a> (will need to be done by a Red Hat employee)</li> 
+         <li class="wikiOrderedListItem"> <a href="ModuleReleaseProcedure.html#H-AddingTheReleaseToSfwkorg" target="" class="regularLink">Add the release to sfwk.org</a></li> 
+         <li class="wikiOrderedListItem"> <a href="ModuleReleaseProcedure.html#H-ReleasingTheJIRAProject" target="" class="regularLink">Release the project in JIRA</a></li> 
+         <li class="wikiOrderedListItem"> <a href="ModuleReleaseProcedure.html#H-VersionReview" target="" class="regularLink">Version review</a></li> 
+         <li class="wikiOrderedListItem"> <a href="ModuleReleaseProcedure.html#H-AnnouncingTheRelease" target="" class="regularLink">Announce the release on the blog and forums</a></li> 
+        </ol> 
+        <p class="wikiPara"> If someone would like to create a script for automating this work, we'll send you some Seam (or other JBoss) <a href="http://www.cafepress.com/jbossorg/6726696" target="" class="regularLink">swag</a>. </p> 
+        <h2 class="wikiHeadline2" id="H-SCMRepositoryDefinition"><a href="ModuleReleaseProcedure.html#H-SCMRepositoryDefinition">SCM repository definition</a></h2> 
+        <p class="wikiPara"> You should have only <strong>one</strong> SCM repository definition, and it should be in the pom.xml at the root of your module (you module's parent). The definition should have both connection and developerConnection elements: (replace {module} with the name of your module in the following sample): </p> 
+        <pre class="wikiPreformatted">&lt;scm&gt;
+   &lt;connection&gt;scm:git:git://github.com/seam/{module}.git&lt;/connection&gt;
+   &lt;developerConnection&gt;scm:git:git@github.com:seam/{module}.git&lt;/developerConnection&gt;
+   &lt;url&gt;http://github.com/seam/{module}&lt;/url&gt;
+&lt;/scm&gt;</pre> 
+        <p class="wikiPara"> If that's not there, things will fail later. Let's go for success. </p> 
+        <h2 class="wikiHeadline2" id="H-CheckYourDependencies"><a href="ModuleReleaseProcedure.html#H-CheckYourDependencies">Check your dependencies!</a></h2> 
+        <p class="wikiPara"> Maven is strict about ensuring that all dependencies are non-snapshot before starting the release, <i class="wikiEmphasis">which is not a bad thing!</i> Also verify that all your dependencies are available in central. </p> 
+        <p class="wikiPara"> You can go the long way and check out your project on another computer and have Maven resolve dependencies using a temporary repository location: </p> 
+        <pre class="wikiPreformatted">mvn dependency:resolve -Dmaven.repo.local=/tmp/repository</pre> 
+        <p class="wikiPara"> That command will bail if you were relying on dependencies that are not available in one of the remote repositories used by your module. The Maven release command, described below, will also tell you. If you do, we'll see you back here in a bit ;) </p> 
+        <h2 class="wikiHeadline2" id="H-GetLicensed"><a href="ModuleReleaseProcedure.html#H-GetLicensed">Get licensed!</a></h2> 
+        <p class="wikiPara"> Make sure you have a license on all your source files. Copy/paste it from this page: </p> 
+        <p class="wikiPara"> <a href="../Community/SeamLicensing.html" target="" class="regularLink">Seam Licensing</a> </p> 
+        <p class="wikiPara"> Also, make sure you don't have any improperly licensed material in your source tree. This should be obvious point, but we'll say it anyway. </p> 
+        <h2 class="wikiHeadline2" id="H-CoordinateWithQE"><a href="ModuleReleaseProcedure.html#H-CoordinateWithQE">Coordinate with QE</a></h2> 
+        <p class="wikiPara"> Seam is unique in that we have a dedicated <a href="QEAndEnterprisePlatformTeams.html" target="" class="regularLink">QE team</a> to help ensure the software is dependable when released. This guarantee will improve over time, as QE understands your module better, you have more tests and examples with tests and QE has helped you setup acceptance tests on your module. So please, <a href="QEAndEnterprisePlatformTeams.html" target="" class="regularLink">coordinate with QE</a> in advance of making a final release of your module (not a requirement for Alpha and Beta releases). </p> 
+        <h2 class="wikiHeadline2" id="H-SelectAVersion"><a href="ModuleReleaseProcedure.html#H-SelectAVersion">Select a version</a></h2> 
+        <p class="wikiPara"> Module versions should align with the <a href="http://community.jboss.org/wiki/JBossProjectVersioning" target="" class="regularLink">JBoss Project Versioning Guidelines</a>. As a rule though, we should follow this naming convention for qualifiers: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <i class="wikiEmphasis">Alpha[n]</i> for alpha releases</li> 
+         <li class="wikiUnorderedListItem"> <i class="wikiEmphasis">Beta[n]</i> for beta releases</li> 
+         <li class="wikiUnorderedListItem"> <i class="wikiEmphasis">CR[n]</i> for candidate releases</li> 
+         <li class="wikiUnorderedListItem"> <i class="wikiEmphasis">Final</i> for production releases</li> 
+        </ul> 
+        <p class="wikiPara"> Some examples: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Seam Faces 3.0.0.Beta1</li> 
+         <li class="wikiUnorderedListItem"> Seam Security 3.0.1.CR2</li> 
+         <li class="wikiUnorderedListItem"> Seam Faces 3.0.1.Final</li> 
+        </ul> 
+        <h4 class="wikiHeadline4" id="H-Maven"><a href="ModuleReleaseProcedure.html#H-Maven">Maven</a></h4> 
+        <p class="wikiPara"> Version numbers in Maven should follow the format: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <i class="wikiEmphasis">major.minor.micro.qualifier</i> (e.g., <i class="wikiEmphasis">3.0.1.Beta1</i>)</li> 
+        </ul> 
+        <p class="wikiPara"> Snapshots should use a qualifier of <i class="wikiEmphasis">SNAPSHOT</i> for releases (e.g., <i class="wikiEmphasis">3.1.0-SNAPSHOT</i>). </p> 
+        <blockquote class="wikiBlockquote"> 
+         <strong>NOTE</strong>
+         <br>
+         <br>We've changed from using a hypen (-) before the qualifier to using a dot (.) to comply with the aforementioned JBoss Project Versioning Guidelines. 
+        </blockquote> 
+        <h2 class="wikiHeadline2" id="H-GettingSetupOnJBossNexus"><a href="ModuleReleaseProcedure.html#H-GettingSetupOnJBossNexus">Getting setup on JBoss Nexus</a></h2> 
+        <p class="wikiPara"> Seam releases and snapshots will be uploaded to the <a href="http://community.jboss.org/wiki/MavenRepository" target="" class="regularLink">JBoss Nexus releases and snapshots repositories</a>, respectively. and snapshots will be uploaded to the JBoss Nexus snapshots repository. Artifacts don't go directly to into the repository, however. They first get staged through Nexus and then get synced to the repository after a manual publishing step using a web interface. </p> 
+        <blockquote class="wikiBlockquote"> 
+         <strong>NOTE</strong>
+         <br>
+         <br>We originally planned to publish releases into Maven central, but it became an uphill battle for us to persuade all the dependent projects to publish their artifacts there. Besides, in the end, we believe the JBoss repository is going to be a better resource for our users anyway. 
+        </blockquote> 
+        <h4 class="wikiHeadline4" id="H-RepositoryConfiguration"><a href="ModuleReleaseProcedure.html#H-RepositoryConfiguration">Repository configuration</a></h4> 
+        <p class="wikiPara"> Both of the JBoss Nexus repositories (staging and snapshots) are configured in the Weld parent project POM (<tt>org.jboss.weld:weld-parent</tt>), which is inherited by the Seam parent POM (svn folder: build/parent/pom.xml, artifact: <tt>org.jboss.seam:seam-parent</tt>): </p> 
+        <pre class="wikiPreformatted">&lt;distributionManagement&gt;
+   &lt;repository&gt;
+      &lt;id&gt;jboss-releases-repository&lt;/id&gt;
+      &lt;name&gt;JBoss Releases Repository&lt;/name&gt;
+      &lt;url&gt;https://repository.jboss.org/nexus/service/local/staging/deploy/maven2&lt;/url&gt;
+   &lt;/repository&gt;
+   &lt;snapshotRepository&gt;
+      &lt;id&gt;jboss-snapshots-repository&lt;/id&gt;
+      &lt;name&gt;JBoss Snapshots Repository&lt;/name&gt;
+      &lt;url&gt;https://repository.jboss.org/nexus/content/repositories/snapshots&lt;/url&gt;
+   &lt;/snapshotRepository&gt;
+&lt;/distributionManagement&gt;</pre> 
+        <p class="wikiPara"> Your module doesn't need any extra configuration. Just by using Seam parent as your module's parent POM you inherit this configuration. </p> 
+        <h4 class="wikiHeadline4" id="H-SettingYourselfUpAsAReleaseEngineer"><a href="ModuleReleaseProcedure.html#H-SettingYourselfUpAsAReleaseEngineer">Setting yourself up as a release engineer</a></h4> 
+        <p class="wikiPara"> To be a release engineer, you first need to follow these steps: </p> 
+        <ol class="wikiOrderedList"> 
+         <li class="wikiOrderedListItem"> Create an account on <a href="http://jboss.org/" target="" class="regularLink">http://jboss.org</a></li> 
+         <li class="wikiOrderedListItem"> Request access on the seam-dev mailinglist (Please provide your jboss username)</li> 
+         <li class="wikiOrderedListItem"> A project team member email Paul Gier, or create a helpdesk ticket, and someone from the JBoss.org team will add you as a release engineer</li> 
+        </ol> 
+        <p class="wikiPara"> Then, you need to add your credentials to your ~/.m2/settings.xml file, as follows: </p> 
+        <pre class="wikiPreformatted">&lt;settings xmlns="http://maven.apache.org/POM/4.0.0"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd"&gt;
+   &lt;servers&gt;
+      &lt;server&gt;
+         &lt;id&gt;jboss-releases-repository&lt;/id&gt;
+         &lt;username&gt;[jboss username]&lt;/username&gt;
+         &lt;password&gt;[jboss password]&lt;/password&gt;
+      &lt;/server&gt;
+      &lt;server&gt;
+         &lt;id&gt;jboss-snapshots-repository&lt;/id&gt;
+         &lt;username&gt;[jboss username]&lt;/username&gt;
+         &lt;password&gt;[jboss password]&lt;/password&gt;
+      &lt;/server&gt;
+   &lt;/servers&gt;
+&lt;/settings&gt;</pre> 
+        <p class="wikiPara"> The server id matches the JBoss Nexus repositories defined in the Weld parent POM (which is inherited by the Seam parent POM). </p> 
+        <p class="wikiPara"> You'll also need to have <a href="http://www.gnupg.org/" target="" class="regularLink">GnuPG</a> set up on your machine and a published gpg key. GnuPG stands for GNU Privacy Guard and is used to used to encrypt data and to create digital signatures. </p> 
+        <p class="wikiPara"> If you've never created a GPG key (or lost the passphrase to the one you have), you'll need to create one and publish it. You can either follow the <a href="http://www.dewinter.com/gnupg_howto/english/GPGMiniHowto-3.html" target="" class="regularLink">official guide</a> or this cheat sheet: </p> 
+        <ol class="wikiOrderedList"> 
+         <li class="wikiOrderedListItem"> Generate a key pair:<br><pre class="wikiPreformatted">gpg --gen-key</pre> - Use the default key type (DSA and Elgamal)<br>- Choose the keysize 2048<br>- Set the key to not expire<br>- Enter your official name (for trust)<br>- Enter an e-mail address you will always have<br>- Choose a strong passphrase (and write it down!)<br><br></li> 
+         <li class="wikiOrderedListItem"> Determine your key id (<tt>YOUR_KEY_ID</tt>)<br><pre class="wikiPreformatted">gpg --list-secret-keys</pre> - Your key id is the alphanum value after the slash in the line that begins with <tt>sec</tt><br>- Here's a script that will print just the key id<br><pre class="wikiPreformatted">gpg --list-secret-keys | grep '^sec' | sed 's/sec \+.*\/\([^ ]\+\).*/\1/'</pre> </li> 
+         <li class="wikiOrderedListItem"> Publish the key:<br><pre class="wikiPreformatted">gpg --keyserver pgp.mit.edu --send-key YOUR_KEY_ID</pre> </li> 
+        </ol> 
+        <p class="wikiPara"> After you publish the key, you can search for it in the <a href="http://pgp.mit.edu:11371/" target="" class="regularLink">web search interface</a>. </p> 
+        <p class="wikiPara"> Now, you need to tell the build about your GPG key. Add this profile to ~/.m2/settings.xml and the Nexus plugin: </p> 
+        <pre class="wikiPreformatted">&lt;settings xmlns="http://maven.apache.org/POM/4.0.0"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd"&gt;
+   &lt;servers&gt;
+      ...
+   &lt;/servers&gt;
+   &lt;profiles&gt;
+      &lt;profile&gt;
+         &lt;id&gt;release&lt;/id&gt;
+         &lt;activation&gt;
+            &lt;property&gt;
+               &lt;name&gt;release&lt;/name&gt;
+            &lt;/property&gt;
+         &lt;/activation&gt;
+         &lt;properties&gt;
+            &lt;gpg.passphrase&gt;[gpg passphrase]&lt;/gpg.passphrase&gt;
+         &lt;/properties&gt;
+      &lt;/profile&gt;
+   &lt;/profiles&gt;
+   &lt;pluginGroups&gt;
+      &lt;pluginGroup&gt;org.sonatype.plugins&lt;/pluginGroup&gt;
+   &lt;/pluginGroups&gt;
+&lt;/settings&gt;</pre> 
+        <p class="wikiPara"> Now you are a Seam 3 release engineer! Give yourself a pat on the shoulder. We will too, when it's time for you to release ;) </p> 
+        <h2 class="wikiHeadline2" id="H-DrivingTheReleaseWithMaven"><a href="ModuleReleaseProcedure.html#H-DrivingTheReleaseWithMaven">Driving the release with Maven</a></h2> 
+        <p class="wikiPara"> Maven will release so you don't have to. Well, you have to run the Maven goals. The <a href="http://maven.apache.org/plugins/maven-release-plugin/" target="" class="regularLink">Maven release plugin</a> will update the version numbers in your POMs, execute the necessary git commands to create the git tag, publish the artifacts to a Nexus staging repository. The Nexus plugin will then close the staging repository in releasing for releasing. The release is a manual step that you will perform using the web-based Nexus UI (so you don't have to worry that you'll accidentally publish without knowing about it). </p> 
+        <p class="wikiPara"> Before running any maven commands make sure you create a release branch (as documented at <a href="http://nvie.com/posts/a-successful-git-branching-model/" target="" class="regularLink">http://nvie.com/posts/a-successful-git-branching-model/</a>). We highly recommend using <a href="https://github.com/nvie/gitflow/downloads" target="" class="regularLink">git flow</a> to do this: </p> 
+        <pre class="wikiPreformatted">git flow release start &lt;release name&gt;</pre> 
+        <p class="wikiPara"> but if not the previous link has information about creating a release branch. What this is doing is creating another branch from develop that will contain any release changes such as maven updates, last minute fixes, etc. It will later be merged to master and also develop. </p> 
+        <p class="wikiPara"> Make sure maven does all of it's work on the release branch. </p> 
+        <h4 class="wikiHeadline4" id="H-DryRun"><a href="ModuleReleaseProcedure.html#H-DryRun">Dry run</a></h4> 
+        <p class="wikiPara"> First, you start with a dry run. This will only perform local changes. It will not touch git (replacing m with the micro version, Q with the qualifier of the release and R with the qualifier of the next anticipated release): </p> 
+        <pre class="wikiPreformatted">mvn release:prepare --batch-mode -Drelease -DdevelopmentVersion=3.0.m.R-SNAPSHOT -DreleaseVersion=3.0.m.Q -Dtag=3.0.m.Q -DdryRun</pre> 
+        <p class="wikiPara"> This command assumes you have a 3.0.m-SNAPSHOT. Replace the m with the micro version (e.g., 0, 1, 2, etc) and Q with the version qualifier of the release (e.g., Alpha1, Beta2, Final, etc). </p> 
+        <p class="wikiPara"> Preparing a release goes through the following release phases: </p> 
+        <ol class="wikiOrderedList"> 
+         <li class="wikiOrderedListItem"> Check that there are no uncommitted changes in the sources</li> 
+         <li class="wikiOrderedListItem"> Check that there are no SNAPSHOT dependencies</li> 
+         <li class="wikiOrderedListItem"> Change the version in the POMs from -SNAPSHOT to a new version</li> 
+         <li class="wikiOrderedListItem"> Run the project tests against the modified POMs to confirm everything is in working order</li> 
+         <li class="wikiOrderedListItem"> Commit the modified POMs</li> 
+         <li class="wikiOrderedListItem"> Tag the code in the SCM with a version name</li> 
+         <li class="wikiOrderedListItem"> Bump the version in the POMs to a new value -SNAPSHOT</li> 
+         <li class="wikiOrderedListItem"> Commit the modified POMs</li> 
+        </ol> 
+        <p class="wikiPara"> If you have unreleased dependencies, the command will abort. If it succeeds, you will see output like this: </p> 
+        <pre class="wikiPreformatted">[INFO] Full run would be tagging /home/dallen/projects/seam/upstream/faces with label: '3.0.0.Alpha1'
+[INFO] Transforming 'Seam Faces Module'...
+[INFO] Not removing release POMs
+[INFO] Full run would be checking in 1 files with message: '[maven-release-plugin] prepare for next development iteration'
+[INFO] Release preparation simulation complete.
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] ------------------------------------------------------------------------</pre> 
+        <p class="wikiPara"> If you see that, you are good to go. </p> 
+        <h4 class="wikiHeadline4" id="H-Tag"><a href="ModuleReleaseProcedure.html#H-Tag">Tag</a></h4> 
+        <p class="wikiPara"> Now you are ready to tag the release. Run the command for real this time (replacing m with the micro version, Q with the qualifier of the release and R with the qualifier of the next anticipated release, as before): </p> 
+        <pre class="wikiPreformatted">mvn release:prepare --batch-mode -Drelease -DdevelopmentVersion=3.0.m.R-SNAPSHOT -DreleaseVersion=3.0.m.Q -Dtag=3.0.m.Q -Dresume=false</pre> 
+        <p class="wikiPara"> Once this finishes, verify that the tag appears in git (e.g. use a <a href="http://github.com/seam" target="" class="regularLink">browser</a>). </p> 
+        <h4 class="wikiHeadline4" id="H-IfYouveMadeAMistake"><a href="ModuleReleaseProcedure.html#H-IfYouveMadeAMistake">If you've made a mistake</a></h4> 
+        <p class="wikiPara"> If you make a mistake during release (or decide to back out and have a drink instead), you can easily undo this mistake using the following command: </p> 
+        <pre class="wikiPreformatted">mvn release:rollback -Drelease</pre> 
+        <p class="wikiPara"> If that doesn't work, clean up manually: </p> 
+        <pre class="wikiPreformatted">git checkout -- pom.xml
+rm -f release.properties</pre> 
+        <p class="wikiPara"> The rollback goal won't remove any created tag, or work for undoing a branch, so you have to delete those manually using git. For example: </p> 
+        <pre class="wikiPreformatted">git push origin :3.0.m.Q</pre> 
+        <h4 class="wikiHeadline4" id="H-ReleaseToNexus"><a href="ModuleReleaseProcedure.html#H-ReleaseToNexus">Release to Nexus</a></h4> 
+        <p class="wikiPara"> You are all tagged and now it is time to publish. You'll be using a combination of the Maven release plugin and the Nexus plugin to publish the artifacts. The Nexus plugin pushes the artifacts to a JBoss Nexus staging repository. From there, you'll use a web UI to publish the artifacts to the real JBoss Nexus repository. </p> 
+        <p class="wikiPara"> Begin the publishing process by finalizing the release and pushing the artifacts to a staging repository using the Nexus staging plugin. Replace the tokens in the description according to the module name and release number. The description is optional, though it help you identify the staging repository in the Nexus UI. </p> 
+        <pre class="wikiPreformatted">mvn release:perform nexus:staging-close -Drelease</pre> 
+        <p class="wikiPara"> The command should exit giving you the URL to the staging repository. </p> 
+        <pre class="wikiPreformatted INFO] [nexus:staging-close">[INFO] Using authentication information for server: 'jboss-releases-repository'.
+[INFO] Logging into Nexus: https://repository.jboss.org/nexus
+[INFO] User: [jboss username]
+[INFO] Using the only staged repository available: jboss_release_staging_profile-049
+[INFO] Closing staging repository for: 'org.jboss.seam.faces:seam-faces-parent:3.0.0-SNAPSHOT
+
+-  jboss_release_staging_profile-049 (profile: JBoss Release Staging Profile)
+   URL: https://repository.jboss.org/nexus/content/repositories/jboss_release_staging_profile-049
+
+[INFO] The following CLOSED staging repositories were found for: 'org.jboss.seam.faces:seam-faces-parent:3.0.0-SNAPSHOT':
+
+-  jboss_release_staging_profile-049 (profile: JBoss Release Staging Profile)
+   URL: https://repository.jboss.org/nexus/content/repositories/jboss_release_staging_profile-049
+
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] ------------------------------------------------------------------------</pre> 
+        <p class="wikiPara"> (Never mind the -SNAPSHOT references. You didn't mess it up, it just doesn't report the version correctly). </p> 
+        <p class="wikiPara"> Now visit the URL that Nexus reported to you as closed and verify that the artifacts you are expecting to release appear there in the typical Maven structure. If that URL returns 404 or your artifacts aren't there, then something went wrong. </p> 
+        <p class="wikiPara"> You'll also get an e-mail from Nexus notifying you that the artifacts were staged. </p> 
+        <p class="wikiPara"> Once this is done you can safely finish the release branch using </p> 
+        <pre class="wikiPreformatted">git flow release finish &lt;release name&gt;</pre> 
+        <p class="wikiPara"> and push to GitHub. The above command will merge the release branch to master and also develop. The branch will then be deleted locally, you should also remote it from origin: </p> 
+        <pre class="wikiPreformatted">git push origin master develop :release/&lt;release name&gt;</pre> 
+        <h4 class="wikiHeadline4" id="H-TryItOutOptional"><a href="ModuleReleaseProcedure.html#H-TryItOutOptional">Try it out (optional)</a></h4> 
+        <p class="wikiPara"> Before you push to the JBoss Community repository for all of eternity, you may want to verify your artifacts from the standpoint of a consumer (or you may <a href="http://seamframework.org/Seam3/QEAndEnterprisePlatformTeams#H-WorkingWithQE" target="" class="regularLink">ask QE team</a> to do so). This is easy to do. First, note the URL that Nexus reported to you when you staged the artifacts. Add the following profile to your $HOME/.m2/settings.xml file and reference that URL: </p> 
+        <pre class="wikiPreformatted">   &lt;profiles&gt;
+      ...
+      &lt;profile&gt;
+         &lt;id&gt;jboss-staging&lt;/id&gt;
+         &lt;repositories&gt;
+            &lt;repository&gt;
+               &lt;id&gt;jboss-staging&lt;/id&gt;
+               &lt;releases&gt;
+                  &lt;enabled/&gt;
+               &lt;/releases&gt;
+               &lt;url&gt;https://repository.jboss.org/nexus/content/repositories/jboss_release_staging_profile-XXX&lt;/url&gt;
+            &lt;/repository&gt;
+         &lt;/repositories&gt;
+      &lt;/profile&gt;
+   &lt;/profiles&gt;
+   &lt;activeProfiles&gt;
+      ...
+      &lt;activeProfile&gt;jboss-staging&lt;/activeProfile&gt;
+   &lt;/activeProfiles&gt;</pre> 
+        <blockquote class="wikiBlockquote"> 
+         <b>NOTE</b>
+         <br>
+         <br>If you are using the JBoss developer configuration, make sure that you negate the jboss-staging repository in the mirrorOf element: 
+         <pre class="wikiPreformatted">&lt;mirrorOf&gt;*,!jboss-deprecated,!jboss-staging&lt;/mirrorOf&gt;</pre> 
+        </blockquote> 
+        <p class="wikiPara"> Clear out your module's artifacts from your local repository: </p> 
+        <pre class="wikiPreformatted">rm -Rf $HOME/.m2/repository/org/jboss/seam/{module}</pre> 
+        <p class="wikiPara"> Now, go into a project that references your module and force Maven to pull it from the staging repository: </p> 
+        <pre class="wikiPreformatted">mvn dependency:resolve</pre> 
+        <p class="wikiPara"> You can also just create an example web application that uses your module, or anything that gets Maven to resolve it. Now you can inspect your local repository and make sure it fetched the right artifacts. </p> 
+        <p class="wikiPara"> If everything looks good... </p> 
+        <h4 class="wikiHeadline4" id="H-MakeItOfficial"><a href="ModuleReleaseProcedure.html#H-MakeItOfficial">Make it official!</a></h4> 
+        <p class="wikiPara"> While you published your artifacts, <i class="wikiEmphasis">they won't get automatically synced to the JBoss Community repository without a nod from you</i>. You give the nod by promoting the staged artifacts through the Nexus web interface. Follow these steps to kick off the promotion: </p> 
+        <ol class="wikiOrderedList"> 
+         <li class="wikiOrderedListItem"> Login to <a href="http://repository.jboss.org/nexus" target="" class="regularLink">http://repository.jboss.org/nexus</a></li> 
+         <li class="wikiOrderedListItem"> Click on Staging Repositories link in the left hand navigation</li> 
+         <li class="wikiOrderedListItem"> Look for the staging activity with your username in the repository name with a status <q>closed</q></li> 
+         <li class="wikiOrderedListItem"> Check the row and click <q>Release</q> or <q>Drop</q><br>- Release will begin a sync to the repository (<i class="wikiEmphasis">Release is forever!</i>)<br>- Drop will discard the staging repository and you will have to release to Nexus again to get it back</li> 
+        </ol> 
+        <p class="wikiPara"> When you click on Release, you will be prompted to enter a description. The description is optional. Just click <q>Release</q> (if you really mean it). </p> 
+        <p class="wikiPara"> Now go have another drink (or chocolate) and check in a couple hours to verify the artifacts made it to the <a href="http://repository.jboss.org/nexus/content/groups/public" target="" class="regularLink">JBoss releases repository</a>. Also look for an e-mail from Nexus notifying you that the artifacts were promoted. </p> 
+        <p class="wikiPara"> If the tag has already been pushed to github you can use this to release from the tag on github: </p> 
+        <pre class="wikiPreformatted">release:perform nexus:staging-close -Drelease -Dtag=3.1.0.Beta1 -DconnectionUrl=scm:git:&lt;git connection&gt;</pre> 
+        <p class="wikiPara"> Typically the git connection is in the form of <tt>git://github.com/seam/module_name.git</tt> </p> 
+        <h2 class="wikiHeadline2" id="H-BuildingTheDistribution"><a href="ModuleReleaseProcedure.html#H-BuildingTheDistribution">Building the distribution</a></h2> 
+        <p class="wikiPara"> We provide zip distributions of each Seam 3 module on SourceForge, in the <a href="http://sf.net/projects/jboss" target="" class="regularLink">JBoss project</a>. A release can be performed by any member of a project team, not just Red Hat employees. However, you will need to have the <q>Release Technician</q> in the JBoss SourceForge project. To request the <q>Release Technician</q> role, email <a href="mailto:help.AT.jboss.org" target="" class="regularLink">mailto:help.AT.jboss.org</a>. </p> 
+        <p class="wikiPara"> To create a Seam 3 module distribution, <strong>switch to the tag you just created</strong> and install it. </p> 
+        <pre class="wikiPreformatted">git checkout 3.0.m.Q</pre> 
+        <p class="wikiPara"> Then, from the root directory of the module, run: </p> 
+        <pre class="wikiPreformatted">mvn clean install -Drelease</pre> 
+        <p class="wikiPara"> That will generate the distribution zip file. You then need to follow the instructions on the <a href="http://sourceforge.net/apps/trac/sourceforge/wiki/Release%20files%20for%20download" target="" class="regularLink">Release files for download</a> page to upload the zip. You should put the zip in the Seam/{Module short name}/{version} directory, where {Module short name} is the capitalized short name of the module (no spaces) and {version} is the version of the release. (For example, Seam/Faces/3.0.0.Alpha1 and Seam/Security/3.0.0.Beta1) </p> 
+        <p class="wikiPara"> You'll need to wait up to an hour while SourceForge replicates the file. Check back to the <a href="http://sourceforge.net/projects/jboss/files/Seam" target="" class="regularLink">main file download page</a> to see if the file is available. </p> 
+        <h2 class="wikiHeadline2" id="H-UploadingTheDocumentation"><a href="ModuleReleaseProcedure.html#H-UploadingTheDocumentation">Uploading the documentation</a></h2> 
+        <p class="wikiPara"> The documentation for Seam 3 modules consists of the reference guide and the API docs (e.g., JavaDoc) and is organized by module under the following URL: </p> 
+        <p class="wikiPara"> <a href="http://docs.jboss.org/seam/3" target="" class="regularLink">http://docs.jboss.org/seam/3</a> </p> 
+        <p class="wikiPara"> The files under the <tt>3</tt> directory should match the following structure: </p> 
+        <pre class="wikiPreformatted">3
+|-- moduleA
+|   |-- 3.0.0.Beta1
+|   |   |-- api
+|   |   \-- reference
+|   |       \-- en-US
+|   |           |-- html
+|   |           |-- html_single
+|   |           \-- pdf
+|   |-- ...
+|   |-- 3.0.0.Final
+|   |   |-- api
+|   |   \-- reference
+|   |       \-- en-US
+|   |           |-- html
+|   |           |-- html_single
+|   |           \-- pdf
+|   |-- latest -&gt; 3.0.0.Final
+|   \-- snapshot
+|       |-- api
+|       \-- reference
+|           \-- en-US
+|               |-- html
+|               |-- html_single
+|               \-- pdf
+\-- moduleB
+    |-- 3.0.0.Alpha1
+    |   |-- api
+    |   \-- reference
+    |       \-- en-US
+    |           |-- html
+    |           |-- html_single
+    |           \-- pdf
+    \-- latest -&gt; 3.0.0.Alpha1</pre> 
+        <p class="wikiPara"> The documentation artifacts are uploaded using a secure shell file transfer (scp, sftp or rsync) to <i class="wikiEmphasis">seam@filemgmt.jboss.org:docs_htdocs/seam/3</i>. Access is restricted to designated Red Hat employee accounts (and in some cases to community contributors). </p> 
+        <blockquote class="wikiBlockquote"> 
+         <strong>NOTE</strong>
+         <br>
+         <br>If you need access to upload documentation, please coordinate with a Seam project member from Red Hat (preferably the project lead). 
+        </blockquote> 
+        <p class="wikiPara"> The general upload process is as follows: </p> 
+        <ol class="wikiOrderedList"> 
+         <li class="wikiOrderedListItem"> Checkout the release tag from git</li> 
+         <li class="wikiOrderedListItem"> Build the module distribution (or just the documentation)</li> 
+         <li class="wikiOrderedListItem"> Execute the following commands to prep the remote directory and upload the documentation (replacing <tt>{module}</tt> with the name of the module directory and <tt>3.0.m.Q</tt> with the release version):</li> 
+        </ol> 
+        <pre class="wikiPreformatted">export MODULE={module}; export RELEASE=3.0.m.Q
+cd docs/target
+mkdir -p $MODULE/$RELEASE/reference
+rsync -r --protocol=28 $MODULE seam@filemgmt.jboss.org:docs_htdocs/seam/3/
+rsync -r --protocol=28 docbook/publish/ seam@filemgmt.jboss.org:docs_htdocs/seam/3/$MODULE/$RELEASE/reference/
+cd ../..</pre> 
+        <p class="wikiPara"> You can then copy the apidocs. Return the root of the release tag checkout, then type: </p> 
+        <pre class="wikiPreformatted">cd api
+mvn javadoc:javadoc
+cd target/site
+mkdir api
+rsync -r --protocol=28 api seam@filemgmt.jboss.org:docs_htdocs/seam/3/$MODULE/$RELEASE/
+rsync -r --protocol=28 apidocs/ seam@filemgmt.jboss.org:docs_htdocs/seam/3/$MODULE/$RELEASE/api/
+cd ../../..</pre> 
+        <p class="wikiPara"> Remember to update the <tt>latest</tt> symlink. For this, you'll need to connect via sftp: </p> 
+        <pre class="wikiPreformatted">sftp seam@filemgmt.jboss.org
+sftp&gt; cd docs_htdocs/seam/3/{module}
+sftp&gt; rm latest
+sftp&gt; ln 3.0.m.Q latest</pre> 
+        <p class="wikiPara"> If you have the SSHFS installed, the remote file commands above can be simplified to local file commands. </p> 
+        <pre class="wikiPreformatted">export MODULE={module}; export RELEASE=3.0.m.Q
+mkdir -p ~/mount/seamdocs
+sshfs seam@filemgmt.jboss.org:docs_htdocs/seam/3 ~/mount/seamdocs
+mkdir -p ~/mount/seamdocs/$MODULE/$RELEASE/reference
+cp -R docs/target/docbook/publish/ ~/mount/seamdocs/$MODULE/$RELEASE/reference/
+mkdir -p ~/mount/seamdocs/$MODULE/$RELEASE/api
+cp -R api/target/site/apidocs/ ~/mount/seamdocs/$MODULE/$RELEASE/api/
+cd ~/mount/seamdocs/$MODULE
+rm latest
+ln -s $RELEASE latest
+cd
+fusermount -u ~/mount/seamdocs</pre> 
+        <p class="wikiPara"> Seam project members, please refer to these two internal documents for additional information about the documentation server, including how to request and setup access for a user: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <a href="https://docspace.corp.redhat.com/docs/DOC-35917" target="" class="regularLink">Getting access to filemgmt.jboss.org</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="https://docspace.corp.redhat.com/docs/DOC-25936#UploadingFiles" target="" class="regularLink">Uploading files to docs.jboss.org</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="https://docspace.corp.redhat.com/docs/DOC-35393" target="" class="regularLink">Access and upload instructions for docs.jboss.org</a> (RichFaces-specific example)</li> 
+        </ul> 
+        <p class="wikiPara"> Before moving on, check to make sure the documentation appears under <a href="http://docs.jboss.org/seam/3" target="" class="regularLink">http://docs.jboss.org/seam/3</a>. Keep the link to the documentation handy, as you'll use it in the next section when adding the release to sfwk.org. </p> 
+        <h2 class="wikiHeadline2" id="H-AddingTheReleaseToSfwkorg"><a href="ModuleReleaseProcedure.html#H-AddingTheReleaseToSfwkorg">Adding the release to sfwk.org</a></h2> 
+        <p class="wikiPara"> There are three pages to update to list the availability of your release: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <a href="MavenArtifacts.html" target="" class="regularLink">Maven artifacts</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="DistributionDownloads.html" target="" class="regularLink">Distribution downloads</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="APIAndReferenceDocumentation.html" target="" class="regularLink">Documentation</a></li> 
+        </ul> 
+        <p class="wikiPara"> Just follow the yellow brick road, so to speak, to add your release. Be sure to test all the links before calling it done. </p> 
+        <p class="wikiPara"> Furthermore, if this is the very first release of a module, also edit these pages: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <a href="FileNotFound.html" target="" class="brokenLink">Seam 3.0 Roadmap</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="Status.html" target="" class="regularLink">Project Status And Direction</a></li> 
+        </ul> 
+        <h2 class="wikiHeadline2" id="H-ReleasingTheJIRAProject"><a href="ModuleReleaseProcedure.html#H-ReleasingTheJIRAProject">Releasing the JIRA project</a></h2> 
+        <p class="wikiPara"> Release the project in JIRA so that people are able to file bugs against the released version (otherwise, they will get filed incorrectly). </p> 
+        <ol class="wikiOrderedList"> 
+         <li class="wikiOrderedListItem"> Go to the Admin page for the project (which you get to through <a href="https://jira.jboss.org/jira/secure/project/ViewProjects.jspa" target="" class="regularLink">Administration</a>)</li> 
+         <li class="wikiOrderedListItem"> Click on Manage versions</li> 
+         <li class="wikiOrderedListItem"> Click the Release link in the row of the version you are releasing (If there are any open issues, JIRA will ask you if you want to move them)</li> 
+        </ol> 
+        <h2 class="wikiHeadline2" id="H-VersionReview"><a href="ModuleReleaseProcedure.html#H-VersionReview">Version review</a></h2> 
+        <p class="wikiPara"> Review the scheduled versions for the project. Make sure future releases are in JIRA so that reported issues can be scheduled properly. </p> 
+        <h2 class="wikiHeadline2" id="H-AnnouncingTheRelease"><a href="ModuleReleaseProcedure.html#H-AnnouncingTheRelease">Announcing the release</a></h2> 
+        <p class="wikiPara"> Create a new blog post on <a href="http://in.relation.to/" target="" class="regularLink">in.relation.to</a> to announce your release. Be sure to tag the entry <q>Seam 3</q>. </p> 
+        <blockquote class="wikiBlockquote"> 
+         <b>NOTE</b>
+         <br>
+         <br>If you don't have an in.relation.to account, we encourage you to post on your personal blog on JBoss Community (every member can have a personal blog). If it's your first entry, let a Seam administrator know so your feed can be added to the aggregated feed on the Seam 3 project page. 
+        </blockquote> 
+        <p class="wikiPara"> After you have published the blog entry, create a <i class="wikiEmphasis">sticky</i> forum entry in <a href="http://seamframework.org/Community/Seam3Users" target="" class="regularLink">Seam 3 users</a> that links to the blog post. You should look at a <a href="http://in.relation.to/Bloggers/SeamXML300Alpha1BringsXMLbasedConfigurationToFruition" target="" class="regularLink">previous release announcement</a> for a template. Be sure to include the following items: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Module name and version number</li> 
+         <li class="wikiUnorderedListItem"> What the module is (mission statement)</li> 
+         <li class="wikiUnorderedListItem"> Pertinent release notes (the exciting stuff)</li> 
+         <li class="wikiUnorderedListItem"> A list of contributors that put work into this release</li> 
+         <li class="wikiUnorderedListItem"> Next steps and future work</li> 
+         <li class="wikiUnorderedListItem"> Links to all the critical resources (Download, Maven artifacts, API, JavaDoc, reference guide, JIRA, etc)</li> 
+        </ul> 
+        <h2 class="wikiHeadline2" id="H-PublicizeYourBlog"><a href="ModuleReleaseProcedure.html#H-PublicizeYourBlog">Publicize your blog</a></h2> 
+        <p class="wikiPara"> A good way to drive traffic to your blog entry is to <a href="http://www.dzone.com/links/add.html" target="" class="regularLink">post</a> it on <a href="http://www.dzone.com/links/add.html" target="" class="regularLink">DZone.com</a>, make sure to use a catchy (but accurate) title, an enticing description (2-3 sentences), and tweet / email all your friends to have them read and vote on it. </p> 
+        <h2 class="wikiHeadline2" id="H-YoureDone"><a href="ModuleReleaseProcedure.html#H-YoureDone">You're done!</a></h2> 
+        <p class="wikiPara"> If you've made it this far, go have an expensive beer or fine chocolate. For beer, I recommend a Chimay Blue, Grande Reserve. For chocolate, I recommend Neuhaus (or any Belgium Chocolatier). These are delicacies fit for such an occasion. You may have your own way of celebrating. Either way, enjoy!</p> 
+        <p class="wikiPara"> </p> 
+       </div>
+       <div id="j_id367" class="documentTags undecoratedLink smallFont">
+        <div id="j_id368">
+          Tags:&nbsp;
+         <a href="https://community.jboss.org/tags?recursive=true#/?tags=Seam+3">Seam 3</a>&nbsp;|&nbsp;
+         <a href="https://community.jboss.org/tags?recursive=true#/?tags=release">release</a>
+        </div>
+       </div> 
+      </div>
+      <div id="commentDisplayForm"></div> 
+     </div> 
+     <div class="clear" style="padding-top:15px;"></div> 
+    </div>
+   </div> 
+  </div> 
+  <div id="footer" class="undecoratedLink"> 
+   <p> © Copyright 2009, Red Hat Middleware, LLC. All rights reserved. JBoss and Seam are registered trademarks and servicemarks of <a href="http://www.redhat.com/">Red Hat, Inc</a>. [<a href="http://www.redhat.com/legal/privacy_statement.html">Privacy Policy</a>]</p> 
+  </div>
+  <div id="status">
+   <span id="globalStatus"><span id="globalStatus.start" style="display: none">
+     <div id="j_id423" class="statusStart">
+      <img src="../themes/sfwkorg/img/statusindicator.gif" height="25" width="20">
+     </div></span><span id="globalStatus.stop">
+     <div id="j_id425" class="statusStop">
+      <img src="../themes/sfwkorg/img/blank.gif" height="25" width="20">
+     </div></span></span>
+  </div>  
+  <!-- Mirrored from 127.0.0.1:64444/Seam3/ModuleReleaseProcedure by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:54:51 GMT --> 
+  <!-- Added by HTTrack -->
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack --> 
+ </body>
+</html>

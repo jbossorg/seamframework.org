@@ -1,0 +1,740 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <!-- Mirrored from 127.0.0.1:64444/Seam3/PersistenceModule by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:55:03 GMT -->
+ <!-- Added by HTTrack -->
+ <head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack -->  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+  <title>Seam Framework - Persistence Module Home</title> 
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/basic_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" rel="stylesheet" type="text/css">
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/extended_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" media="rich-extended-skinning" rel="stylesheet" type="text/css">
+  <script src="../a4j/g/3_3_3.CR1org.ajax4jsf.javascript.AjaxScript" type="text/javascript"></script>
+  <script type="text/javascript">window.RICH_FACES_EXTENDED_SKINNING_ON=true;</script>
+  <script src="../a4j/g/3_3_3.CR1org/richfaces/renderkit/html/scripts/skinning.js" type="text/javascript"></script>
+  <link href="../themes/sfwkorg/css/sfwk.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shCore.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shThemeDefault.css" rel="stylesheet" type="text/css"> 
+  <script type="text/javascript" src="../seam/resource/remoting/resource/remote.js"></script> 
+  <script type="text/javascript" src="../seam/resource/remoting/interface1535.js?httpSessionChecker"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jquery.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jqueryPlugins.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/lacewiki.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shCore.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushBash.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCpp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCSharp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCss.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDelphi.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDiff.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushGroovy.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJava.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJScript.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPhp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPlain.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPython.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushRuby.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushScala.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushSql.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushVb.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushXml.js"></script> 
+  <script type="text/javascript">
+        /* If you really want to load the Flash garbage on every page, go ahead and enable this:
+        SyntaxHighlighter.config.clipboardSwf = '/themes/sfwkorg/js/sh/scripts/clipboard.swf';
+         */
+        SyntaxHighlighter.defaults['gutter'] = false;
+        SyntaxHighlighter.all();
+	</script> 
+  <script type="text/javascript">
+
+        // ###################### Session timeout alert #################################
+
+        var sessionChecker = Seam.Component.getInstance("httpSessionChecker");
+        var timeoutURL = '/Home/JBossSeam';
+        var timeoutMillis = '900'*1000+3000;
+        var sessionTimeoutInterval = null;
+
+        function startSessionTimeoutCheck() {
+            sessionTimeoutInterval = setInterval('sessionChecker.isNewSession(alertTimeout)', timeoutMillis);
+        }
+
+        function stopSessionTimeoutCheck() {
+            if (sessionTimeoutInterval) clearInterval(sessionTimeoutInterval);
+        }
+
+        function resetSessionTimeoutCheck() {
+            if (sessionTimeoutInterval != null) {
+                stopSessionTimeoutCheck();
+                startSessionTimeoutCheck();
+            }
+        }
+
+        function alertTimeout(newSession) {
+            if (newSession) {
+                clearInterval(sessionTimeoutInterval);
+                jQuery(".ajaxSupport")
+                        .removeAttr('onblur')
+                        .removeAttr('onchange')
+                        .removeAttr('onkeyup')
+                        .removeAttr('onclick');
+                jQuery(".sessionEventTrigger").hide();
+                var answer = confirm("Your session has timed out, you will be redirected to the start page.");
+                if (answer) window.location = timeoutURL;
+            }
+        }
+
+        // ###################### Popups #################################
+
+        var fadeInPopupDialog = function(hash) {
+            hash.w.fadeIn('fast',function(){ hash.o.show(); });
+            jQuery(".closeDialog", hash.w).attr("accesskey", "C"); // Dynamically assign accesskey to .closeDialog buttons
+        };
+
+        var fadeOutPopupDialog = function(hash) { hash.w.fadeOut('fast',function(){ hash.o.remove(); }); };
+
+        // ###################### Tabbed Forms #################################
+
+        var formTabErrors = {};
+
+        function formTabRaiseError(tabId, fieldId, message) {
+
+            formTabClearError(tabId, fieldId); // Clear error then re-add
+
+            log("Raise error for tab: '" + tabId + "' field: " + fieldId);
+
+            // Add an error message to the client message box
+            log("Adding error message: " +tabId + fieldId + "ErrorMessage")
+            jQuery("#clientMessageBoxTable").append(
+                '<tr id="' + tabId + fieldId + 'ErrorMessage"><td><img src="/themes/sfwkorg/img/attention.gif" ' +
+                'height="18" width="18" class="clientMessageBoxImage attentionImage"/></td>' +
+                '<td><span id="attentionMessage" class="attentionMessage">'+ message + '</span></td></tr>'
+            );
+            if (formTabErrors[tabId] == null) {
+                formTabErrors[tabId] = 1;
+            } else {
+                formTabErrors[tabId]++;
+            }
+            formTabRenderErrors(tabId);
+        }
+
+        function formTabClearError(tabId, fieldId) {
+            if (document.getElementById(tabId+fieldId+"ErrorMessage") != null) { // This error is displayed
+                log("Clear error for tab: '" + tabId + "' field: " + fieldId);
+                log("Removing error message: " +tabId + fieldId + "ErrorMessage")
+                // Remove the error message on the client message box
+                jQuery("#"+tabId + fieldId + "ErrorMessage").remove();
+
+                formTabErrors[tabId]--;
+                formTabRenderErrors(tabId);
+            }
+        }
+
+        function formTabRenderErrors(tabId) {
+            log("Errors for tab: '" + tabId + "': " + formTabErrors[tabId]);
+
+            if (formTabErrors[tabId] > 0 && document.getElementById(tabId+"InvalidIcon") == null) {
+                log("Showing icon for tab: " + tabId);
+                // Show an icon on the tab and blink it a few times
+                jQuery("#"+tabId)
+                    .prepend('<img id="' + tabId + 'InvalidIcon" ' +
+                            'src="/themes/sfwkorg/img/attention.gif" width="13" height="13" ' +
+                            'alt="!" style="vertical-align:bottom;margin-left:5px;margin-right:5px;"/>');
+                pulsate("#"+tabId);
+            } else if (formTabErrors[tabId] < 1){
+                log("Removing icon of tab: " + tabId);
+                jQuery("#"+tabId + "InvalidIcon").remove();             // Remove the error icon on the tab
+            }
+
+            var tabsHaveErrors = false;
+            for (var tab in formTabErrors) {
+                var numOfErrors = formTabErrors[tab];
+                if (numOfErrors > 0) {
+                    tabsHaveErrors = true;
+                    break;
+                }
+            }
+
+            if (tabsHaveErrors) {
+                log("Hiding save button and showing form message box");
+                jQuery(".saveButton").hide();                       // Hide save button(s)
+                jQuery(".formControls").css("height", "30px");      // Adjust height for missing save button
+                jQuery("#messageBoxContainer").hide();                 // Hide server messages
+                jQuery("#clientMessageBoxContainer").show();           // Show client error messages
+            } else {
+                log("Showing save button and hiding form message box");
+                jQuery(".saveButton").show();                       // Show save button(s)
+                jQuery(".formControls").css("height", "");          // Readjust height for present save button
+                jQuery("#clientMessageBoxContainer").hide();           // Hide client error messages
+            }
+        }
+
+        function formTabClicked() {
+            jQuery("#messageBoxContainer").hide();                 // Hide server messages
+        }
+
+        function log(message) {
+            return; // Remove to enable logging
+            if (!log.window_ || log.window_.closed) {
+                var win = window.open("", null, "width=400,height=200," +
+                                                "scrollbars=yes,resizable=yes,status=no," +
+                                                "location=no,menubar=no,toolbar=no");
+                if (!win) return;
+                var doc = win.document;
+                doc.write("<html><head><title>Debug Log</title></head><body style='font-family: monospace'></body></html>");
+                doc.close();
+                log.window_ = win;
+            }
+            var logLine = log.window_.document.createElement("div");
+            logLine.appendChild(log.window_.document.createTextNode(message));
+            log.window_.document.body.appendChild(logLine);
+        }
+
+        // ###################### Design #################################
+
+        function highlightStars(item, range, end) {
+            for (i = 1; i <= range; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star_grey.gif");
+            }
+            for (i = 1; i <= end; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star.gif");
+            }
+        }
+
+        function pulsate(query) {
+            var blinkCount = 2*2;
+            do {
+                jQuery(query)['fade'+(blinkCount%2==0?'Out':'In')]('fast');
+            } while (--blinkCount);
+        }
+
+        function clearDocumentBackground() {
+            // Noop for this skin
+        }
+
+        // Wrap boxes with border and shadow
+        function wrapBoxes() {
+            // Noop for this skin
+        }
+
+        function initPage() {
+            checkCookieSupport();
+            wrapBoxes();
+        }
+
+        jQuery(function() {
+            initPage();
+        });
+
+    </script> 
+  <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-25106513-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script> 
+ </head> 
+ <body> 
+  <noscript> 
+   <div class="cookieJavaScriptWarning">
+     Please activate JavaScript in your browser. Without it, you will only be able to browse this website but clicking on any advanced feature (any forms or submit buttons) will not work. 
+   </div> 
+  </noscript>
+  <div id="dialogHelp" class="popupDialog">
+   <span id="dialogHelpPopup" title="dialogHelp"></span>
+   <span id="dialogHelpInit"> <script type="text/javascript">
+            function showHelpPopup(width, height, offsetId) {
+                var offset = jQuery("#"+offsetId).offset();
+                jsf('dialogHelpPopup')
+                    .css({width: width+"px", height: height+"px", top: offset.top-100+"px", left: offset.left-150+"px"})
+                    .jqm({
+                        closeClass: "closeDialog",
+                        overlay: 0
+                    });
+
+                jQuery("#dialogHelpContent").css("width", width-20+"px").css("height", height-75+"px");
+                jQuery("#dialogHelpContent").css("overflow", "auto");
+
+                jsf('dialogHelpPopup').jqmShow();
+            }
+        </script></span> 
+   <script type="text/javascript">jQuery(function() {
+        jsf('dialogHelpPopup').Resizable({
+            minTop: 1,
+            dragHandle: "#dialogHelpHead",
+            handlers: { se: "#dialogHelpResizeHandle" }
+        });
+    });</script> 
+   <div class="popupDialogHead" id="dialogHelpHead">
+    Help
+   </div>
+   <div id="dialogHelpContent" class="popupDialogContent"></div>
+   <div id="dialogHelpControls" class="popupDialogControls">
+    <div id="j_id14" style="padding:5px;">
+     <a href="#" class="buttonNonpersistent closeDialog"><span class="buttonLabel">Close Help</span></a>
+    </div>
+   </div>
+  </div> 
+  <div id="wrapper"> 
+   <div id="header">  
+    <div>
+     <a href="http://seamframework.org/"><img src="../themes/sfwkorg/img/blank.gif" height="98" width="210"></a> 
+    </div> 
+   </div>
+   <div id="body"> 
+    <div id="container"> 
+     <div id="leftColumn">
+      <div id="mainMenu" xmlns="http://www.w3.org/1999/xhtml">
+       <div id="j_id121" class="box">
+        <div class="mainMenuContainer"> 
+         <div class="mainMenuHeader"></div> 
+         <div class="mainMenuBody">
+          <div id="j_id125" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Home.html" class="level1Link">Home</a>
+          </div>
+          <div id="j_id132" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Home/WhySeam.html" class="level2Link">Why Seam?</a>
+          </div>
+          <div id="j_id139" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Seam2.html" class="level1Link">Seam 2</a>
+          </div>
+          <div id="j_id146" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/GettingStarted.html" class="level2Link">Getting Started</a>
+          </div>
+          <div id="j_id153" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Downloads.html" class="level2Link">Downloads</a>
+          </div>
+          <div id="j_id160" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Documentation.html" class="level2Link">Documentation</a>
+          </div>
+          <div id="j_id167" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="http://weld.cdi-spec.org/" class="level1Link">Weld</a>
+          </div>
+          <div id="j_id174" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Community.html" class="level1Link">Community</a>
+          </div>
+          <div id="j_id181" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="https://community.jboss.org/" class="level2Link">Forums</a>
+          </div>
+          <div id="j_id188" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/CDIExtensions.html" class="level2Link">CDI Extensions</a>
+          </div>
+          <div id="j_id195" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Contribute.html" class="level2Link">Contribute</a>
+          </div>
+          <div id="j_id202" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/JIRA.html" class="level2Link">JIRA</a>
+          </div>
+          <div id="j_id209" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/MailingLists.html" class="level2Link">Mailing Lists</a>
+          </div>
+          <div id="j_id216" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Events.html" class="level2Link">Events</a>
+          </div>
+          <div id="j_id223" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Links.html" class="level2Link">Links</a>
+          </div>
+          <div id="j_id230" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/SeamInProduction.html" class="level2Link">Seam In Production</a>
+          </div>
+          <div id="j_id237" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Documentation.html" class="level1Link">Documentation</a>
+          </div>
+          <div id="j_id244" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Documentation/FAQs.html" class="level2Link">FAQs</a>
+          </div>
+          <div id="j_id251" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Documentation/KnowledgeBase.html" class="level2Link">Knowledge Base</a>
+          </div>
+          <div id="j_id258" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Documentation/Design.html" class="level2Link">Design</a>
+          </div> 
+         </div> 
+         <div class="mainMenuFooter"></div> 
+        </div>
+       </div> 
+      </div> 
+      <br> 
+      <div style="margin-top: 25px; margin-left: 15px; margin-right: 15px; "> 
+       <h2>Built with Seam</h2> 
+       <p> You can find the full source code for this website in the <a href="/Download.html">Seam package</a> in the directory /examples/wiki. It is licensed under the LGPL. </p> 
+       <div style="text-align:center;">
+        <a href="/Community/GetASeamIcon.html"><img src="../themes/sfwkorg/img/runningon_seamlogo_beige.gif" height="50" width="200"></a> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="rightColumn">
+      <img src="../themes/sfwkorg/img/blank.gif" height="8" width="1">
+      <div id="breadcrumb" class="breadcrumb">
+       <span class="breadcrumbPanel"><a href="../index.html" class="itemLink breadcrumbRoot">Site</a><span class="itemSeparator breadcrumbRoot">·</span><a href="../Seam3.html" class="itemLink">Seam 3</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="PersistenceModule.html" class="itemLink">Persistence Module</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="PersistenceModuleHome.html" class="itemText">Persistence Module Home</a></span>
+      </div>
+      <div id="messageBoxContainer"></div>
+      <div id="clientMessageBoxContainer" style="display:none;"> 
+       <div id="clientMessageBox" class="messageBox"> 
+        <table id="clientMessageBoxTable" class="messageBoxTable" cellpadding="0" cellspacing="0" border="0"></table> 
+        <script type="text/javascript">jQuery(function() {
+                    jQuery("#clientMessageBoxContainer").css("margin-top", "10px").css("margin-bottom", "10px");
+                    pulsate(".clientMessageBoxImage");
+                });</script> 
+       </div>
+      </div> 
+      <div id="documentDisplayContainer" class="box">
+       <div id="documentDisplay" class="documentDisplay">
+        <p class="wikiPara"> </p> 
+        <h1 style="font-size:48px">Active development of Seam Persistence has been halted by Red Hat. This project has been migrated over to <a href="http://incubator.apache.org/deltaspike/" target="" class="regularLink">Apache DeltaSpike </a>.</h1> 
+        <h1 style="display: none;">Seam Persistence</h1> 
+        <div>
+         <img src="../service/File/143936.png" width="581" height="85">
+         <img src="http://seamframework.org/service/File/145488" style="margin-left: -5px; margin-bottom: -5px;">
+         <a href="http://ci.jboss.org/jenkins/view/Seam/job/Seam-3.X-persistence-CI/lastBuild/" style="float: right;"><img src="http://ci.jboss.org/jenkins/view/Seam/job/Seam-3.X-persistence-CI/lastBuild/buildStatus"></a>
+        </div> 
+        <p class="wikiPara" style="font-style: italic; margin-top: 0px; margin-left: 60px; width: 500px;">Brings transactions and persistence to managed beans, provides a simplified transaction API and hooks transaction propagation events to the CDI event bus.</p> 
+        <hr> 
+        <h2 class="wikiHeadline2" id="H-KeyLinks"><a href="PersistenceModuleHome.html#H-KeyLinks">Key links</a></h2> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <strong>Bookmark:</strong> <a href="http://sfwk.org/Seam3/Persistence" target="" class="regularLink">http://sfwk.org/Seam3/Persistence</a><br></li> 
+         <li class="wikiUnorderedListItem"> <strong>Git repository:</strong> <a href="http://github.com/seam/persistence" target="" class="regularLink">http://github.com/seam/persistence</a><br></li> 
+         <li class="wikiUnorderedListItem"> <strong>Issue tracker:</strong> <a href="https://jira.jboss.org/browse/SEAMPERSIST" target="" class="regularLink">https://jira.jboss.org/browse/SEAMPERSIST</a> (SEAMPERSIST)</li> 
+         <li class="wikiUnorderedListItem"> <strong>Documentation:</strong> <a href="http://docs.jboss.org/seam/3/persistence/latest/reference/en-US/html" target="" class="regularLink">Reference guide</a> | <a href="http://docs.jboss.org/seam/3/persistence/latest/api/" target="" class="regularLink">API </a></li> 
+         <li class="wikiUnorderedListItem"> <strong>Download:</strong> <a href="http://sourceforge.net/projects/jboss/files/Seam/Persistence" target="" class="regularLink">Distribution</a></li> 
+         <li class="wikiUnorderedListItem"> <strong>Maven artifacts:</strong> <a href="https://repository.jboss.org/nexus/index.html#nexus-search;quick~seam-persistence" target="" class="regularLink">seam-persistence</a> (or <a href="https://repository.jboss.org/nexus/index.html#nexus-search;quick~seam-persistence-api" target="" class="regularLink">seam-persistence-api</a> &amp; <a href="https://repository.jboss.org/nexus/index.html#nexus-search;quick~seam-persistence-impl" target="" class="regularLink">seam-persistence-impl</a>)*</li> 
+        </ul> 
+        <p class="wikiPara"> To get started, add <strong><u>one</u></strong> of the following dependency groups below to your pom.xml: </p> 
+        <table> 
+         <tbody>
+          <tr>
+           <th>Individual JARs</th>
+           <th>Combined JAR (API &amp; implementation)</th>
+          </tr> 
+          <tr>
+           <td style="vertical-align: top; padding: 0;"> <pre class="wikiPreformatted">&lt;dependency&gt;
+   &lt;groupId&gt;org.jboss.seam.persistence&lt;/groupId&gt;
+   &lt;artifactId&gt;seam-persistence-api&lt;/artifactId&gt;
+   &lt;version&gt;3.0.0.Final&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;dependency&gt;
+   &lt;groupId&gt;org.jboss.seam.persistence&lt;/groupId&gt;
+   &lt;artifactId&gt;seam-persistence-impl&lt;/artifactId&gt;
+   &lt;version&gt;3.0.0.Final&lt;/version&gt;
+   &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;</pre> </td>
+           <td style="vertical-align: top; padding: 0;"> <pre class="wikiPreformatted">&lt;dependency&gt;
+   &lt;groupId&gt;org.jboss.seam.persistence&lt;/groupId&gt;
+   &lt;artifactId&gt;seam-persistence&lt;/artifactId&gt;
+   &lt;version&gt;3.0.0.Final&lt;/version&gt;
+&lt;/dependency&gt;</pre> </td>
+          </tr>
+         </tbody>
+        </table> 
+        <div>
+         * 
+         <i class="wikiEmphasis">Maven artifacts are located in the <a href="http://community.jboss.org/wiki/MavenGettingStarted-Users" target="" class="regularLink">JBoss Community Repository</a>: http://repository.jboss.org/nexus/content/groups/public</i>
+        </div> 
+        <h2 class="wikiHeadline2" id="H-ModuleTeam"><a href="PersistenceModuleHome.html#H-ModuleTeam">Module team</a></h2> 
+        <table class="datatable topLeftBottomBorder rightBorder" border="0" cellspacing="0" cellpadding="5"> 
+         <tbody>
+          <tr class="regularHeader alignLeft"> 
+           <th class="rightBorder">Name</th> 
+           <th class="rightBorder">Module role</th> 
+           <th class="rightBorder">Commit username (Git)</th> 
+           <th>Hometown (Time zone)</th> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="http://community.jboss.org/people/swd847"><img src="http://gravatar.com/avatar/c3cc797e76ad63e206555f5520f603a0" style="width: 50px; height: 50px; vertical-align: middle; margin-right: 3px;"></a> <a href="http://community.jboss.org/people/swd847" target="" class="regularLink">Stuart Douglas</a></td> 
+           <td class="rightBorder">Lead</td> 
+           <td class="rightBorder"><a href="http://github.com/stuartwdouglas" target="" class="regularLink">stuartwdouglas</a></td> 
+           <td>Sydney, AU (<a href="http://timeanddate.com/library/abbreviations/timezones/au/edt.html" target="" class="regularLink">UTC+10</a>)</td> 
+          </tr> 
+         </tbody>
+        </table> 
+        <div style="margin-top: .5em;">
+         <i class="wikiEmphasis">Want your name to appear in this list? Join us in <a href="Chat.html" target="" class="regularLink">#seam-dev on freenode</a> and let us know you want to get involved.</i>
+        </div> 
+        <h2 class="wikiHeadline2" id="H-Description"><a href="PersistenceModuleHome.html#H-Description">Description</a></h2> 
+        <p class="wikiPara"> Brings transactions and persistence to non-EJB managed beans, provides a simplified transaction API and hooks transaction propagation events to the CDI event bus. It may also bring features handled by Java EE containers to your CDI application running on Java SE or servlet containers, like Tomcat or Jetty. This module also includes abstractions for Persistence as a general concept (JDBC, JPA, Hibernate, NoSQL, and JDO,) otherwise referred to as the Seam-persistence framework - making CRUD easy, and more. </p> 
+        <p class="wikiPara"> The overall goal of EJB 3.1 was to simplify overall usability so that developers would choose either an EJB stateful or stateless session bean when needing declarative transaction or security capabilities. The difference between an EJB and managed bean has been reduced to a single annotation on the class: </p> 
+        <p class="wikiPara"> <i class="wikiEmphasis">managed bean:</i> </p> 
+        <pre class="wikiPreformatted">public class ManagedBean {}</pre> 
+        <p class="wikiPara"> <i class="wikiEmphasis">stateful session bean:</i> </p> 
+        <pre class="wikiPreformatted">@Stateful public class ManagedBean {}</pre> 
+        <p class="wikiPara"> <i class="wikiEmphasis">stateless session bean:</i> </p> 
+        <pre class="wikiPreformatted">@Stateless public class ManagedBean {}</pre> 
+        <p class="wikiPara"> An EJB no longer requires an interface and can be packaged in a war. What sets apart an EJB is that it has transactions enabled by default (type REQUIRED), whereas the managed bean has no out-of-the-box interceptors. </p> 
+        <p class="wikiPara"> In Java EE 6, the only beans that support transactions <q>out of the box</q> are EJBs. You can, of course, apply your own interceptor to any bean, but there is no <q>off the shelf</q> transaction interceptor. Many people, including us, believe that non-EJB managed beans should enjoy declarative transaction capability as well. It didn't happen for Java EE 6. That is the need we seek to fill to some extent in Seam 3, and perhaps weave into the platform in the future. </p> 
+        <p class="wikiPara"> The Seam Persistence module will provide the following: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Declarative transaction support for managed beans</li> 
+         <li class="wikiUnorderedListItem"> A simplified transaction API</li> 
+         <li class="wikiUnorderedListItem"> A seam managed persistence context usable in both SE and EE environments</li> 
+         <li class="wikiUnorderedListItem"> Envars Integration</li> 
+         <li class="wikiUnorderedListItem"> Hibernate Search Integration</li> 
+         <li class="wikiUnorderedListItem"> Injection into entities</li> 
+         <li class="wikiUnorderedListItem"> A CDI Transaction Scope</li> 
+        </ul> 
+        <p class="wikiPara"> It would also be nice to support REQUIRES_NEW for managed beans, although this will probably require configuring a transaction manager in xml as support for this varies between application servers. </p> 
+        <h2 class="wikiHeadline2" id="H-ReleasePlan"><a href="PersistenceModuleHome.html#H-ReleasePlan">Release plan</a></h2> 
+        <p class="wikiPara"> (status: draft) - This plan is still being defined. </p> 
+        <table class="datatable topLeftBottomBorder rightBorder" border="0" cellspacing="0" cellpadding="5"> 
+         <tbody>
+          <tr class="regularHeader alignLeft"> 
+           <th class="rightBorder">Version</th> 
+           <th class="rightBorder">Time frame</th> 
+           <th>Focus</th> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="https://jira.jboss.org/browse/SEAMPERSIST/fixforversion/12315230" target="" class="regularLink">3.0.0.Alpha1</a></td> 
+           <td class="rightBorder">Available</td> 
+           <td> 
+            <ul class="wikiUnorderedList"> 
+             <li class="wikiUnorderedListItem"> Project structure compliant with <a href="ModuleAnatomy.html" target="" class="regularLink">Module Anatomy</a></li> 
+             <li class="wikiUnorderedListItem"> Transaction interceptor for managed beans</li> 
+             <li class="wikiUnorderedListItem"> Transaction API-agnostic UserTransaction producer (depended on by Faces lifecycle transactions)</li> 
+             <li class="wikiUnorderedListItem"> Simplified transaction API </li> 
+             <li class="wikiUnorderedListItem"> Seam Managed Persistence Context</li> 
+             <li class="wikiUnorderedListItem"> Hibernate Search Integration</li> 
+            </ul> </td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder">3.0.0.Beta1</td> 
+           <td class="rightBorder">Available</td> 
+           <td> Managed Hibernate Sessions </td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder">3.0.0.Beta2</td> 
+           <td class="rightBorder">Available</td> 
+           <td>Updated to use Seam Solder</td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder">3.0.0.CR1</td> 
+           <td class="rightBorder">Available</td> 
+           <td> Improved documentation, especially for people who are new to JPA/Hibernate Tests for all containers (Jboss 6, Jetty, Jetty + openjpa, Glassfish, Glassfish + Hibernate, Jboss 5) </td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder">3.1</td> 
+           <td class="rightBorder">TBA</td> 
+           <td> 
+            <ul class="wikiUnorderedList"> 
+             <li class="wikiUnorderedListItem"> REQUIRES_NEW Support including stopping SPMC propagation (this will be configurable behaviour)</li> 
+             <li class="wikiUnorderedListItem"> Envars Integration</li> 
+            </ul> </td> 
+          </tr> 
+         </tbody>
+        </table> 
+        <h2 class="wikiHeadline2" id="H-DesignWhiteboard"><a href="PersistenceModuleHome.html#H-DesignWhiteboard">Design whiteboard</a></h2> 
+        <table style="border: 0;"> 
+         <tbody>
+          <tr> 
+           <td style="padding: 0;"><img src="http://seamframework.org/service/File/144128" style="width: 250px; height: 140px; margin-right: 10px;"></td> 
+           <td style="vertical-align: top; padding: 0;"> This section serves as a whiteboard for design and ideas for this module. Once you've decided to pursue a feature, it should be added to JIRA as a feature request and optionally linked from this page. </td> 
+          </tr> 
+         </tbody>
+        </table> 
+        <h3 class="wikiHeadline3" id="H-DeclarativeTransactions"><a href="PersistenceModuleHome.html#H-DeclarativeTransactions">Declarative transactions</a></h3> 
+        <p class="wikiPara"> Most of the time when a developer chooses to use a managed bean, it's because they do not need transactional capabilities. In fact, transactional components are typically limited to a single layer of the application (call it the service layer) or set of components (call them business components). The case we are trying to address is the developer that wants to use managed beans to serve in this role. </p> 
+        <p class="wikiPara"> Therefore, it's safe to say that declarative transactions are something the developer should have to specify explicitly (not on by default, like with EJB). Having every bean be transactional would be an unnecessary overhead. But the transaction annotation would only be needed on the class to apply to all public methods and the default attribute would be REQUIRED to be consistent w/ EJB. </p> 
+        <p class="wikiPara"> Seam persistence allows you to use @TransactionAttribute on managed beans as well as EJB's. It also provides an @Transactional annotation for use in non EE environments where @TransactionAttribute is unavailable. It also provides @SeamApplicationException for this same purpose (as a replacement for @ApplicationException). </p> 
+        <p class="wikiPara"> Forum discussion: <a href="http://seamframework.org/Community/SeampersistenceJavaxejbTransactionAttribute" target="" class="regularLink">here</a>. </p> 
+        <p class="wikiPara"> Transactions will only be rolled back if an exception is propagated out of the managed bean that started the transaction, unlike seam 2 where a rollback would occur if an exception propagated out of any component. </p> 
+        <p class="wikiPara"> Transaction support is implemented in a similar manner to seam 2. The default is to use JTA, however EntityTransaction and HibernateTransaction will also be provided, and the user can provide their own <tt>SeamTransaction</tt> implementation. </p> 
+        <p class="wikiPara"> This brings us to the unified transaction API (with important convenience methods). </p> 
+        <h3 class="wikiHeadline3" id="H-UnifiedTransactionAPI"><a href="PersistenceModuleHome.html#H-UnifiedTransactionAPI">Unified transaction API</a></h3> 
+        <p class="wikiPara"> The JTA transaction API (javax.transaction.UserTransaction) makes you work pretty hard to find out basic information about the state of the transaction. Consider these questions: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> isActive</li> 
+         <li class="wikiUnorderedListItem"> isActiveOrMarkedRollback</li> 
+         <li class="wikiUnorderedListItem"> isRolledBackOrMarkedRollback</li> 
+         <li class="wikiUnorderedListItem"> isMarkedRollback</li> 
+         <li class="wikiUnorderedListItem"> isNoTransaction</li> 
+         <li class="wikiUnorderedListItem"> isRolledBack</li> 
+         <li class="wikiUnorderedListItem"> isCommitted</li> 
+        </ul> 
+        <p class="wikiPara"> Each of these questions must be answered by calling <tt>UserTransaction#getStatus()</tt> and comparing the result value to a static constant in the class <tt>javax.transaction.Status</tt>. </p> 
+        <p class="wikiPara"> We will provide <tt>SeamTransaction</tt> which will extend <tt>javax.transaction.UserTransaction</tt> with these convenience methods. The SeamTransaction object can be injected as follows: </p> 
+        <pre class="wikiPreformatted">
+@Inject
+@DefaultTransaction
+SeamTransaction transaction;
+</pre> 
+        <p class="wikiPara"> Providing declarative transactions on managed beans also requires that we register the bean to receive transaction synchronization events. We may be able to handle this with a more general event mechanism, but if not, then it makes sense to add this support to the transaction abstraction API. </p> 
+        <h3 class="wikiHeadline3" id="H-TransactionEvents"><a href="PersistenceModuleHome.html#H-TransactionEvents">Transaction events</a></h3> 
+        <p class="wikiPara"> Transaction success and failure should be placed on the CDI event bus to that managed beans can react to them. We may need to receive JTA transaction completion notifications from the EJB container and pass them on to registered synchronizations, or just onto the CDI event bus. </p> 
+        <p class="wikiPara"> This is difficult to achieve for all cases, as there is no general mechanism for being notified of transaction start, so if no transactional resources from seam-persistence participate in a transaction we will not be able to register a synchronisation, and no event will be fired. I think the best we can do is fire a transaction completed event for every SMPC that participated in the transaction. </p> 
+        <h3 class="wikiHeadline3" id="H-PersistenceManagement"><a href="PersistenceModuleHome.html#H-PersistenceManagement">Persistence management</a></h3> 
+        <p class="wikiPara"> Java EE 6 has vastly improved in that all managed beans, EJB or not, get <tt>@Resource</tt> and family injections. This means that, as long as there is container-managed persistence available (web profile and up), it's possible to inject the EntityManager. </p> 
+        <pre class="wikiPreformatted">@PersistenceContext EntityManager em;</pre> 
+        <p class="wikiPara"> Of course, this is a <q>weak</q> injection point for several reasons. First, if there is a more than one persistence unit, the string-based unit name is required: </p> 
+        <pre class="wikiPreformatted">@PersistenceContext(unitName = "erp") EntityManager erpEm;</pre> 
+        <p class="wikiPara"> Additionally, there are propagation issues depending on the order of invocation of beans hosting this annotation. So it makes more sense to centralize the injection, which CDI makes possible using a producer field. </p> 
+        <pre class="wikiPreformatted">@Produces @Erp @PersistenceContext(unitName = "erp") EntityManager erpEm;</pre> 
+        <p class="wikiPara"> The EntityManager can now be injected elsewhere in the application using: </p> 
+        <pre class="wikiPreformatted">@Inject @Erp EntityManager erpEm;</pre> 
+        <p class="wikiPara"> The string-based unit name is relegated to a single injection point. </p> 
+        <p class="wikiPara"> The problems with this are similar to that of transactions. It will not work in a servlet contaienr, nor does it play well with an application-managed EntityManager (created using <tt>Persistence#createEntityManager()</tt>). </p> 
+        <p class="wikiPara"> This EntityManager is also a transaction scoped container managed EntityManager. It is not possible to create extended persistence contexts in this manner. </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> We should be encouraging the use of the web profile at a minimum, which provides container-managed persistence</li> 
+         <li class="wikiUnorderedListItem"> Spring could use container-managed persistence, allowing it to cleanly integrate with Java EE and Seam applications</li> 
+        </ul> 
+        <p class="wikiPara"> The Seam Managed Persistence Context can be configured as follows: </p> 
+        <pre class="wikiPreformatted">
+@ExtensionManaged
+@ConversationScoped
+@Produces
+@PersistenceUnit(unitName="myPu")
+EntityManagerFactory emf;
+</pre> 
+        <p class="wikiPara"> This will even work in a servlet/se environment, as seam persistence will detect this and bootstrap the entity manager factory automatically. </p> 
+        <p class="wikiPara"> A configurable persistence context is needed by other modules as well. It raises the question: </p> 
+        <blockquote class="wikiBlockquote">
+          How should we be providing persistence contexts to the beans in our own modules that manipulate persistent data (e.g. JpaIdentityStore)? 
+        </blockquote> 
+        <p class="wikiPara"> Likely a simple <tt>@Inject EntityManager entityManager;</tt> declaration would be best, meaning that it would be up to the application itself to provide the <tt>EntityManager</tt> producer method. However, it would be nice to have the persistence module provide a built-in producer that can be configured via XML. </p> 
+        <p class="wikiPara"> It's important the when the EntityManager is injected, regardless of how it's implemented, it gets enlisted in the current transaction. </p> 
+        <h4 class="wikiHeadline4" id="H-TransactionEnlistment"><a href="PersistenceModuleHome.html#H-TransactionEnlistment">Transaction enlistment</a></h4> 
+        <p class="wikiPara"> The SMPC is automatically enlisted in the current transaction, this is achieved by proxying the EntityManager. </p> 
+        <h4 class="wikiHeadline4" id="H-ManualFlushModeActivation"><a href="PersistenceModuleHome.html#H-ManualFlushModeActivation">Manual flush mode activation</a></h4> 
+        <p class="wikiPara"> Default flush mode settings need to be configurable in a fine grained manner. e.g. It should be possible to have manual flush mode by default, except for pages in /app/crud, which use auto flush mode. </p> 
+        <h3 class="wikiHeadline3" id="H-JSFIntegration"><a href="PersistenceModuleHome.html#H-JSFIntegration">JSF integration</a></h3> 
+        <p class="wikiPara"> We will want to provide the Seam-managed transaction around the JSF lifecycle like we did in Seam 2. We'll have to think about where this code belongs (probably the Faces module) and how best to loosely link it to this module (optional dependency). </p> 
+        <p class="wikiPara"> Forum discussion: <a href="http://seamframework.org/Community/JSFLifecycleTransactionsFeature" target="" class="regularLink">here</a>. </p> 
+        <h3 class="wikiHeadline3" id="H-EnversIntegration"><a href="PersistenceModuleHome.html#H-EnversIntegration">Envers integration</a></h3> 
+        <p class="wikiPara"> We will want to integration with <a href="http://www.jboss.org/envers" target="" class="regularLink">Envers</a> to make it easy for a developer to add auditing to their database-oriented application. </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> injecting AuditReader (wrapper around the current EntityManager to read history)</li> 
+         <li class="wikiUnorderedListItem"> fireing and observing a <q>new revision</q> event</li> 
+        </ul> 
+        <h3 class="wikiHeadline3" id="H-HibernateSearchIntegration"><a href="PersistenceModuleHome.html#H-HibernateSearchIntegration">Hibernate Search Integration</a></h3> 
+        <p class="wikiPara"> We should provide hibernate search integration in a similar manner to seam 2. </p> 
+        <h3 class="wikiHeadline3" id="H-References"><a href="PersistenceModuleHome.html#H-References">References</a></h3> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <a href="http://relation.to/Bloggers/OnCDIInterceptorBindings" target="" class="regularLink">On CDI interceptor bindings</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="http://relation.to/Bloggers/MoreOnCDIInterceptorBindings" target="" class="regularLink">More on CDI interceptor bindings</a> (provides example approach to a transaction interceptor)</li> 
+         <li class="wikiUnorderedListItem"> <a href="http://smokeandice.blogspot.com/2009/12/cdi-and-declarative-transactions.html" target="" class="regularLink">CDI and declarative transactions</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="http://smokeandice.blogspot.com/2009/12/jsr-299-tx-interceptor-code.html" target="" class="regularLink">JSR-299 transaction interceptor code</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="http://blogs.sun.com/ldemichiel/entry/jpa_next_thinking_about_the" target="" class="regularLink">JPA.next</a></li> 
+         <li class="wikiUnorderedListItem"> <a href="/Community/TransactionForNormalBeans.html" target="" class="regularLink">Forum discussion on JSF integration and EM producer</a></li> 
+        </ul> 
+        <p class="wikiPara"> </p> 
+       </div>
+       <div id="j_id367" class="documentTags undecoratedLink smallFont">
+        <div id="j_id368">
+          Tags:&nbsp;
+         <a href="https://community.jboss.org/tags?recursive=true#/?tags=Seam+3">Seam 3</a>&nbsp;|&nbsp;
+         <a href="https://community.jboss.org/tags?recursive=true#/?tags=persistence">persistence</a>&nbsp;|&nbsp;
+         <a href="https://community.jboss.org/tags?recursive=true#/?tags=transactions">transactions</a>
+        </div>
+       </div> 
+      </div>
+      <div id="commentDisplayForm"></div> 
+     </div> 
+     <div class="clear" style="padding-top:15px;"></div> 
+    </div>
+   </div> 
+  </div> 
+  <div id="footer" class="undecoratedLink"> 
+   <p> © Copyright 2009, Red Hat Middleware, LLC. All rights reserved. JBoss and Seam are registered trademarks and servicemarks of <a href="http://www.redhat.com/">Red Hat, Inc</a>. [<a href="http://www.redhat.com/legal/privacy_statement.html">Privacy Policy</a>]</p> 
+  </div>
+  <div id="status">
+   <span id="globalStatus"><span id="globalStatus.start" style="display: none">
+     <div id="j_id423" class="statusStart">
+      <img src="../themes/sfwkorg/img/statusindicator.gif" height="25" width="20">
+     </div></span><span id="globalStatus.stop">
+     <div id="j_id425" class="statusStop">
+      <img src="../themes/sfwkorg/img/blank.gif" height="25" width="20">
+     </div></span></span>
+  </div>  
+  <!-- Mirrored from 127.0.0.1:64444/Seam3/PersistenceModule by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:55:03 GMT --> 
+  <!-- Added by HTTrack -->
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack --> 
+ </body>
+</html>

@@ -1,0 +1,917 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <!-- Mirrored from 127.0.0.1:64444/Documentation/Forge by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:52:07 GMT -->
+ <!-- Added by HTTrack -->
+ <head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack -->  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+  <title>Seam Framework - Forge</title> 
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/basic_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" rel="stylesheet" type="text/css">
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/extended_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" media="rich-extended-skinning" rel="stylesheet" type="text/css">
+  <script src="../a4j/g/3_3_3.CR1org.ajax4jsf.javascript.AjaxScript" type="text/javascript"></script>
+  <script type="text/javascript">window.RICH_FACES_EXTENDED_SKINNING_ON=true;</script>
+  <script src="../a4j/g/3_3_3.CR1org/richfaces/renderkit/html/scripts/skinning.js" type="text/javascript"></script>
+  <link href="../themes/sfwkorg/css/sfwk.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shCore.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shThemeDefault.css" rel="stylesheet" type="text/css"> 
+  <link rel="alternate" type="application/atom+xml" title="Design" href="../service/Feed/atom/Area/Documentation/Node/Designhtml.html"> 
+  <script type="text/javascript" src="../seam/resource/remoting/resource/remote.js"></script> 
+  <script type="text/javascript" src="../seam/resource/remoting/interface1535.js?httpSessionChecker"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jquery.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jqueryPlugins.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/lacewiki.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shCore.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushBash.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCpp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCSharp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCss.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDelphi.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDiff.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushGroovy.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJava.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJScript.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPhp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPlain.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPython.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushRuby.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushScala.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushSql.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushVb.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushXml.js"></script> 
+  <script type="text/javascript">
+        /* If you really want to load the Flash garbage on every page, go ahead and enable this:
+        SyntaxHighlighter.config.clipboardSwf = '/themes/sfwkorg/js/sh/scripts/clipboard.swf';
+         */
+        SyntaxHighlighter.defaults['gutter'] = false;
+        SyntaxHighlighter.all();
+	</script> 
+  <script type="text/javascript">
+
+        // ###################### Session timeout alert #################################
+
+        var sessionChecker = Seam.Component.getInstance("httpSessionChecker");
+        var timeoutURL = '/Home/JBossSeam';
+        var timeoutMillis = '900'*1000+3000;
+        var sessionTimeoutInterval = null;
+
+        function startSessionTimeoutCheck() {
+            sessionTimeoutInterval = setInterval('sessionChecker.isNewSession(alertTimeout)', timeoutMillis);
+        }
+
+        function stopSessionTimeoutCheck() {
+            if (sessionTimeoutInterval) clearInterval(sessionTimeoutInterval);
+        }
+
+        function resetSessionTimeoutCheck() {
+            if (sessionTimeoutInterval != null) {
+                stopSessionTimeoutCheck();
+                startSessionTimeoutCheck();
+            }
+        }
+
+        function alertTimeout(newSession) {
+            if (newSession) {
+                clearInterval(sessionTimeoutInterval);
+                jQuery(".ajaxSupport")
+                        .removeAttr('onblur')
+                        .removeAttr('onchange')
+                        .removeAttr('onkeyup')
+                        .removeAttr('onclick');
+                jQuery(".sessionEventTrigger").hide();
+                var answer = confirm("Your session has timed out, you will be redirected to the start page.");
+                if (answer) window.location = timeoutURL;
+            }
+        }
+
+        // ###################### Popups #################################
+
+        var fadeInPopupDialog = function(hash) {
+            hash.w.fadeIn('fast',function(){ hash.o.show(); });
+            jQuery(".closeDialog", hash.w).attr("accesskey", "C"); // Dynamically assign accesskey to .closeDialog buttons
+        };
+
+        var fadeOutPopupDialog = function(hash) { hash.w.fadeOut('fast',function(){ hash.o.remove(); }); };
+
+        // ###################### Tabbed Forms #################################
+
+        var formTabErrors = {};
+
+        function formTabRaiseError(tabId, fieldId, message) {
+
+            formTabClearError(tabId, fieldId); // Clear error then re-add
+
+            log("Raise error for tab: '" + tabId + "' field: " + fieldId);
+
+            // Add an error message to the client message box
+            log("Adding error message: " +tabId + fieldId + "ErrorMessage")
+            jQuery("#clientMessageBoxTable").append(
+                '<tr id="' + tabId + fieldId + 'ErrorMessage"><td><img src="/themes/sfwkorg/img/attention.gif" ' +
+                'height="18" width="18" class="clientMessageBoxImage attentionImage"/></td>' +
+                '<td><span id="attentionMessage" class="attentionMessage">'+ message + '</span></td></tr>'
+            );
+            if (formTabErrors[tabId] == null) {
+                formTabErrors[tabId] = 1;
+            } else {
+                formTabErrors[tabId]++;
+            }
+            formTabRenderErrors(tabId);
+        }
+
+        function formTabClearError(tabId, fieldId) {
+            if (document.getElementById(tabId+fieldId+"ErrorMessage") != null) { // This error is displayed
+                log("Clear error for tab: '" + tabId + "' field: " + fieldId);
+                log("Removing error message: " +tabId + fieldId + "ErrorMessage")
+                // Remove the error message on the client message box
+                jQuery("#"+tabId + fieldId + "ErrorMessage").remove();
+
+                formTabErrors[tabId]--;
+                formTabRenderErrors(tabId);
+            }
+        }
+
+        function formTabRenderErrors(tabId) {
+            log("Errors for tab: '" + tabId + "': " + formTabErrors[tabId]);
+
+            if (formTabErrors[tabId] > 0 && document.getElementById(tabId+"InvalidIcon") == null) {
+                log("Showing icon for tab: " + tabId);
+                // Show an icon on the tab and blink it a few times
+                jQuery("#"+tabId)
+                    .prepend('<img id="' + tabId + 'InvalidIcon" ' +
+                            'src="/themes/sfwkorg/img/attention.gif" width="13" height="13" ' +
+                            'alt="!" style="vertical-align:bottom;margin-left:5px;margin-right:5px;"/>');
+                pulsate("#"+tabId);
+            } else if (formTabErrors[tabId] < 1){
+                log("Removing icon of tab: " + tabId);
+                jQuery("#"+tabId + "InvalidIcon").remove();             // Remove the error icon on the tab
+            }
+
+            var tabsHaveErrors = false;
+            for (var tab in formTabErrors) {
+                var numOfErrors = formTabErrors[tab];
+                if (numOfErrors > 0) {
+                    tabsHaveErrors = true;
+                    break;
+                }
+            }
+
+            if (tabsHaveErrors) {
+                log("Hiding save button and showing form message box");
+                jQuery(".saveButton").hide();                       // Hide save button(s)
+                jQuery(".formControls").css("height", "30px");      // Adjust height for missing save button
+                jQuery("#messageBoxContainer").hide();                 // Hide server messages
+                jQuery("#clientMessageBoxContainer").show();           // Show client error messages
+            } else {
+                log("Showing save button and hiding form message box");
+                jQuery(".saveButton").show();                       // Show save button(s)
+                jQuery(".formControls").css("height", "");          // Readjust height for present save button
+                jQuery("#clientMessageBoxContainer").hide();           // Hide client error messages
+            }
+        }
+
+        function formTabClicked() {
+            jQuery("#messageBoxContainer").hide();                 // Hide server messages
+        }
+
+        function log(message) {
+            return; // Remove to enable logging
+            if (!log.window_ || log.window_.closed) {
+                var win = window.open("", null, "width=400,height=200," +
+                                                "scrollbars=yes,resizable=yes,status=no," +
+                                                "location=no,menubar=no,toolbar=no");
+                if (!win) return;
+                var doc = win.document;
+                doc.write("<html><head><title>Debug Log</title></head><body style='font-family: monospace'></body></html>");
+                doc.close();
+                log.window_ = win;
+            }
+            var logLine = log.window_.document.createElement("div");
+            logLine.appendChild(log.window_.document.createTextNode(message));
+            log.window_.document.body.appendChild(logLine);
+        }
+
+        // ###################### Design #################################
+
+        function highlightStars(item, range, end) {
+            for (i = 1; i <= range; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star_grey.gif");
+            }
+            for (i = 1; i <= end; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star.gif");
+            }
+        }
+
+        function pulsate(query) {
+            var blinkCount = 2*2;
+            do {
+                jQuery(query)['fade'+(blinkCount%2==0?'Out':'In')]('fast');
+            } while (--blinkCount);
+        }
+
+        function clearDocumentBackground() {
+            // Noop for this skin
+        }
+
+        // Wrap boxes with border and shadow
+        function wrapBoxes() {
+            // Noop for this skin
+        }
+
+        function initPage() {
+            checkCookieSupport();
+            wrapBoxes();
+        }
+
+        jQuery(function() {
+            initPage();
+        });
+
+    </script> 
+  <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-25106513-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script> 
+ </head> 
+ <body> 
+  <noscript> 
+   <div class="cookieJavaScriptWarning">
+     Please activate JavaScript in your browser. Without it, you will only be able to browse this website but clicking on any advanced feature (any forms or submit buttons) will not work. 
+   </div> 
+  </noscript>
+  <div id="dialogHelp" class="popupDialog">
+   <span id="dialogHelpPopup" title="dialogHelp"></span>
+   <span id="dialogHelpInit"> <script type="text/javascript">
+            function showHelpPopup(width, height, offsetId) {
+                var offset = jQuery("#"+offsetId).offset();
+                jsf('dialogHelpPopup')
+                    .css({width: width+"px", height: height+"px", top: offset.top-100+"px", left: offset.left-150+"px"})
+                    .jqm({
+                        closeClass: "closeDialog",
+                        overlay: 0
+                    });
+
+                jQuery("#dialogHelpContent").css("width", width-20+"px").css("height", height-75+"px");
+                jQuery("#dialogHelpContent").css("overflow", "auto");
+
+                jsf('dialogHelpPopup').jqmShow();
+            }
+        </script></span> 
+   <script type="text/javascript">jQuery(function() {
+        jsf('dialogHelpPopup').Resizable({
+            minTop: 1,
+            dragHandle: "#dialogHelpHead",
+            handlers: { se: "#dialogHelpResizeHandle" }
+        });
+    });</script> 
+   <div class="popupDialogHead" id="dialogHelpHead">
+    Help
+   </div>
+   <div id="dialogHelpContent" class="popupDialogContent"></div>
+   <div id="dialogHelpControls" class="popupDialogControls">
+    <div id="j_id14" style="padding:5px;">
+     <a href="#" class="buttonNonpersistent closeDialog"><span class="buttonLabel">Close Help</span></a>
+    </div>
+   </div>
+  </div> 
+  <div id="wrapper"> 
+   <div id="header">  
+    <div>
+     <a href="http://seamframework.org/"><img src="../themes/sfwkorg/img/blank.gif" height="98" width="210"></a> 
+    </div> 
+   </div>
+   <div id="body"> 
+    <div id="container"> 
+     <div id="leftColumn">
+      <div id="mainMenu" xmlns="http://www.w3.org/1999/xhtml">
+       <div id="j_id121" class="box">
+        <div class="mainMenuContainer"> 
+         <div class="mainMenuHeader"></div> 
+         <div class="mainMenuBody">
+          <div id="j_id125" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Home.html" class="level1Link">Home</a>
+          </div>
+          <div id="j_id132" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Home/WhySeam.html" class="level2Link">Why Seam?</a>
+          </div>
+          <div id="j_id139" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Seam2.html" class="level1Link">Seam 2</a>
+          </div>
+          <div id="j_id146" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/GettingStarted.html" class="level2Link">Getting Started</a>
+          </div>
+          <div id="j_id153" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Downloads.html" class="level2Link">Downloads</a>
+          </div>
+          <div id="j_id160" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Documentation.html" class="level2Link">Documentation</a>
+          </div>
+          <div id="j_id167" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="http://weld.cdi-spec.org/" class="level1Link">Weld</a>
+          </div>
+          <div id="j_id174" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Community.html" class="level1Link">Community</a>
+          </div>
+          <div id="j_id181" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="https://community.jboss.org/" class="level2Link">Forums</a>
+          </div>
+          <div id="j_id188" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/CDIExtensions.html" class="level2Link">CDI Extensions</a>
+          </div>
+          <div id="j_id195" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Contribute.html" class="level2Link">Contribute</a>
+          </div>
+          <div id="j_id202" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/JIRA.html" class="level2Link">JIRA</a>
+          </div>
+          <div id="j_id209" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/MailingLists.html" class="level2Link">Mailing Lists</a>
+          </div>
+          <div id="j_id216" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Events.html" class="level2Link">Events</a>
+          </div>
+          <div id="j_id223" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Links.html" class="level2Link">Links</a>
+          </div>
+          <div id="j_id230" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/SeamInProduction.html" class="level2Link">Seam In Production</a>
+          </div>
+          <div id="j_id237" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Documentation.html" class="level1Link">Documentation</a>
+          </div>
+          <div id="j_id244" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="FAQs.html" class="level2Link">FAQs</a>
+          </div>
+          <div id="j_id251" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="KnowledgeBase.html" class="level2Link">Knowledge Base</a>
+          </div>
+          <div id="j_id258" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="Design.html" class="level2Link">Design</a>
+          </div> 
+         </div> 
+         <div class="mainMenuFooter"></div> 
+        </div>
+       </div> 
+      </div> 
+      <br> 
+      <div style="margin-top: 25px; margin-left: 15px; margin-right: 15px; "> 
+       <h2>Built with Seam</h2> 
+       <p> You can find the full source code for this website in the <a href="/Download.html">Seam package</a> in the directory /examples/wiki. It is licensed under the LGPL. </p> 
+       <div style="text-align:center;">
+        <a href="/Community/GetASeamIcon.html"><img src="../themes/sfwkorg/img/runningon_seamlogo_beige.gif" height="50" width="200"></a> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="rightColumn">
+      <img src="../themes/sfwkorg/img/blank.gif" height="8" width="1">
+      <div id="breadcrumb" class="breadcrumb">
+       <span class="breadcrumbPanel"><a href="../index.html" class="itemLink breadcrumbRoot">Site</a><span class="itemSeparator breadcrumbRoot">·</span><a href="../Documentation.html" class="itemLink">Documentation</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="Design.html" class="itemLink">Design</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="Forge.html" class="itemText">Forge</a></span>
+      </div>
+      <div id="messageBoxContainer"></div>
+      <div id="clientMessageBoxContainer" style="display:none;"> 
+       <div id="clientMessageBox" class="messageBox"> 
+        <table id="clientMessageBoxTable" class="messageBoxTable" cellpadding="0" cellspacing="0" border="0"></table> 
+        <script type="text/javascript">jQuery(function() {
+                    jQuery("#clientMessageBoxContainer").css("margin-top", "10px").css("margin-bottom", "10px");
+                    pulsate(".clientMessageBoxImage");
+                });</script> 
+       </div>
+      </div> 
+      <div id="documentDisplayContainer" class="box">
+       <div id="documentDisplay" class="documentDisplay">
+        <br>
+        <br> 
+        <h1 style="display: none;">Forge</h1> 
+        <div> 
+         <img src="../service/File/171315.png" width="555" height="256"> 
+         <a target="_blank" href="http://hudson.jboss.org/jenkins/view/Seam/job/Seam%20Forge/lastBuild" style="float: right; margin-top: 20px;"><img src="http://hudson.jboss.org/jenkins/view/Seam/job/Seam%20Forge/lastBuild/buildStatus"></a> 
+        </div>
+        <p class="wikiPara"> </p> 
+        <p class="wikiPara" style="font-style: italic; margin-top: 0px; margin-left: 60px; width: 500px;">A core framework for rapid-application development in a standards-based environment. Plugins / incremental project enhancement for Java EE, and more.</p> 
+        <hr> 
+        <div style="display:block; background: #ccc; width: 100%; padding: 5px;">
+          Note: This project requires 
+         <a href="http://maven.apache.org/download.html" target="" class="regularLink">Maven 3</a> and Java 6 - ( 
+         <a href="http://seamframework.org/Documentation/SeamForge#H-GetInvolved" target="" class="regularLink">Get Involved!</a> )
+        </div> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <strong>Downloads &amp; Releases:</strong> <a href="https://repository.jboss.org/nexus/index.html#nexus-search;gav~org.jboss.forge~forge-distribution~~~~kw,versionexpand" target="" class="regularLink">Downloads</a>, <a href="http://seamframework.org/Documentation/SeamForge#H-ReleasePlan" target="" class="regularLink">Release Plan</a></li> 
+         <li class="wikiUnorderedListItem"> <strong>User's guide:</strong> <a href="https://docs.jboss.org/author/display/SEAMFORGE/Home" target="" class="regularLink">https://docs.jboss.org/author/display/SEAMFORGE/Home</a></li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <strong>Issue Tracker (JIRA):</strong> <a href="https://issues.jboss.org/browse/SEAMFORGE" target="" class="regularLink">https://issues.jboss.org/browse/SEAMFORGE</a></li> 
+         <li class="wikiUnorderedListItem"> <strong>CI Builds (Jenkins):</strong> <a href="http://ci.jboss.org/jenkins/view/Forge/" target="" class="regularLink">All CI Jobs</a></li> 
+         <li class="wikiUnorderedListItem"> <strong>Version Control (git):</strong> <a href="http://github.com/forge/core" target="" class="regularLink">http://github.com/forge/core</a><br></li> 
+         <li class="wikiUnorderedListItem"> <strong>Version Control (JBossTools svn):</strong> <a href="https://anonsvn.jboss.org/repos/jbosstools/trunk/forge/" target="" class="regularLink">https://anonsvn.jboss.org/repos/jbosstools/trunk/forge/</a><br></li> 
+         <li class="wikiUnorderedListItem"> <strong>Users List (Email):</strong> <a href="https://lists.jboss.org/mailman/listinfo/forge-users" target="" class="regularLink">https://lists.jboss.org/mailman/listinfo/forge-users</a></li> 
+         <li class="wikiUnorderedListItem"> <strong>Dev List (Email):</strong> <a href="https://lists.jboss.org/mailman/listinfo/forge-dev" target="" class="regularLink">https://lists.jboss.org/mailman/listinfo/forge-dev</a></li> 
+         <li class="wikiUnorderedListItem"> <strong>FAQ:</strong> <a href="SeamForgeFAQ.html" target="" class="regularLink">Frequenly Asked Questions</a></li> 
+         <li class="wikiUnorderedListItem"> <strong>ScreenCasts:</strong> <a href="http://vimeo.com/channels/seamforge" target="" class="regularLink">Vimeo Channel</a></li> 
+        </ul> 
+        <h2 class="wikiHeadline2" id="H-MaintainersAndContributors"><a href="Forge.html#H-MaintainersAndContributors">Maintainers and contributors</a></h2> 
+        <table class="datatable topLeftBottomBorder rightBorder" border="0" cellspacing="0" cellpadding="5" style="width: 759px;"> 
+         <tbody>
+          <tr class="regularHeader alignLeft"> 
+           <th class="rightBorder">Name</th> 
+           <th class="rightBorder">Organization</th> 
+           <th class="rightBorder">Role</th> 
+           <th>Hometown (Time zone)</th> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="http://community.jboss.org/people/lincolnthree" target="" class="regularLink">Lincoln Baxter III</a></td> 
+           <td class="rightBorder">JBoss, by Red Hat</td> 
+           <td class="rightBorder">Project Lead</td> 
+           <td>Charlotte, NC, USA (UTC-05)</td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="http://twitter.com/brockm" target="" class="regularLink">Mike Brock</a></td> 
+           <td class="rightBorder">JBoss, by Red Hat</td> 
+           <td class="rightBorder">Scripting &amp; Errai Integration Lead</td> 
+           <td>Toronto, ON (UTC-05)</td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="http://community.jboss.org/people/koen.aers%40jboss.com" target="" class="regularLink">Koen Aers</a></td> 
+           <td class="rightBorder">JBoss, by Red Hat</td> 
+           <td class="rightBorder">JBoss Tools Integation Lead</td> 
+           <td>Antwerp, BE (UTC+01)</td> 
+          </tr> 
+         </tbody>
+        </table> 
+        <img src="http://seamframework.org/service/File/145010"> 
+        <h2 class="wikiHeadline2" id="H-GetInvolved"><a href="Forge.html#H-GetInvolved">Get Involved</a></h2> 
+        <p class="wikiPara"> Got an idea? Want to get your feet wet? Do some Forgestorming: <a href="http://bit.ly/forgestorm" target="" class="regularLink">http://bit.ly/forgestorm</a> - def: forgestorm (v.) [for-ge-st-orm] - <q>The act of brainstorming when applied to Forge</q> <a href="http://watchmayweathervsortizonlinex.blogspot.com/">watch mayweather vs ortiz online</a> </p> 
+        <table> 
+         <tbody>
+          <tr> 
+           <td></td>
+           <td> 
+            <ol class="wikiOrderedList"> 
+             <li class="wikiOrderedListItem"> Check out the code: <pre class="wikiPreformatted">git clone git://github.com/forge/core.git forge</pre> </li> 
+             <li class="wikiOrderedListItem"> 'cd' into the project directory: <pre class="wikiPreformatted">cd forge</pre> </li> 
+             <li class="wikiOrderedListItem"> Build the code: <pre class="wikiPreformatted">mvn install</pre> </li> 
+             <li class="wikiOrderedListItem"> 'cd' into the dist/ directory: <pre class="wikiPreformatted">cd dist</pre> </li> 
+             <li class="wikiOrderedListItem"> Execute Forge: <pre class="wikiPreformatted">mvn exec:java</pre> </li> 
+            </ol> <b><i class="wikiEmphasis">Note</i></b>: <a href="http://maven.apache.org/download.html" target="" class="regularLink">Maven 3</a> and Java 6 are required to build this project. </td> 
+          </tr> 
+         </tbody>
+        </table> 
+        <h3 class="wikiHeadline3" id="H-Contribute"><a href="Forge.html#H-Contribute">Contribute</a></h3> 
+        <ol class="wikiOrderedList"> 
+         <li class="wikiOrderedListItem"> Fork the repository on GitHub: <a href="http://github.com/forge/core" target="" class="regularLink">http://github.com/forge/core</a> and clone it to your local PC <pre class="wikiPreformatted">git clone git@github.com:{your user}/{your forge repo}.git</pre> </li> 
+         <li class="wikiOrderedListItem"> If you haven't done so already, sign the JBoss CLA: <a href="https://cla.jboss.org/" target="" class="regularLink">https://cla.jboss.org/</a></li> 
+         <li class="wikiOrderedListItem"> Create an issue in the issue tracker: <a href="https://issues.jboss.org/browse/SEAMFORGE" target="" class="regularLink">https://issues.jboss.org/browse/SEAMFORGE</a></li> 
+         <li class="wikiOrderedListItem"> Create a branch for your issue, where XX is the issue number: <pre class="wikiPreformatted">git branch SEAMFORGE-XX
+git checkout SEAMFORGE-XX</pre> </li> 
+         <li class="wikiOrderedListItem"> Make your changes and write unit tests for them.</li> 
+         <li class="wikiOrderedListItem"> Commit your changes <pre class="wikiPreformatted">git add -A
+git commit -m "Implemented SEAMFORGE-XX"</pre> </li> 
+         <li class="wikiOrderedListItem"> If you made multiple commits, use rebase to squash them into a single commit, where 5 is the number of commits to rebase: <pre class="wikiPreformatted">git rebase -i HEAD~5</pre> Change 'pick' to 's' for each commit you wish to squash upwards. (If you do not change a line, it will not be modified.) <pre class="wikiPreformatted">  1 pick ade2b1a Implemented SEAMFORGE-XX
+  2 s c3ae0a2 almost done
+  3 s c863bfb did more work
+  4 s af793ae Started working on SEAMFORGE-XX
+  5 pick 368bbb9 RepositoryLookup falls back to Central by default
+</pre> Once you are done, your commits should look like this: <pre class="wikiPreformatted">  1 ade2b1a Implemented SEAMFORGE-XX
+  2 368bbb9 RepositoryLookup falls back to Central by default
+</pre> </li> 
+         <li class="wikiOrderedListItem"> Push to your branch: <pre class="wikiPreformatted">git push origin SEAMFORGE-XX</pre> </li> 
+         <li class="wikiOrderedListItem"> Submit a pull request from your branch. The pull request should include one single commit changing all of your changes. If you have more than one commit, then you did not rebase correctly. <pre class="wikiPreformatted">http://github.com/{your user}/{your forge repo}/tree/{SEAMFORGE-XX}</pre> </li> 
+         <li class="wikiOrderedListItem"> Link the pull request to the JIRA via <q>Workflow</q> -&gt; <q>Link Pull Request</q></li> 
+        </ol> 
+        <h3 class="wikiHeadline3" id="H-SyncUpdateYourRepository"><a href="Forge.html#H-SyncUpdateYourRepository">Sync/Update your Repository</a></h3> 
+        <p class="wikiPara"> 1 This step only needs to occur once: </p>
+        <pre class="wikiPreformatted">git remote add upstream git://github.com/forge/core.git</pre> 2 Pull the changes from upstream and merge them into your current branch: 
+        <pre class="wikiPreformatted">git pull upstream master</pre> 
+        <p></p> 
+        <h3 class="wikiHeadline3" id="H-DebugForge"><a href="Forge.html#H-DebugForge">Debug Forge</a></h3> 
+        <p class="wikiPara"> Once you have checked out and built the sources, you can debug Forge by taking the following steps: </p> 
+        <ol class="wikiOrderedList"> 
+         <li class="wikiOrderedListItem"> <pre class="wikiPreformatted">cd forge/dist/</pre> </li> 
+         <li class="wikiOrderedListItem"> <pre class="wikiPreformatted">mvnDebug exec:java</pre> </li> 
+         <li class="wikiOrderedListItem"> Link to your eclipse debugger: <a href="http://docs.codehaus.org/display/MAVENUSER/Dealing+with+Eclipse-based+IDE" target="" class="regularLink">http://docs.codehaus.org/display/MAVENUSER/Dealing+with+Eclipse-based+IDE</a></li> 
+        </ol> 
+        <h2 class="wikiHeadline2" id="H-ReleasePlan"><a href="Forge.html#H-ReleasePlan">Release plan</a></h2> 
+        <p class="wikiPara"> (status: draft) - This plan is still being defined. </p> 
+        <table class="datatable topLeftBottomBorder rightBorder" border="0" cellspacing="0" cellpadding="5"> 
+         <tbody>
+          <tr class="regularHeader alignLeft"> 
+           <th class="rightBorder">Version</th> 
+           <th class="rightBorder">Time frame</th> 
+           <th>Focus</th> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"> 1.0.0.Beta2 or 1.0.0.CR1 (In Progress) </td> 
+           <td class="rightBorder">~ September</td> 
+           <td> 
+            <ul class="wikiUnorderedList"> 
+             <li class="wikiUnorderedListItem"> Provide navigation for CRUD <img src="../service/File/138173.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> Enhance scaffolding <img src="../service/File/138173.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> Enhance plugin installation/removal <img src="../service/File/138173.png" width="16" height="16"></li> 
+            </ul> </td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"> 1.0.0.Beta1 (In Progress) </td> 
+           <td class="rightBorder">~ August</td> 
+           <td> 
+            <ul class="wikiUnorderedList"> 
+             <li class="wikiUnorderedListItem"> Plugin repository hosted and searchable <img src="../service/File/138171.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> Use JBoss Modules to isolate plugins <img src="../service/File/138171.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> Deploy to AS7 <img src="../service/File/138171.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> Deploy to OpenShift <img src="../service/File/138171.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> Provide navigation for CRUD <img src="../service/File/138173.png" width="16" height="16"></li> 
+            </ul> </td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"> <a href="http://community.jboss.org/people/lincolnthree/blog/2011/06/09/seam-forge-100alpha4-birthday-released" target="" class="regularLink">1.0.0.Alpha4</a> "Birthday" Released </td> 
+           <td class="rightBorder">June 9, 2011</td> 
+           <td> 
+            <ul class="wikiUnorderedList"> 
+             <li class="wikiUnorderedListItem"> Scaffolding framework broken down and de-coupled <img src="../service/File/138171.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> Provide basic functional CRUD <img src="../service/File/138171.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> Maven Project Model API stabilized <img src="../service/File/138171.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> Built in Facets API stabilized <img src="../service/File/138171.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> Enabled removal of facets <img src="../service/File/138171.png" width="16" height="16"></li> 
+            </ul> </td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"> <a href="http://bit.ly/angrykittens" target="" class="regularLink">1.0.0.Alpha3</a> "Angry Kittens" Released </td> 
+           <td class="rightBorder">~ March 30th</td> 
+           <td> 
+            <ul class="wikiUnorderedList"> 
+             <li class="wikiUnorderedListItem"> Plugin distribution framework implemented <img src="../service/File/138171.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> JPA configuration implemented <img src="../service/File/138171.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> CDI configuration implemented <img src="../service/File/138171.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> JSF configuration implemented <img src="../service/File/138171.png" width="16" height="16"></li> 
+            </ul> </td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"> <a href="https://issues.jboss.org/browse/SEAMFORGE/fixforversion/12315890" target="" class="regularLink">1.0.0.Alpha2</a> "Angry Kitten" (Released) </td> 
+           <td class="rightBorder">~ February</td> 
+           <td> 
+            <ul class="wikiUnorderedList"> 
+             <li class="wikiUnorderedListItem"> JBoss Tools integration prototyped <img src="../service/File/138171.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> Dependency manipulation plugins prototyped <img src="../service/File/138171.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> Java manipulation plugins prototyped <img src="../service/File/138171.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> XML Facelet View file manipulation prototyped <img src="../service/File/138173.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> More robust and customizable scaffolding functionality <img src="../service/File/138171.png" width="16" height="16"></li> 
+            </ul> </td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"> <a href="http://bit.ly/angrykitten" target="" class="regularLink">1.0.0.Alpha1</a> "Angry Kitten" Released </td> 
+           <td class="rightBorder">~ November</td> 
+           <td> 
+            <ul class="wikiUnorderedList"> 
+             <li class="wikiUnorderedListItem"> Java Manipulation API Stabilized <img src="../service/File/138171.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> Plugin Framework API Stabilized <img src="../service/File/138171.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> Continued integration and feedback for refactoring <img src="../service/File/138171.png" width="16" height="16"></li> 
+            </ul> </td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"></td> 
+           <td class="rightBorder">~ October</td> 
+           <td> 
+            <ul class="wikiUnorderedList"> 
+             <li class="wikiUnorderedListItem"> Additional addons prototyped (GWT, JSF, JPA <img src="../service/File/138171.png" width="16" height="16">... etc) </li> 
+             <li class="wikiUnorderedListItem"> Plugin framework feedback incorporated and refactored <img src="../service/File/138171.png" width="16" height="16"></li> 
+            </ul> </td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"></td> 
+           <td class="rightBorder">~ September</td> 
+           <td> 
+            <ul class="wikiUnorderedList"> 
+             <li class="wikiUnorderedListItem"> Plugin Framework Events initial testing and application begins. (in progress <img src="../service/File/138173.png" width="16" height="16">)</li> 
+             <li class="wikiUnorderedListItem"> First set of plug-ins for project bootstrapping <img src="../service/File/138171.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> Tooling feedback incporated and refactored <img src="../service/File/138171.png" width="16" height="16"></li> 
+            </ul> </td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"></td> 
+           <td class="rightBorder">~ August</td> 
+           <td> 
+            <ul class="wikiUnorderedList"> 
+             <li class="wikiUnorderedListItem"> Basic Java Manipulation API <img src="../service/File/138171.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> Maven Integration <img src="../service/File/138171.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> Basic CLI Runner or Prototype Shell<img src="../service/File/138171.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> Initial set of Plugin Framework Events (Based on CDI) <img src="../service/File/138171.png" width="16" height="16"></li> 
+             <li class="wikiUnorderedListItem"> Tooling team consulted for IDE integration in JBoss Tools <img src="../service/File/138171.png" width="16" height="16"></li> 
+            </ul> </td> 
+          </tr> 
+         </tbody>
+        </table> 
+        <h3 class="wikiHeadline3" id="H-SimplicityAtWork"><a href="Forge.html#H-SimplicityAtWork">Simplicity at work</a></h3> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <a href="http://pastebin.com/Mp0Ke4TP" target="" class="regularLink">Entity Generation</a> | <a href="https://sas.elluminate.com/p.jnlp?psid=2010-10-21.0709.M.390C7DEAB81485CE3EDBCDCC98DD29.vcr&amp;sid=819" target="" class="regularLink">Oct 21 Demo Video - Forge Prototype</a></li> 
+        </ul> 
+        <h2 class="wikiHeadline2" id="H-DesignNotes"><a href="Forge.html#H-DesignNotes">Design notes</a></h2> 
+        <p class="wikiPara"> (To be continued as more ideas roll in.) </p> 
+        <h3 class="wikiHeadline3" id="H-MajorFacets"><a href="Forge.html#H-MajorFacets">Major Facets</a></h3> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Continuous Project Enhancement</li> 
+         <li class="wikiUnorderedListItem"> Rapid Application Developemnt</li> 
+         <li class="wikiUnorderedListItem"> Shell-style interaction while enabling a strong tooling suite</li> 
+         <li class="wikiUnorderedListItem"> Single-command style interaction via native command line</li> 
+         <li class="wikiUnorderedListItem"> Plugin-based: standardized around a core set of manipulation APIs for Java sources, XML, Maven POMs, Java Archives (ShrinkWrap)</li> 
+         <li class="wikiUnorderedListItem"> Internal architecture founded on <a href="http://seamframework.org/Weld" target="" class="regularLink">CDI/Weld</a></li> 
+         <li class="wikiUnorderedListItem"> Technology agnostic, may be used to create application frameworks for any technology or language.</li> 
+         <li class="wikiUnorderedListItem"> Support for internationalization and localization (i18n and l10n)</li> 
+         <li class="wikiUnorderedListItem"> Support for maven artifact discovery and version selection: (<a href="http://arquillian.pastebin.com/nE5NbmyH" target="" class="regularLink">http://arquillian.pastebin.com/nE5NbmyH</a>)</li> 
+         <li class="wikiUnorderedListItem"> Incremental database reverse-engineering w/Hibernate Tools</li> 
+        </ul> 
+        <h3 class="wikiHeadline3" id="H-PotentialPluginsBrainstorming"><a href="Forge.html#H-PotentialPluginsBrainstorming">Potential Plugins / Brainstorming</a></h3> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Set project.build.finalName of project (sets name of generated artifact)</li> 
+         <li class="wikiUnorderedListItem"> Create a blank JSF view template</li> 
+         <li class="wikiUnorderedListItem"> Add a taglib namespace to a JSF view template</li> 
+         <li class="wikiUnorderedListItem"> Setup Solder logging annotation processor</li> 
+         <li class="wikiUnorderedListItem"> Set an initial property on bean in seam-beans.xml (Seam Config)</li> 
+         <li class="wikiUnorderedListItem">Maven repository configurer (updates settings.xml or pom.xml with necessary repositories for dependencies)</li> 
+         <li class="wikiUnorderedListItem">Scaffolding framework</li> 
+         <li class="wikiUnorderedListItem">Automatic test stub generation</li> 
+         <li class="wikiUnorderedListItem">Generate/Run/Deploy webapp</li> 
+         <li class="wikiUnorderedListItem">Generate executable JAR/WAR that can leverage JBoss embedded to provide a simplified deliverable - e.g. Generating a webapp that can be run as a Java app like Grails.</li> 
+         <li class="wikiUnorderedListItem">Seam2 to Seam3 migration plugin/toolkit.</li> 
+         <li class="wikiUnorderedListItem">ability to reference project settings through EL in Default @Option params: <pre class="wikiPreformatted">@Option(default="org.${project.name}") String defaultPackage</pre> </li> 
+         <li class="wikiUnorderedListItem"> File monitoring with JNotify</li> 
+         <li class="wikiUnorderedListItem"> XML Formatting w/JTidy (XMLPrettyPrinter in Hibernate Tools Core)</li> 
+         <li class="wikiUnorderedListItem"> Source file header maintainance plugin (find and replace with consistent copyright.)</li> 
+         <li class="wikiUnorderedListItem"> Manpage-like JavaDoc plugin <q>javadoc javax.servlet.Servlet</q></li> 
+         <li class="wikiUnorderedListItem"> Mark locations: <q>cd src/main/java</q>...<q>mark java</q>... <q>show marks (marks)</q> ... <q>cd/go java</q></li> 
+        </ul> 
+        <h4 class="wikiHeadline4" id="H-MavenPluginExecutable"><a href="Forge.html#H-MavenPluginExecutable">Maven plugin executable:</a></h4> 
+        <p class="wikiPara"> For faster installation &amp; bootstrap: </p> 
+        <pre class="wikiPreformatted">mvn org.jboss.seam:seamforge</pre> 
+        <p class="wikiPara"> would result in downloading the forge dist, executing it. </p> 
+        <h3 class="wikiHeadline3" id="H-CreatingABarebonesMavenProjectFunctional"><a href="Forge.html#H-CreatingABarebonesMavenProjectFunctional">Creating a barebones Maven Project (Functional)</a></h3> 
+        <pre class="wikiPreformatted">[no project] /home/lb3/Desktop $ new-project
+[The name of the new project (java.lang.String)]: example
+Use [/home/lb3/Desktop/example] as project directory? [Y/n] y
+Please enter your base package [e.g: "com.example.project"] com.example
+***SUCCESS*** Created project [example] in new working directory [/home/lb3/Desktop/example]
+[example] /home/lb3/Desktop/example $</pre> 
+        <h3 class="wikiHeadline3" id="H-PluginAPIFunctional"><a href="Forge.html#H-PluginAPIFunctional">Plugin API (Functional)</a></h3> 
+        <p class="wikiPara"> Maven Artifact: </p> 
+        <pre class="wikiPreformatted">         &lt;dependency&gt;
+            &lt;groupId&gt;org.jboss.seam.forge&lt;/groupId&gt;
+            &lt;artifactId&gt;forge-shell-api&lt;/artifactId&gt;
+            &lt;version&gt;${project.version}&lt;/version&gt;
+         &lt;/dependency&gt;
+</pre> 
+        <p class="wikiPara"> example of how the plugin would be invoked from the shell: displays help information about the system, plugins, and commands </p> 
+        <pre class="wikiPreformatted">[no project] /home/lb3/Desktop $ help</pre> 
+        <pre class="wikiPreformatted">/**
+ * @author &lt;a href="mailto:lincolnbaxter@gmail.com"&gt;Lincoln Baxter, III&lt;/a&gt;
+ */
+@Named("help")
+@Help("Displays help text for specified plugins &amp; commands.")
+public class HelpPlugin implements Plugin
+{
+   @Inject
+   PluginRegistry registry;
+
+   @Inject
+   Shell shell;
+
+   @DefaultCommand(help = "Get help about specific commands")
+   public void help(@Option final String... commands)
+   {
+      if ((commands == null) || (commands.length == 0))
+      {
+         shell.println("Welcome to Encore!");
+      }
+      else
+      {
+         shell.println("[" + commands[0] + "] " + registry.getPlugins().get(commands[0]).getHelp());
+      }
+   }
+}</pre> 
+        <h3 class="wikiHeadline3" id="H-SimplifiedSourceCodeManipulationFunctional"><a href="Forge.html#H-SimplifiedSourceCodeManipulationFunctional">Simplified Source Code Manipulation (Functional)</a></h3> 
+        <p class="wikiPara"> Maven Artifact: </p> 
+        <pre class="wikiPreformatted">         &lt;dependency&gt;
+            &lt;groupId&gt;org.jboss.seam.forge&lt;/groupId&gt;
+            &lt;artifactId&gt;forge-parser-java&lt;/artifactId&gt;
+            &lt;version&gt;${project.version}&lt;/version&gt;
+         &lt;/dependency&gt;
+</pre> 
+        <p class="wikiPara"> Needs code formatting from <a href="http://help.eclipse.org/helios/index.jsp?topic=/org.eclipse.jdt.doc.isv/reference/api/org/eclipse/jdt/core/formatter/package-summary.html" target="" class="regularLink">Eclipse JDT</a>. </p> 
+        <p class="wikiPara"> Example usage via a JUnit Test: </p> 
+        <pre class="wikiPreformatted">public class JavaClassTest
+{
+   private InputStream stream;
+   private JavaClass javaClass;
+
+   @Before
+   public void reset()
+   {
+      stream = JavaClassTest.class
+               .getResourceAsStream("/org/jboss/encore/grammar/java/MockClassFile.java");
+      javaClass = new JavaClass(stream);
+   }
+
+   @Test
+   public void testParse() throws Exception
+   {
+      List&lt;Import&gt; imports = javaClass.getImports();
+      assertEquals(URL.class.getName(), imports.get(0).getName());
+   }
+
+   @Test
+   public void testAddMethodFromString() throws Exception
+   {
+      javaClass.addMethod("public URL rewriteURL(String pattern, String replacement) { return null; }")
+               .setPackagePrivate().applyChanges();
+      List&lt;Method&gt; methods = javaClass.getMethods();
+      assertEquals(3, methods.size());
+      assertEquals("URL", methods.get(2).getReturnType());
+      assertEquals("rewriteURL", methods.get(2).getName());
+
+      String body = methods.get(2).getBody();
+      assertEquals("return null;".replaceAll("\\s+", ""),
+                     body.replaceAll("\\s+", ""));
+   }
+
+   @Test
+   public void testRemoveMethod() throws Exception
+   {
+      // TODO Removing methods needs to work
+      List&lt;Method&gt; methods = javaClass.getMethods();
+      javaClass.removeMethod(methods.get(0)).applyChanges();
+      methods = javaClass.getMethods();
+      assertEquals(1, methods.size());
+   }
+</pre> 
+        <h3 class="wikiHeadline3" id="H-TestHarnessAPIFunctional"><a href="Forge.html#H-TestHarnessAPIFunctional">Test Harness API (Functional)</a></h3> 
+        <p class="wikiPara"> Maven Dependency: </p> 
+        <pre class="wikiPreformatted">         &lt;dependency&gt;
+            &lt;groupId&gt;org.jboss.seam.forge&lt;/groupId&gt;
+            &lt;artifactId&gt;forge-test-harness&lt;/artifactId&gt;
+            &lt;version&gt;${project.version}&lt;/version&gt;
+         &lt;/dependency&gt;
+</pre> 
+        <p class="wikiPara"> Example usage: (Any shell operation can be performed, using the default shell implementation. A new base-project is created, and the shell is re-initialized for each test method invocation.) </p> 
+        <pre class="wikiPreformatted">
+@RunWith(Arquillian.class)
+public class ShellImplTest extends AbstractShellTest
+{
+   @Test
+   public void testPromptBoolean() throws Exception
+   {
+      queueInputLines("y");
+      assertTrue(getShell().promptBoolean("Would you like cake?"));
+
+      queueInputLines("yes");
+      assertTrue(getShell().promptBoolean("Would you like cake?"));
+
+      queueInputLines("n");
+      assertFalse(getShell().promptBoolean("Would you like cake?"));
+
+      queueInputLines("no");
+      assertFalse(getShell().promptBoolean("Would you like cake?"));
+   }
+}</pre> 
+        <h3 class="wikiHeadline3" id="H-CoreShellFeaturesUnderDevelopmentPrototyped"><a href="Forge.html#H-CoreShellFeaturesUnderDevelopmentPrototyped">Core Shell Features (under development, prototyped)</a></h3> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> <q>--pretend</q> : causes all file modifications to be performed in a parallel directory structure, after which creating a Diff to be displayed to the user / consumed by tooling; any parallel files created are to be removed after execution.</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> tab-completion : pressing TAB will complete the current partially typed command or option. </li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> tab-completion(contextual) : pressing TAB will trigger command/option auto-completion, where the next required option (sorted alphabetically) is appended to the prompt input. If a partially typed command/option is ambiguous, or if no more required options are present, display a list of remaining non-required options. This feature must be context sensitive to the current list of commands/arguments that have already been typed on the console.</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Colorized and syntax-highlighted output: <a href="http://seamframework.org/service/File/143005" target="" class="regularLink">http://seamframework.org/service/File/143005</a> <a href="http://www.ychatter.com/UK/rent_a_room.html">rent a room</a></li> 
+        </ul> 
+        <h3 class="wikiHeadline3" id="H-CustomizableConfigurationProposed"><a href="Forge.html#H-CustomizableConfigurationProposed">Customizable configuration (proposed)</a></h3> 
+        <b>.forge</b>
+        <p class="wikiPara"> file: </p> 
+        <pre class="wikiPreformatted">plugin.scaffold.domainPackage="~.domain2.entities"
+plugin.scaffold.autoUpdate=false
+
+plugin.scaffold.viewPath="~/faces/views/"</pre> 
+        <h3 class="wikiHeadline3" id="H-PluginOrderingAndConflictsUnderDevelopmentPrototyped"><a href="Forge.html#H-PluginOrderingAndConflictsUnderDevelopmentPrototyped">Plugin ordering and conflicts (under development, prototyped)</a></h3> 
+        <p class="wikiPara"> There will certainly be situations where some plugins must operate before others. A CDI event bus will be in place to ensure ordering of said events, and allowing for propagation of file changes throughout the plugin listeners, in a manner that prevents cyclic operations. </p> 
+        <h3 class="wikiHeadline3" id="H-ToolingInteregrationOptionsProposed"><a href="Forge.html#H-ToolingInteregrationOptionsProposed">Tooling interegration options (proposed)</a></h3> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Embedded JMS Queue (HornetQ) for transfer of events between IDE and Shell</li> 
+         <li class="wikiUnorderedListItem"> Simple socket communication</li> 
+         <li class="wikiUnorderedListItem"> File polling (append updates to a flat file w/timestamps &amp; metadata)</li> 
+        </ul> 
+        <h3 class="wikiHeadline3" id="H-TemplatingAndScaffoldingFrameworkProposed"><a href="Forge.html#H-TemplatingAndScaffoldingFrameworkProposed">Templating and Scaffolding Framework (proposed)</a></h3> 
+        <p class="wikiPara"> Lightweight and powerful templating <a href="http://www.pastie.org/1146629" target="" class="regularLink">http://www.pastie.org/1146629</a><br> <a href="http://www.pastie.org/1146678" target="" class="regularLink">http://www.pastie.org/1146678</a> </p> 
+        <p class="wikiPara"> </p> 
+       </div> 
+      </div>
+      <div id="commentDisplayForm"></div> 
+     </div> 
+     <div class="clear" style="padding-top:15px;"></div> 
+    </div>
+   </div> 
+  </div> 
+  <div id="footer" class="undecoratedLink"> 
+   <p> © Copyright 2009, Red Hat Middleware, LLC. All rights reserved. JBoss and Seam are registered trademarks and servicemarks of <a href="http://www.redhat.com/">Red Hat, Inc</a>. [<a href="http://www.redhat.com/legal/privacy_statement.html">Privacy Policy</a>]</p> 
+  </div>
+  <div id="status">
+   <span id="globalStatus"><span id="globalStatus.start" style="display: none">
+     <div id="j_id423" class="statusStart">
+      <img src="../themes/sfwkorg/img/statusindicator.gif" height="25" width="20">
+     </div></span><span id="globalStatus.stop">
+     <div id="j_id425" class="statusStop">
+      <img src="../themes/sfwkorg/img/blank.gif" height="25" width="20">
+     </div></span></span>
+  </div>  
+  <!-- Mirrored from 127.0.0.1:64444/Documentation/Forge by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:52:14 GMT --> 
+  <!-- Added by HTTrack -->
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack --> 
+ </body>
+</html>

@@ -1,0 +1,671 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <!-- Mirrored from 127.0.0.1:64444/Documentation/UnifiedErrorPageAndExceptionHandling by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:48:28 GMT -->
+ <!-- Added by HTTrack -->
+ <head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack -->  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+  <title>Seam Framework - Unified error page and exception handling</title> 
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/basic_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" rel="stylesheet" type="text/css">
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/extended_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" media="rich-extended-skinning" rel="stylesheet" type="text/css">
+  <script src="../a4j/g/3_3_3.CR1org.ajax4jsf.javascript.AjaxScript" type="text/javascript"></script>
+  <script type="text/javascript">window.RICH_FACES_EXTENDED_SKINNING_ON=true;</script>
+  <script src="../a4j/g/3_3_3.CR1org/richfaces/renderkit/html/scripts/skinning.js" type="text/javascript"></script>
+  <link href="../themes/sfwkorg/css/sfwk.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shCore.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shThemeDefault.css" rel="stylesheet" type="text/css"> 
+  <script type="text/javascript" src="../seam/resource/remoting/resource/remote.js"></script> 
+  <script type="text/javascript" src="../seam/resource/remoting/interface1535.js?httpSessionChecker"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jquery.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jqueryPlugins.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/lacewiki.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shCore.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushBash.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCpp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCSharp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCss.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDelphi.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDiff.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushGroovy.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJava.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJScript.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPhp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPlain.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPython.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushRuby.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushScala.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushSql.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushVb.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushXml.js"></script> 
+  <script type="text/javascript">
+        /* If you really want to load the Flash garbage on every page, go ahead and enable this:
+        SyntaxHighlighter.config.clipboardSwf = '/themes/sfwkorg/js/sh/scripts/clipboard.swf';
+         */
+        SyntaxHighlighter.defaults['gutter'] = false;
+        SyntaxHighlighter.all();
+	</script> 
+  <script type="text/javascript">
+
+        // ###################### Session timeout alert #################################
+
+        var sessionChecker = Seam.Component.getInstance("httpSessionChecker");
+        var timeoutURL = '/Home/JBossSeam';
+        var timeoutMillis = '900'*1000+3000;
+        var sessionTimeoutInterval = null;
+
+        function startSessionTimeoutCheck() {
+            sessionTimeoutInterval = setInterval('sessionChecker.isNewSession(alertTimeout)', timeoutMillis);
+        }
+
+        function stopSessionTimeoutCheck() {
+            if (sessionTimeoutInterval) clearInterval(sessionTimeoutInterval);
+        }
+
+        function resetSessionTimeoutCheck() {
+            if (sessionTimeoutInterval != null) {
+                stopSessionTimeoutCheck();
+                startSessionTimeoutCheck();
+            }
+        }
+
+        function alertTimeout(newSession) {
+            if (newSession) {
+                clearInterval(sessionTimeoutInterval);
+                jQuery(".ajaxSupport")
+                        .removeAttr('onblur')
+                        .removeAttr('onchange')
+                        .removeAttr('onkeyup')
+                        .removeAttr('onclick');
+                jQuery(".sessionEventTrigger").hide();
+                var answer = confirm("Your session has timed out, you will be redirected to the start page.");
+                if (answer) window.location = timeoutURL;
+            }
+        }
+
+        // ###################### Popups #################################
+
+        var fadeInPopupDialog = function(hash) {
+            hash.w.fadeIn('fast',function(){ hash.o.show(); });
+            jQuery(".closeDialog", hash.w).attr("accesskey", "C"); // Dynamically assign accesskey to .closeDialog buttons
+        };
+
+        var fadeOutPopupDialog = function(hash) { hash.w.fadeOut('fast',function(){ hash.o.remove(); }); };
+
+        // ###################### Tabbed Forms #################################
+
+        var formTabErrors = {};
+
+        function formTabRaiseError(tabId, fieldId, message) {
+
+            formTabClearError(tabId, fieldId); // Clear error then re-add
+
+            log("Raise error for tab: '" + tabId + "' field: " + fieldId);
+
+            // Add an error message to the client message box
+            log("Adding error message: " +tabId + fieldId + "ErrorMessage")
+            jQuery("#clientMessageBoxTable").append(
+                '<tr id="' + tabId + fieldId + 'ErrorMessage"><td><img src="/themes/sfwkorg/img/attention.gif" ' +
+                'height="18" width="18" class="clientMessageBoxImage attentionImage"/></td>' +
+                '<td><span id="attentionMessage" class="attentionMessage">'+ message + '</span></td></tr>'
+            );
+            if (formTabErrors[tabId] == null) {
+                formTabErrors[tabId] = 1;
+            } else {
+                formTabErrors[tabId]++;
+            }
+            formTabRenderErrors(tabId);
+        }
+
+        function formTabClearError(tabId, fieldId) {
+            if (document.getElementById(tabId+fieldId+"ErrorMessage") != null) { // This error is displayed
+                log("Clear error for tab: '" + tabId + "' field: " + fieldId);
+                log("Removing error message: " +tabId + fieldId + "ErrorMessage")
+                // Remove the error message on the client message box
+                jQuery("#"+tabId + fieldId + "ErrorMessage").remove();
+
+                formTabErrors[tabId]--;
+                formTabRenderErrors(tabId);
+            }
+        }
+
+        function formTabRenderErrors(tabId) {
+            log("Errors for tab: '" + tabId + "': " + formTabErrors[tabId]);
+
+            if (formTabErrors[tabId] > 0 && document.getElementById(tabId+"InvalidIcon") == null) {
+                log("Showing icon for tab: " + tabId);
+                // Show an icon on the tab and blink it a few times
+                jQuery("#"+tabId)
+                    .prepend('<img id="' + tabId + 'InvalidIcon" ' +
+                            'src="/themes/sfwkorg/img/attention.gif" width="13" height="13" ' +
+                            'alt="!" style="vertical-align:bottom;margin-left:5px;margin-right:5px;"/>');
+                pulsate("#"+tabId);
+            } else if (formTabErrors[tabId] < 1){
+                log("Removing icon of tab: " + tabId);
+                jQuery("#"+tabId + "InvalidIcon").remove();             // Remove the error icon on the tab
+            }
+
+            var tabsHaveErrors = false;
+            for (var tab in formTabErrors) {
+                var numOfErrors = formTabErrors[tab];
+                if (numOfErrors > 0) {
+                    tabsHaveErrors = true;
+                    break;
+                }
+            }
+
+            if (tabsHaveErrors) {
+                log("Hiding save button and showing form message box");
+                jQuery(".saveButton").hide();                       // Hide save button(s)
+                jQuery(".formControls").css("height", "30px");      // Adjust height for missing save button
+                jQuery("#messageBoxContainer").hide();                 // Hide server messages
+                jQuery("#clientMessageBoxContainer").show();           // Show client error messages
+            } else {
+                log("Showing save button and hiding form message box");
+                jQuery(".saveButton").show();                       // Show save button(s)
+                jQuery(".formControls").css("height", "");          // Readjust height for present save button
+                jQuery("#clientMessageBoxContainer").hide();           // Hide client error messages
+            }
+        }
+
+        function formTabClicked() {
+            jQuery("#messageBoxContainer").hide();                 // Hide server messages
+        }
+
+        function log(message) {
+            return; // Remove to enable logging
+            if (!log.window_ || log.window_.closed) {
+                var win = window.open("", null, "width=400,height=200," +
+                                                "scrollbars=yes,resizable=yes,status=no," +
+                                                "location=no,menubar=no,toolbar=no");
+                if (!win) return;
+                var doc = win.document;
+                doc.write("<html><head><title>Debug Log</title></head><body style='font-family: monospace'></body></html>");
+                doc.close();
+                log.window_ = win;
+            }
+            var logLine = log.window_.document.createElement("div");
+            logLine.appendChild(log.window_.document.createTextNode(message));
+            log.window_.document.body.appendChild(logLine);
+        }
+
+        // ###################### Design #################################
+
+        function highlightStars(item, range, end) {
+            for (i = 1; i <= range; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star_grey.gif");
+            }
+            for (i = 1; i <= end; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star.gif");
+            }
+        }
+
+        function pulsate(query) {
+            var blinkCount = 2*2;
+            do {
+                jQuery(query)['fade'+(blinkCount%2==0?'Out':'In')]('fast');
+            } while (--blinkCount);
+        }
+
+        function clearDocumentBackground() {
+            // Noop for this skin
+        }
+
+        // Wrap boxes with border and shadow
+        function wrapBoxes() {
+            // Noop for this skin
+        }
+
+        function initPage() {
+            checkCookieSupport();
+            wrapBoxes();
+        }
+
+        jQuery(function() {
+            initPage();
+        });
+
+    </script> 
+  <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-25106513-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script> 
+ </head> 
+ <body> 
+  <noscript> 
+   <div class="cookieJavaScriptWarning">
+     Please activate JavaScript in your browser. Without it, you will only be able to browse this website but clicking on any advanced feature (any forms or submit buttons) will not work. 
+   </div> 
+  </noscript>
+  <div id="dialogHelp" class="popupDialog">
+   <span id="dialogHelpPopup" title="dialogHelp"></span>
+   <span id="dialogHelpInit"> <script type="text/javascript">
+            function showHelpPopup(width, height, offsetId) {
+                var offset = jQuery("#"+offsetId).offset();
+                jsf('dialogHelpPopup')
+                    .css({width: width+"px", height: height+"px", top: offset.top-100+"px", left: offset.left-150+"px"})
+                    .jqm({
+                        closeClass: "closeDialog",
+                        overlay: 0
+                    });
+
+                jQuery("#dialogHelpContent").css("width", width-20+"px").css("height", height-75+"px");
+                jQuery("#dialogHelpContent").css("overflow", "auto");
+
+                jsf('dialogHelpPopup').jqmShow();
+            }
+        </script></span> 
+   <script type="text/javascript">jQuery(function() {
+        jsf('dialogHelpPopup').Resizable({
+            minTop: 1,
+            dragHandle: "#dialogHelpHead",
+            handlers: { se: "#dialogHelpResizeHandle" }
+        });
+    });</script> 
+   <div class="popupDialogHead" id="dialogHelpHead">
+    Help
+   </div>
+   <div id="dialogHelpContent" class="popupDialogContent"></div>
+   <div id="dialogHelpControls" class="popupDialogControls">
+    <div id="j_id14" style="padding:5px;">
+     <a href="#" class="buttonNonpersistent closeDialog"><span class="buttonLabel">Close Help</span></a>
+    </div>
+   </div>
+  </div> 
+  <div id="wrapper"> 
+   <div id="header">  
+    <div>
+     <a href="http://seamframework.org/"><img src="../themes/sfwkorg/img/blank.gif" height="98" width="210"></a> 
+    </div> 
+   </div>
+   <div id="body"> 
+    <div id="container"> 
+     <div id="leftColumn">
+      <div id="mainMenu" xmlns="http://www.w3.org/1999/xhtml">
+       <div id="j_id121" class="box">
+        <div class="mainMenuContainer"> 
+         <div class="mainMenuHeader"></div> 
+         <div class="mainMenuBody">
+          <div id="j_id125" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Home.html" class="level1Link">Home</a>
+          </div>
+          <div id="j_id132" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Home/WhySeam.html" class="level2Link">Why Seam?</a>
+          </div>
+          <div id="j_id139" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Seam2.html" class="level1Link">Seam 2</a>
+          </div>
+          <div id="j_id146" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/GettingStarted.html" class="level2Link">Getting Started</a>
+          </div>
+          <div id="j_id153" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Downloads.html" class="level2Link">Downloads</a>
+          </div>
+          <div id="j_id160" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Documentation.html" class="level2Link">Documentation</a>
+          </div>
+          <div id="j_id167" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="http://weld.cdi-spec.org/" class="level1Link">Weld</a>
+          </div>
+          <div id="j_id174" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Community.html" class="level1Link">Community</a>
+          </div>
+          <div id="j_id181" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="https://community.jboss.org/" class="level2Link">Forums</a>
+          </div>
+          <div id="j_id188" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/CDIExtensions.html" class="level2Link">CDI Extensions</a>
+          </div>
+          <div id="j_id195" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Contribute.html" class="level2Link">Contribute</a>
+          </div>
+          <div id="j_id202" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/JIRA.html" class="level2Link">JIRA</a>
+          </div>
+          <div id="j_id209" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/MailingLists.html" class="level2Link">Mailing Lists</a>
+          </div>
+          <div id="j_id216" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Events.html" class="level2Link">Events</a>
+          </div>
+          <div id="j_id223" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Links.html" class="level2Link">Links</a>
+          </div>
+          <div id="j_id230" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/SeamInProduction.html" class="level2Link">Seam In Production</a>
+          </div>
+          <div id="j_id237" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Documentation.html" class="level1Link">Documentation</a>
+          </div>
+          <div id="j_id244" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="FAQs.html" class="level2Link">FAQs</a>
+          </div>
+          <div id="j_id251" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="KnowledgeBase.html" class="level2Link">Knowledge Base</a>
+          </div>
+          <div id="j_id258" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="Design.html" class="level2Link">Design</a>
+          </div> 
+         </div> 
+         <div class="mainMenuFooter"></div> 
+        </div>
+       </div> 
+      </div> 
+      <br> 
+      <div style="margin-top: 25px; margin-left: 15px; margin-right: 15px; "> 
+       <h2>Built with Seam</h2> 
+       <p> You can find the full source code for this website in the <a href="/Download.html">Seam package</a> in the directory /examples/wiki. It is licensed under the LGPL. </p> 
+       <div style="text-align:center;">
+        <a href="/Community/GetASeamIcon.html"><img src="../themes/sfwkorg/img/runningon_seamlogo_beige.gif" height="50" width="200"></a> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="rightColumn">
+      <img src="../themes/sfwkorg/img/blank.gif" height="8" width="1">
+      <div id="breadcrumb" class="breadcrumb">
+       <span class="breadcrumbPanel"><a href="../index.html" class="itemLink breadcrumbRoot">Site</a><span class="itemSeparator breadcrumbRoot">·</span><a href="../Documentation.html" class="itemLink">Documentation</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="KnowledgeBase.html" class="itemLink">Knowledge Base</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="TipsAndTricks.html" class="itemLink">Tips and Tricks</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="UnifiedErrorPageAndExceptionHandling.html" class="itemText">Unified error page and exception h...</a></span>
+      </div>
+      <div id="messageBoxContainer"></div>
+      <div id="clientMessageBoxContainer" style="display:none;"> 
+       <div id="clientMessageBox" class="messageBox"> 
+        <table id="clientMessageBoxTable" class="messageBoxTable" cellpadding="0" cellspacing="0" border="0"></table> 
+        <script type="text/javascript">jQuery(function() {
+                    jQuery("#clientMessageBoxContainer").css("margin-top", "10px").css("margin-bottom", "10px");
+                    pulsate(".clientMessageBoxImage");
+                });</script> 
+       </div>
+      </div> 
+      <div id="documentDisplayContainer" class="box">
+       <div id="documentDisplay" class="documentDisplay">
+        <div id="j_id362"> 
+         <h1 class="documentTitle"><a href="UnifiedErrorPageAndExceptionHandling.html">Unified error page and exception handling</a> </h1>
+        </div>
+        <p class="wikiPara"> A web application can run into a server-side error for many different reasons and at any point in time. Finding the right strategy for your application, how to deal with these error conditions and exceptional situations, can be difficult. This page provides some guidelines and a simple but effective solution. </p> 
+        <p class="wikiPara"> When a client request is handled by a web application server, exceptions can be thrown by code at any time. Typically, you need to consider: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Exceptions thrown by the web application server, usually the servlet container. For example, exceptions you definitely have to expect and handle include session limit violations. If your servlet container reaches its configured maximum active session limit, your users should be presented with a nice error message that tells them to come back later.</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Exceptions can be thrown by the web application frameworks and 3rd party libraries you are using. In a Seam application, those frameworks would typically include JSF, Facelets, Hibernate, and of course Seam and any of its integration modules. There are many exceptions that are obvioulsy related to bugs in your application, for these you might want to encourage the users to report these with a nice message. But you also have other exceptions, such as database lock acquisition failures, that indicate an overloaded system, which does not necessarily require a bug report.</li> 
+        </ul> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> Finally, you have your own error handling in your web application. You use (runtime) infrastructure exceptions to indicate fatal error conditions which should be reported by users when they encounter them. You use (checked) application exceptions that are expected and are handled in your code, probably without even letting the users know that some exceptional application flow occurred behind the scenes.</li> 
+        </ul> 
+        <h2 class="wikiHeadline2" id="H-HandlingRecoverableExceptions"><a href="UnifiedErrorPageAndExceptionHandling.html#H-HandlingRecoverableExceptions">Handling recoverable exceptions</a></h2> 
+        <p class="wikiPara"> Seam comes with an exception handling servlet filter that wraps its processing of a request: </p> 
+        <pre class="wikiPreformatted">&lt;web:exception-filter url-pattern="*.seam"/&gt;</pre> 
+        <p class="wikiPara"> Whenever an exception occurs while a request is being processed, this filter will catch it and try to do map it to an outcome. Your metadata for this is typically in a single global <tt>pages.xml</tt> file: </p> 
+        <pre class="wikiPreformatted">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;pages 
+  xmlns="http://jboss.com/products/seam/pages"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jboss.com/products/seam/pages
+                      http://jboss.com/products/seam/pages-2.2.xsd"&gt;
+
+    &lt;!--
+    All exceptions we can gracefully recover from, usually by redirecting to an application page or if
+    that is not an option, sending an HTTP error code that is not '500' (which would be caught in web.xml).
+    --&gt;
+
+    &lt;!-- Thrown when a @Restrict action is executed and the user is not logged in --&gt;
+    &lt;exception class="org.jboss.seam.security.NotLoggedInException" log="false"&gt;
+        &lt;redirect view-id="/login.xhtml"/&gt;
+    &lt;/exception&gt;
+
+    &lt;!-- Throw when a JSF form is submitted but the view-id can not be found in the HTTP session --&gt;
+    &lt;exception class="javax.faces.application.ViewExpiredException" log="false"&gt;
+        &lt;redirect view-id="/home.xhtml"&gt;
+            &lt;message severity="WARN"&gt;Session timeout, you have been redirected to the start page.&lt;/message&gt;
+        &lt;/redirect&gt;
+    &lt;/exception&gt;
+
+    &lt;!-- Thrown by either the Seam entity framework or when using JPA directly --&gt;
+    &lt;exception class="org.jboss.seam.framework.EntityNotFoundException" log="false"&gt;
+        &lt;http-error error-code="404"/&gt;
+    &lt;/exception&gt;
+    &lt;exception class="javax.persistence.EntityNotFoundException" log="false"&gt;
+        &lt;http-error error-code="404"/&gt;
+    &lt;/exception&gt;
+   
+&lt;/pages&gt;</pre> 
+        <p class="wikiPara"> As you can see, some of these exceptions will occur frequently. The <tt>EntityNotFoundException</tt> for example is a very natural outcome when a referenced entity (like a customer or product) is no longer available in the database. Instead of showing an error or application page with a message, an HTTP 404 status code is the right response - this tells search engines to invalidate the requested URL in their index. </p> 
+        <p class="wikiPara"> An exception that indicates that a user has to be logged in, for example, is best handled by showing the user the login page instead of an error message. </p> 
+        <p class="wikiPara"> In general, you also do not want these exceptions and their stacktraces to be logged on the server, as there is nothing you can do about them. </p> 
+        <blockquote> 
+         <b>NOTE:</b> The JSF reference implementation and Facelets have many problems with exception handling. In fact, the JSF RI even swallows exceptions in certain situations and some of this behavior is even required by the JSF 1.0 specification. Both frameworks also log exceptions, including their stacktrace, at a 
+         <tt>WARN</tt> level, and then pass the exception further up the call stack (into Seam usually), where the exception might get logged again. If you don't handle it in Seam, it will get logged again by your servlet container. All of this is very disappointing but there is nothing Seam can do. Although lowering the log level to 
+         <tt>ERROR</tt> for a few JSF and Facelets categories helps in production, we do not recommend this in development. For example, the JSF RI also reports a problem with the status message queue (e.g. if you forget 
+         <tt>&lt;h:messages/&gt;</tt> on a page and there are queued message) with a 
+         <tt>WARN</tt> message. You will not see such programming errors if your log level during development is 
+         <tt>ERROR</tt>. In other words: Even though you use 
+         <tt>log="false"</tt> in Seam's 
+         <tt>pages.xml</tt> configuration, you will sometimes see stacktraces printed by JSF and Facelets. 
+        </blockquote> 
+        <p class="wikiPara"> What happens when a runtime exception is thrown and it's not listed in <tt>pages.xml</tt>? </p> 
+        <h2 class="wikiHeadline2" id="H-HandlingUnrecoverableExceptions"><a href="UnifiedErrorPageAndExceptionHandling.html#H-HandlingUnrecoverableExceptions">Handling unrecoverable exceptions</a></h2> 
+        <p class="wikiPara"> Many Seam applications try to handle unrecoverable exceptions with a generic <q>catchall</q> in <tt>pages.xml</tt>. An <tt>&lt;exception&gt;</tt> declaration without an exception type is used by Seam as the fallback when no other type matches. Although this works great at first, it's not sufficient for production systems. </p> 
+        <p class="wikiPara"> The only non-recoverable runtime exceptions you would catch are those that occur <u>within</u> the Seam request call stack <a href="http://www.45bet.com/" style="color: #000;">casas apostas</a>. Those might of course include exceptions thrown by Hibernate, for example. But there are other fatal runtime exceptions that might be thrown, usually by the servlet container <u>outside</u> of Seam request processing stack. Because these exceptions do not occur within the Seam exception filter, they never appear inside Seam and can not be handled through <tt>pages.xml</tt>. </p> 
+        <p class="wikiPara"> So, you can of course map a catchall in <tt>pages.xml</tt> but you will still have to consider exceptions outside of Seam. These are handled in <tt>web.xml</tt>. In fact, I do not recommend having any catchall in <tt>pages.xml</tt> and just handle all of the unexpected errors in <tt>web.xml</tt>. That way, you have one less thing to worry about. Also, when an exception which you did not expect occurs within the Seam call stack, are you sure that Seam (or JSF, or Facelets, or Hibernate) is still in a state that allows you to handle the situation gracefully? If a Facelets exception occured, can you still render an error page with Facelets? It is best to fall back to the most trivial environment in such a situation, without relying on too many subsystems for a robust exception handling procedure. </p> 
+        <p class="wikiPara"> In the <tt>pages.xml</tt> example above you have already seen the hint that <q>error code 500 would be caught in web.xml</q>. When an exception is thrown inside the Seam call stack, and the Seam filters do not handle it, it is passed on to the servlet container wrapped in a generic <tt>ServletException</tt>. The servlet container then looks for the exception type (also using the root cause, your exception) in the handlers configured in <tt>web.xml</tt>. If no handler can be found for the type, a <tt>500</tt> status code is created and the <tt>web.xml</tt> handlers are checked again, this time with the numeric code. You also need to consider situations where a servlet (including your Seam application!) might return a status code. For example, the <tt>404 NOT FOUND</tt> we mapped earlier is also passing through the <tt>web.xml</tt> handlers. </p> 
+        <p class="wikiPara"> Therefore, you should at least have the following mapping defined in <tt>web.xml</tt>: </p> 
+        <pre class="wikiPreformatted">&lt;error-page&gt;
+    &lt;error-code&gt;500&lt;/error-code&gt;
+    &lt;location&gt;/WEB-INF/pages/applicationerror.jsp&lt;/location&gt;
+&lt;/error-page&gt;</pre> 
+        <p class="wikiPara"> This is the ultimate catch-all. It will catch any exception thrown by any servlet or filter (hence, all exceptions in your Seam application) and it will also catch any exception thrown by the servlet container itself. We use a global generic error page to tell the user of the application what has happened and what to do next. </p> 
+        <p class="wikiPara"> Unfortunately, there are some exceptions thrown by the servlet container that you might want to handle special. One in particular, which occurs when your servlet container hits the maximum session limit, should not be handled with a JSP page. When you are running out of space for user sessions, nothing works anymore (at least in Tomcat) and you need to abort the current request quickly. It's best to just send a simple HTML page to the client, informing the user to try again later. Because Tomcat is an awful production environment, nobody ever thought about this problem before and the only way to even be informed of this situation is by catching a generic exception: </p> 
+        <pre class="wikiPreformatted">&lt;!-- Don't use a Faces or JSP page here, too many sessions means nothing works anymore!
+     Unfortunately, Tomcat can't be bothered to throw anything better than an IllegalStateException...
+     So in other words: If your application throws an IllegalStateException, this page will be shown, not
+     the 'applicationerror.jsp' page declared above. --&gt;
+&lt;error-page&gt;
+    &lt;exception-type&gt;java.lang.IllegalStateException&lt;/exception-type&gt;
+    &lt;location&gt;/WEB-INF/pages/toomanysessions.html&lt;/location&gt;
+&lt;/error-page&gt;
+</pre> 
+        <p class="wikiPara"> So if your application throws an uncaught <tt>IllegalStateException</tt>, this configuration would now consider this to be an <q>out of memory for new sessions</q> error. </p> 
+        <h2 class="wikiHeadline2" id="H-CreatingAGlobalErrorPage"><a href="UnifiedErrorPageAndExceptionHandling.html#H-CreatingAGlobalErrorPage">Creating a global error page</a></h2> 
+        <p class="wikiPara"> The <tt>applicationerror.jsp</tt> page defined above deserves some extra attention. The following example works great in practice: </p> 
+        <pre class="wikiPreformatted">&lt;%@ page import="java.io.PrintWriter" %&gt;
+&lt;%@ page import="common.util.Functions" %&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta HTTP-EQUIV="Content-Type" CONTENT="text/html;charset=UTF-8"/&gt;
+    &lt;title&gt;Application Error&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;style&gt;
+    body {
+        font-family: arial, verdana, Geneva, Arial, Helvetica, sans-serif;
+        font-size: 1.1em;
+    }
+
+    .errorHeader {
+        font-size: 1.6em;
+        background-color: #6392C6;
+        color: white;
+        font-weight: bold;
+        padding: 3px;
+        margin-bottom: 10px;
+    }
+
+    .errorFooter {
+        font-size: 0.8em;
+        background-color: #6392C6;
+        color: white;
+        font-style: italic;
+        padding: 3px;
+        margin-top: 5px;
+    }
+
+    .errorMessage {
+        color: red;
+        font-weight: bold;
+    }
+
+    .errorExceptionCause {
+        padding: 3px;
+        border-style: solid;
+        border-width: 1px;
+        border-color: #9F9F9F;
+        background-color: #E0E0E0;
+        font-size: 80%;
+    }
+
+&lt;/style&gt;
+&lt;div class="errorHeader"&gt;Your request was not successful, server-side error encountered:&lt;/div&gt;
+&lt;%
+    String customMessage = // ... Some user-friendly message
+    Boolean showstack = // ... Do you want to show a stacktrace?
+
+    if (customMessage != null) {
+%&gt;&lt;span class="errorMessage"&gt;&lt;%=customMessage%&gt;&lt;/span&gt;&lt;%
+    }
+
+    Throwable exception = (Throwable) request.getAttribute("javax.servlet.error.exception");
+    if ((showstack == null || showstack) &amp;&amp; exception != null) {
+        Throwable rootCause = Functions.unwrap(exception);
+        String exceptionMessage = rootCause.getMessage();
+
+%&gt;&lt;hr/&gt;Root cause exception message: &lt;span class="errorMessage"&gt;&lt;%=exceptionMessage%&gt;&lt;/span&gt;&lt;%
+
+%&gt;&lt;br/&gt;&lt;%
+%&gt;&lt;span id="errorDetails" class="errorExceptions"&gt;&lt;%
+%&gt;&lt;pre class="errorExceptionCause"&gt;&lt;%
+    PrintWriter pw = new PrintWriter(out);
+    rootCause.printStackTrace(pw);
+%&gt;&lt;/pre&gt;&lt;%
+%&gt;&lt;/span&gt;&lt;%
+    }
+%&gt;
+&lt;div class="errorFooter"&gt;&lt;%= new java.util.Date() %&gt;&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre> 
+        <p class="wikiPara"> Note that this example does not use the <tt>isErrorPage=true</tt> directive! It is simply not necessary to access the implicit <tt>exception</tt> instance, we obtain the exception instance through the <tt>javax.servlet.error.exception</tt> request attribute. You can externalize (to servlet context properties?) whatever custom message you want to show your users (<q>Contact the administrator, here is the phone number...</q>) and if you want to show them (<a href="http://case-de-pariuri.ro/agentii/bet-at-home" style="color: #000;">bet at home</a>) an exception stacktrace (true in beta testing, false in production, etc). </p> 
+        <p class="wikiPara"> Finally, note that when you enable Seam debugging (with <tt>seam-debug.jar</tt> on your classpath), Seam will handle <q>reachable</q> exceptions internally and automatically redirect to the debug page. Disable debugging to see the shown configuration in action. </p> 
+       </div>
+       <div id="j_id374" class="documentCreatorHistory undecoratedLink smallFont">
+        <div id="j_id375">
+          Created:&nbsp;30. Sep 2009, 06:41&nbsp;America/New_York&nbsp;(Christian Bauer)
+        </div>
+        <div id="j_id383">
+          Last Modified:&nbsp;14. Jan 2013, 05:58&nbsp;America/New_York&nbsp;(Christian Bauer)
+        </div>
+       </div> 
+      </div>
+      <div id="commentDisplayForm"></div> 
+     </div> 
+     <div class="clear" style="padding-top:15px;"></div> 
+    </div>
+   </div> 
+  </div> 
+  <div id="footer" class="undecoratedLink"> 
+   <p> © Copyright 2009, Red Hat Middleware, LLC. All rights reserved. JBoss and Seam are registered trademarks and servicemarks of <a href="http://www.redhat.com/">Red Hat, Inc</a>. [<a href="http://www.redhat.com/legal/privacy_statement.html">Privacy Policy</a>]</p> 
+  </div>
+  <div id="status">
+   <span id="globalStatus"><span id="globalStatus.start" style="display: none">
+     <div id="j_id423" class="statusStart">
+      <img src="../themes/sfwkorg/img/statusindicator.gif" height="25" width="20">
+     </div></span><span id="globalStatus.stop">
+     <div id="j_id425" class="statusStop">
+      <img src="../themes/sfwkorg/img/blank.gif" height="25" width="20">
+     </div></span></span>
+  </div>  
+  <!-- Mirrored from 127.0.0.1:64444/Documentation/UnifiedErrorPageAndExceptionHandling by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:48:29 GMT --> 
+  <!-- Added by HTTrack -->
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack --> 
+ </body>
+</html>

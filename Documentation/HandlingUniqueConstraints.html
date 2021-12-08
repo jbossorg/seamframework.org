@@ -1,0 +1,910 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <!-- Mirrored from 127.0.0.1:64444/Documentation/HandlingUniqueConstraints by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:48:34 GMT -->
+ <!-- Added by HTTrack -->
+ <head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack -->  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+  <title>Seam Framework - Handling Unique Constraints</title> 
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/basic_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" rel="stylesheet" type="text/css">
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/extended_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" media="rich-extended-skinning" rel="stylesheet" type="text/css">
+  <script src="../a4j/g/3_3_3.CR1org.ajax4jsf.javascript.AjaxScript" type="text/javascript"></script>
+  <script type="text/javascript">window.RICH_FACES_EXTENDED_SKINNING_ON=true;</script>
+  <script src="../a4j/g/3_3_3.CR1org/richfaces/renderkit/html/scripts/skinning.js" type="text/javascript"></script>
+  <link href="../themes/sfwkorg/css/sfwk.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shCore.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shThemeDefault.css" rel="stylesheet" type="text/css"> 
+  <script type="text/javascript" src="../seam/resource/remoting/resource/remote.js"></script> 
+  <script type="text/javascript" src="../seam/resource/remoting/interface1535.js?httpSessionChecker"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jquery.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jqueryPlugins.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/lacewiki.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shCore.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushBash.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCpp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCSharp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCss.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDelphi.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDiff.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushGroovy.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJava.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJScript.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPhp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPlain.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPython.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushRuby.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushScala.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushSql.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushVb.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushXml.js"></script> 
+  <script type="text/javascript">
+        /* If you really want to load the Flash garbage on every page, go ahead and enable this:
+        SyntaxHighlighter.config.clipboardSwf = '/themes/sfwkorg/js/sh/scripts/clipboard.swf';
+         */
+        SyntaxHighlighter.defaults['gutter'] = false;
+        SyntaxHighlighter.all();
+	</script> 
+  <script type="text/javascript">
+
+        // ###################### Session timeout alert #################################
+
+        var sessionChecker = Seam.Component.getInstance("httpSessionChecker");
+        var timeoutURL = '/Home/JBossSeam';
+        var timeoutMillis = '900'*1000+3000;
+        var sessionTimeoutInterval = null;
+
+        function startSessionTimeoutCheck() {
+            sessionTimeoutInterval = setInterval('sessionChecker.isNewSession(alertTimeout)', timeoutMillis);
+        }
+
+        function stopSessionTimeoutCheck() {
+            if (sessionTimeoutInterval) clearInterval(sessionTimeoutInterval);
+        }
+
+        function resetSessionTimeoutCheck() {
+            if (sessionTimeoutInterval != null) {
+                stopSessionTimeoutCheck();
+                startSessionTimeoutCheck();
+            }
+        }
+
+        function alertTimeout(newSession) {
+            if (newSession) {
+                clearInterval(sessionTimeoutInterval);
+                jQuery(".ajaxSupport")
+                        .removeAttr('onblur')
+                        .removeAttr('onchange')
+                        .removeAttr('onkeyup')
+                        .removeAttr('onclick');
+                jQuery(".sessionEventTrigger").hide();
+                var answer = confirm("Your session has timed out, you will be redirected to the start page.");
+                if (answer) window.location = timeoutURL;
+            }
+        }
+
+        // ###################### Popups #################################
+
+        var fadeInPopupDialog = function(hash) {
+            hash.w.fadeIn('fast',function(){ hash.o.show(); });
+            jQuery(".closeDialog", hash.w).attr("accesskey", "C"); // Dynamically assign accesskey to .closeDialog buttons
+        };
+
+        var fadeOutPopupDialog = function(hash) { hash.w.fadeOut('fast',function(){ hash.o.remove(); }); };
+
+        // ###################### Tabbed Forms #################################
+
+        var formTabErrors = {};
+
+        function formTabRaiseError(tabId, fieldId, message) {
+
+            formTabClearError(tabId, fieldId); // Clear error then re-add
+
+            log("Raise error for tab: '" + tabId + "' field: " + fieldId);
+
+            // Add an error message to the client message box
+            log("Adding error message: " +tabId + fieldId + "ErrorMessage")
+            jQuery("#clientMessageBoxTable").append(
+                '<tr id="' + tabId + fieldId + 'ErrorMessage"><td><img src="/themes/sfwkorg/img/attention.gif" ' +
+                'height="18" width="18" class="clientMessageBoxImage attentionImage"/></td>' +
+                '<td><span id="attentionMessage" class="attentionMessage">'+ message + '</span></td></tr>'
+            );
+            if (formTabErrors[tabId] == null) {
+                formTabErrors[tabId] = 1;
+            } else {
+                formTabErrors[tabId]++;
+            }
+            formTabRenderErrors(tabId);
+        }
+
+        function formTabClearError(tabId, fieldId) {
+            if (document.getElementById(tabId+fieldId+"ErrorMessage") != null) { // This error is displayed
+                log("Clear error for tab: '" + tabId + "' field: " + fieldId);
+                log("Removing error message: " +tabId + fieldId + "ErrorMessage")
+                // Remove the error message on the client message box
+                jQuery("#"+tabId + fieldId + "ErrorMessage").remove();
+
+                formTabErrors[tabId]--;
+                formTabRenderErrors(tabId);
+            }
+        }
+
+        function formTabRenderErrors(tabId) {
+            log("Errors for tab: '" + tabId + "': " + formTabErrors[tabId]);
+
+            if (formTabErrors[tabId] > 0 && document.getElementById(tabId+"InvalidIcon") == null) {
+                log("Showing icon for tab: " + tabId);
+                // Show an icon on the tab and blink it a few times
+                jQuery("#"+tabId)
+                    .prepend('<img id="' + tabId + 'InvalidIcon" ' +
+                            'src="/themes/sfwkorg/img/attention.gif" width="13" height="13" ' +
+                            'alt="!" style="vertical-align:bottom;margin-left:5px;margin-right:5px;"/>');
+                pulsate("#"+tabId);
+            } else if (formTabErrors[tabId] < 1){
+                log("Removing icon of tab: " + tabId);
+                jQuery("#"+tabId + "InvalidIcon").remove();             // Remove the error icon on the tab
+            }
+
+            var tabsHaveErrors = false;
+            for (var tab in formTabErrors) {
+                var numOfErrors = formTabErrors[tab];
+                if (numOfErrors > 0) {
+                    tabsHaveErrors = true;
+                    break;
+                }
+            }
+
+            if (tabsHaveErrors) {
+                log("Hiding save button and showing form message box");
+                jQuery(".saveButton").hide();                       // Hide save button(s)
+                jQuery(".formControls").css("height", "30px");      // Adjust height for missing save button
+                jQuery("#messageBoxContainer").hide();                 // Hide server messages
+                jQuery("#clientMessageBoxContainer").show();           // Show client error messages
+            } else {
+                log("Showing save button and hiding form message box");
+                jQuery(".saveButton").show();                       // Show save button(s)
+                jQuery(".formControls").css("height", "");          // Readjust height for present save button
+                jQuery("#clientMessageBoxContainer").hide();           // Hide client error messages
+            }
+        }
+
+        function formTabClicked() {
+            jQuery("#messageBoxContainer").hide();                 // Hide server messages
+        }
+
+        function log(message) {
+            return; // Remove to enable logging
+            if (!log.window_ || log.window_.closed) {
+                var win = window.open("", null, "width=400,height=200," +
+                                                "scrollbars=yes,resizable=yes,status=no," +
+                                                "location=no,menubar=no,toolbar=no");
+                if (!win) return;
+                var doc = win.document;
+                doc.write("<html><head><title>Debug Log</title></head><body style='font-family: monospace'></body></html>");
+                doc.close();
+                log.window_ = win;
+            }
+            var logLine = log.window_.document.createElement("div");
+            logLine.appendChild(log.window_.document.createTextNode(message));
+            log.window_.document.body.appendChild(logLine);
+        }
+
+        // ###################### Design #################################
+
+        function highlightStars(item, range, end) {
+            for (i = 1; i <= range; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star_grey.gif");
+            }
+            for (i = 1; i <= end; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star.gif");
+            }
+        }
+
+        function pulsate(query) {
+            var blinkCount = 2*2;
+            do {
+                jQuery(query)['fade'+(blinkCount%2==0?'Out':'In')]('fast');
+            } while (--blinkCount);
+        }
+
+        function clearDocumentBackground() {
+            // Noop for this skin
+        }
+
+        // Wrap boxes with border and shadow
+        function wrapBoxes() {
+            // Noop for this skin
+        }
+
+        function initPage() {
+            checkCookieSupport();
+            wrapBoxes();
+        }
+
+        jQuery(function() {
+            initPage();
+        });
+
+    </script> 
+  <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-25106513-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script> 
+ </head> 
+ <body> 
+  <noscript> 
+   <div class="cookieJavaScriptWarning">
+     Please activate JavaScript in your browser. Without it, you will only be able to browse this website but clicking on any advanced feature (any forms or submit buttons) will not work. 
+   </div> 
+  </noscript>
+  <div id="dialogHelp" class="popupDialog">
+   <span id="dialogHelpPopup" title="dialogHelp"></span>
+   <span id="dialogHelpInit"> <script type="text/javascript">
+            function showHelpPopup(width, height, offsetId) {
+                var offset = jQuery("#"+offsetId).offset();
+                jsf('dialogHelpPopup')
+                    .css({width: width+"px", height: height+"px", top: offset.top-100+"px", left: offset.left-150+"px"})
+                    .jqm({
+                        closeClass: "closeDialog",
+                        overlay: 0
+                    });
+
+                jQuery("#dialogHelpContent").css("width", width-20+"px").css("height", height-75+"px");
+                jQuery("#dialogHelpContent").css("overflow", "auto");
+
+                jsf('dialogHelpPopup').jqmShow();
+            }
+        </script></span> 
+   <script type="text/javascript">jQuery(function() {
+        jsf('dialogHelpPopup').Resizable({
+            minTop: 1,
+            dragHandle: "#dialogHelpHead",
+            handlers: { se: "#dialogHelpResizeHandle" }
+        });
+    });</script> 
+   <div class="popupDialogHead" id="dialogHelpHead">
+    Help
+   </div>
+   <div id="dialogHelpContent" class="popupDialogContent"></div>
+   <div id="dialogHelpControls" class="popupDialogControls">
+    <div id="j_id14" style="padding:5px;">
+     <a href="#" class="buttonNonpersistent closeDialog"><span class="buttonLabel">Close Help</span></a>
+    </div>
+   </div>
+  </div> 
+  <div id="wrapper"> 
+   <div id="header">  
+    <div>
+     <a href="http://seamframework.org/"><img src="../themes/sfwkorg/img/blank.gif" height="98" width="210"></a> 
+    </div> 
+   </div>
+   <div id="body"> 
+    <div id="container"> 
+     <div id="leftColumn">
+      <div id="mainMenu" xmlns="http://www.w3.org/1999/xhtml">
+       <div id="j_id121" class="box">
+        <div class="mainMenuContainer"> 
+         <div class="mainMenuHeader"></div> 
+         <div class="mainMenuBody">
+          <div id="j_id125" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Home.html" class="level1Link">Home</a>
+          </div>
+          <div id="j_id132" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Home/WhySeam.html" class="level2Link">Why Seam?</a>
+          </div>
+          <div id="j_id139" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Seam2.html" class="level1Link">Seam 2</a>
+          </div>
+          <div id="j_id146" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/GettingStarted.html" class="level2Link">Getting Started</a>
+          </div>
+          <div id="j_id153" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Downloads.html" class="level2Link">Downloads</a>
+          </div>
+          <div id="j_id160" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Documentation.html" class="level2Link">Documentation</a>
+          </div>
+          <div id="j_id167" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="http://weld.cdi-spec.org/" class="level1Link">Weld</a>
+          </div>
+          <div id="j_id174" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Community.html" class="level1Link">Community</a>
+          </div>
+          <div id="j_id181" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="https://community.jboss.org/" class="level2Link">Forums</a>
+          </div>
+          <div id="j_id188" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/CDIExtensions.html" class="level2Link">CDI Extensions</a>
+          </div>
+          <div id="j_id195" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Contribute.html" class="level2Link">Contribute</a>
+          </div>
+          <div id="j_id202" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/JIRA.html" class="level2Link">JIRA</a>
+          </div>
+          <div id="j_id209" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/MailingLists.html" class="level2Link">Mailing Lists</a>
+          </div>
+          <div id="j_id216" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Events.html" class="level2Link">Events</a>
+          </div>
+          <div id="j_id223" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/Links.html" class="level2Link">Links</a>
+          </div>
+          <div id="j_id230" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Community/SeamInProduction.html" class="level2Link">Seam In Production</a>
+          </div>
+          <div id="j_id237" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Documentation.html" class="level1Link">Documentation</a>
+          </div>
+          <div id="j_id244" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="FAQs.html" class="level2Link">FAQs</a>
+          </div>
+          <div id="j_id251" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="KnowledgeBase.html" class="level2Link">Knowledge Base</a>
+          </div>
+          <div id="j_id258" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="Design.html" class="level2Link">Design</a>
+          </div> 
+         </div> 
+         <div class="mainMenuFooter"></div> 
+        </div>
+       </div> 
+      </div> 
+      <br> 
+      <div style="margin-top: 25px; margin-left: 15px; margin-right: 15px; "> 
+       <h2>Built with Seam</h2> 
+       <p> You can find the full source code for this website in the <a href="/Download.html">Seam package</a> in the directory /examples/wiki. It is licensed under the LGPL. </p> 
+       <div style="text-align:center;">
+        <a href="/Community/GetASeamIcon.html"><img src="../themes/sfwkorg/img/runningon_seamlogo_beige.gif" height="50" width="200"></a> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="rightColumn">
+      <img src="../themes/sfwkorg/img/blank.gif" height="8" width="1">
+      <div id="breadcrumb" class="breadcrumb">
+       <span class="breadcrumbPanel"><a href="../index.html" class="itemLink breadcrumbRoot">Site</a><span class="itemSeparator breadcrumbRoot">·</span><a href="../Documentation.html" class="itemLink">Documentation</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="KnowledgeBase.html" class="itemLink">Knowledge Base</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="TipsAndTricks.html" class="itemLink">Tips and Tricks</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="HandlingUniqueConstraints.html" class="itemText">Handling Unique Constraints</a></span>
+      </div>
+      <div id="messageBoxContainer"></div>
+      <div id="clientMessageBoxContainer" style="display:none;"> 
+       <div id="clientMessageBox" class="messageBox"> 
+        <table id="clientMessageBoxTable" class="messageBoxTable" cellpadding="0" cellspacing="0" border="0"></table> 
+        <script type="text/javascript">jQuery(function() {
+                    jQuery("#clientMessageBoxContainer").css("margin-top", "10px").css("margin-bottom", "10px");
+                    pulsate(".clientMessageBoxImage");
+                });</script> 
+       </div>
+      </div> 
+      <div id="documentDisplayContainer" class="box">
+       <div id="documentDisplay" class="documentDisplay">
+        <div id="j_id362"> 
+         <h1 class="documentTitle"><a href="HandlingUniqueConstraints.html">Handling Unique Constraints</a> </h1>
+        </div>
+        <p class="wikiPara"> When you want to make sure that a field or a property meets a general rule, let's say if it fits a given range, or meets a predefined format - you will use Hibernate field/property validators. That's what the well known @Max, @Min, @Length, @NotNull and other <tt>org.hibernate.validator.*</tt> annotations do. They are called before the entity is persisted, so if a rule is not met, Hibernate throws an exception. But Seam makes even a better use of these rules, by calling them automatically immediately after a view has been submitted (this is achieved by &lt;s:validate/&gt; and &lt;s:validateAll/&gt; tags). If something is wrong, the last view is redisplayed with a detailed error message attached to each problematic field, <i class="wikiEmphasis">without contacting the database</i>. </p> 
+        <p class="wikiPara"> But what to do when you have to validate relations between more fields of the same entity? Let's say, when you have to check that a start date is before the end date? That's when you use a class-level validator. Unlike property validators described above, these are not called by the Seam after the page submit, but only by the Hibernate - and it will throw an ugly exception when a rule is not met! That is why you have to call these validators manually from EntityHome <i class="wikiEmphasis">before a persist() or update()</i>. Refer to <a href="http://seamframework.org/Community/EntityLevelValidation" target="" class="regularLink">http://seamframework.org/Community/EntityLevelValidation</a> for more details. I guess, that's something we can live with, until such a feature is provided automatically by Seam in a future release. </p> 
+        <p class="wikiPara"> Finally, here we come to the biggest issue - how to elegantly validate a uniqueness constraint? Unlike the class-level validator, this problem requires a validation on a <i class="wikiEmphasis">set level</i>, i.e. requires you to have access to the entity manager. In the architecture where an entity is blissfully unaware of the persistence context, that's a big no-no! Therefore, it has to be validated from the EntityHome, that does have a reference to the EntityManger. Some people would naively say that you could catch a possible exception around persist() or update() and then return a user to the last view, with a message explaining that a constraint has been violated - but that's even a bigger no-no. Firstly, an exception would break the transaction, and secondly - using exceptions for handling expected events is time consuming and generally a bad practice. </p> 
+        <p class="wikiPara"> What you should to is to make a query searching for other entities with the same properties, and if one is found, just display a message without making an INSERT or UPDATE. Otherwise, you can put it in the database. There is still a possibility that in the meantime another entity that collides with that entity was inserted by another user, but that indeed <i class="wikiEmphasis">is an exception</i>, and should be handled as one (<tt>pages.xml</tt> is a good place to deal with it). </p> 
+        <p class="wikiPara"> That operation requires creating entity-specific queries and you can manually hard-code one for each entity requiring checks for unique constraints... Or, you could make a <a href="http://pariuri365.webs.com/" target="" class="regularLink">bet</a> an extension of the EntityHome class, that <i class="wikiEmphasis">checks its entity for annotations that you will use to define unique constraints on the Entity level</i>. </p> 
+        <p class="wikiPara"> Let's write that annotation: </p> 
+        <pre class="wikiPreformatted">
+package com.jonniezg.seam;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/**
+ * Defines a list of fields that are unique for an entity.
+ * 
+ * @see ExtendedEntityHome
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface Unique {
+	/**
+	 * A list of field (property) names.
+	 */
+	String[] value();
+}
+</pre> 
+        <p class="wikiPara"> Now, let's write our extension of EntityHome and call it ExtendedEntityHome. It overrides persist() and update() methods, checking the entity class for: </p> 
+        <ul class="wikiUnorderedList"> 
+         <li class="wikiUnorderedListItem"> An identifier field annotated with <tt>javax.persistence.Id</tt>, required for distinguishing the current entity from other entities when performing an UPDATE;</li> 
+         <li class="wikiUnorderedListItem"> A <tt>Unique</tt> annotation on the class level, containing a list of unique fields.</li> 
+        </ul> 
+        <p class="wikiPara"> If the validation fails, a message will be issued and the action will return string <q>constraintViolated</q>. </p> 
+        <p class="wikiPara"> Here it is: </p> 
+        <pre class="wikiPreformatted">
+package com.jonniezg.seam;
+
+import static org.jboss.seam.international.StatusMessage.Severity.ERROR;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.persistence.Query;
+
+import org.jboss.seam.annotations.Transactional;
+import org.jboss.seam.core.Expressions;
+import org.jboss.seam.core.Expressions.ValueExpression;
+import org.jboss.seam.framework.EntityHome;
+import org.jboss.seam.framework.Home;
+
+/**
+ * This class extends the EntityHome with uniqueness checking facilities. It's a good place to put your own enhancements
+ * as well.
+ * 
+ * It checks the entity class for:
+ * &lt;ul&gt;
+ * &lt;li&gt;An identifier field annotated with {@link javax.persistence.Id}&lt;/li&gt;
+ * &lt;li&gt;A {@link Unique} annotation on the class level, containing a list of unique fields&lt;/li&gt;
+ * &lt;/ul&gt;
+ * 
+ * If the validation fails, a message will be issued and the action will return string "constraintViolated".
+ * 
+ * @author Arsen Torbarina
+ * 
+ * @param &lt;E&gt;
+ *            Entity class
+ */
+public class ExtendedEntityHome&lt;E&gt; extends EntityHome&lt;E&gt; {
+	private String idField;
+	private String queryCreate;
+	private String queryUpdate;
+	private List&lt;String&gt; uniqueFields = new ArrayList&lt;String&gt;(0);
+	private List&lt;Method&gt; getters = new ArrayList&lt;Method&gt;(0);
+
+	@SuppressWarnings("unchecked")
+	private ValueExpression constraintViolationMessage;
+	private boolean built = false;
+
+	/**
+	 * Copies names of unique fields specified by the {@link Unique} into a string list.
+	 */
+	private void findUniqueFields() {
+		for (Annotation a : getEntityClass().getAnnotations()) {
+			if (a instanceof Unique) {
+				uniqueFields = Arrays.asList(((Unique) a).value());
+				break;
+			}
+		}
+	}
+
+	/**
+	 * Finds a field annotated with @Id tag.
+	 */
+	private void findIdField() {
+		OUTER: for (Method m : getEntityClass().getMethods()) {
+			for (Annotation a : m.getAnnotations()) {
+				if (a instanceof javax.persistence.Id) {
+					idField = m.getName();
+					break OUTER;
+				}
+			}
+		}
+		idField = fieldName(idField);
+	}
+
+	/**
+	 * Builds EJBQLs for validation before update and before create.
+	 */
+	protected void buildQueries() {
+		StringBuilder sb = new StringBuilder("select o from ").append(getSimpleEntityName()).append(" o where ");
+		String delim = "";
+		for (String field : uniqueFields) {
+			sb.append(delim);
+			sb.append("o.").append(field).append("=");
+			sb.append(":").append(field);
+			delim = " and ";
+		}
+		queryCreate = sb.toString();
+		sb.append(delim).append("o.").append(idField).append("!=:id");
+		queryUpdate = sb.toString();
+	}
+
+	/**
+	 * Finds getters for constrained fields.
+	 */
+	protected void findGetters() {
+		getters.clear();
+		for (String field : uniqueFields) {
+			String s = firstUpper(field);
+			try {
+				Method m;
+				try {
+					m = getEntityClass().getDeclaredMethod("get" + s);
+				} catch (NoSuchMethodException e) {
+					m = getEntityClass().getDeclaredMethod("is" + s);
+				}
+				getters.add(m);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+	}
+
+	/**
+	 * Gets the name of the entity identifier field.
+	 * 
+	 * @return field name
+	 */
+	public String getIdField() {
+		return idField;
+	}
+
+	/**
+	 * Sets the name of the entity identifier field. Can be used as an alternative to the {@link javax.persistence.Id}
+	 * annotation.
+	 * 
+	 * @param idField
+	 *            field name
+	 */
+	public void setIdField(String idField) {
+		this.idField = idField;
+	}
+
+	/**
+	 * Gets a list of field names that together form a unique constraint.
+	 * 
+	 * @return a list of field names
+	 */
+	public List&lt;String&gt; getUniqueConstraints() {
+		return uniqueFields;
+	}
+
+	/**
+	 * Sets a list of fields that together form a unique constraint. Can be used as an alternative to the
+	 * {@link Unique} annotation.
+	 * 
+	 * @param uniqueFields
+	 */
+	public void setUniqueFields(List&lt;String&gt; uniqueFields) {
+		this.uniqueFields = uniqueFields;
+		built = false;
+	}
+
+	/**
+	 * Check if the uniqueness constraint is respected, and if so, persist unmanaged entity instance to the underlying
+	 * database. If the persist is successful, a log message is printed, a {@link javax.faces.application.FacesMessage }
+	 * is added and a transaction success event raised.&lt;br/&gt;
+	 * If the uniqueness constraint is violated, an error status message is issued and the "constraintViolated" string
+	 * is returned.
+	 * 
+	 * @see Home#createdMessage()
+	 * @see Home#raiseAfterTransactionSuccessEvent()
+	 * 
+	 * @return "persisted" if the persist is successful, "constraintViolated" if the constraint is violated
+	 */
+	@Override
+	@Transactional
+	public String persist() {
+		return persistOrUpdate(false);
+	}
+
+	/**
+	 * Check if the uniqueness constraint is respected and flush any changes made to the managed entity instance to the
+	 * underlying database. &lt;br /&gt;
+	 * If the update is successful, a log message is printed, a {@link javax.faces.application.FacesMessage} is added
+	 * and a transaction success event raised.&lt;br/&gt;
+	 * If the uniqueness constraint is violated, an error status message is issued and the "constraintViolated" string
+	 * is returned.
+	 * 
+	 * @see Home#updatedMessage()
+	 * @see Home#raiseAfterTransactionSuccessEvent()
+	 * 
+	 * @return "persisted" if the update is successful, "constraintViolated" if the constraint is violated
+	 */
+	@Override
+	@Transactional
+	public String update() {
+		return persistOrUpdate(true);
+	}
+
+	private String persistOrUpdate(boolean update) {
+		if (!built) {
+			findUniqueFields();
+			findIdField();
+			findGetters();
+			buildQueries();
+			built = true;
+		}
+
+		Query q = getEntityManager().createQuery(update ? queryUpdate : queryCreate);
+		for (int i = 0; i &lt; uniqueFields.size(); i++) {
+			Method getter = getters.get(i);
+			String field = uniqueFields.get(i);
+			Object val;
+			try {
+				val = getter.invoke(getInstance());
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+			q.setParameter(field, val);
+		}
+		if (update) {
+			q.setParameter("id", getId());
+		}
+		if (q.getResultList().size() &gt; 0) {
+			getStatusMessages().addFromResourceBundleOrDefault(ERROR, getConstraintViolationKey(),
+					getConstraintViolationMessage().getExpressionString());
+
+			if (update) {
+				getEntityManager().refresh(getInstance());
+			}
+			return "constraintViolated";
+		}
+		if (update) {
+			return super.update();
+		} else {
+			return super.persist();
+		}
+	}
+
+	@Override
+	protected void initDefaultMessages() {
+		super.initDefaultMessages();
+		Expressions expressions = new Expressions();
+		if (constraintViolationMessage == null) {
+			constraintViolationMessage = expressions.createValueExpression("Constraint violation");
+		}
+	}
+
+	/**
+	 * Gets constraint violation message key for the resource bundle.
+	 * 
+	 * @return
+	 */
+	protected String getConstraintViolationKey() {
+		return getMessageKeyPrefix() + "constraintViolation";
+	}
+
+	/**
+	 * Gets constraint violation message.
+	 * 
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public ValueExpression getConstraintViolationMessage() {
+		return constraintViolationMessage;
+	}
+
+	/*
+	 * ---- Utilities -----------
+	 */
+	private static String firstLower(String str) {
+		if (str.length() == 1) {
+			return str.toLowerCase();
+		}
+		return str.substring(0, 1).toLowerCase() + str.substring(1);
+	}
+
+	private static String firstUpper(String str) {
+		if (str.length() == 1) {
+			return str.toUpperCase();
+		}
+		return str.substring(0, 1).toUpperCase() + str.substring(1);
+	}
+
+	private static String fieldName(String str) {
+		if (str == null)
+			return null;
+		if (str.startsWith("get")) {
+			str = str.substring(3);
+		} else if (str.startsWith("is")) {
+			str = str.substring(2);
+		}
+		return firstLower(str);
+	}
+
+}
+</pre> 
+        <p class="wikiPara"> Now when you have these two classes, it is time to use them in an example. The only specific thing in the Entity class is the @Unique annotation containing the list of properties that form a unique constraint. Some may say that we could have used the database columns instead, defined by the @UniqueConstraint annotation. That would require some more work converting DB column names back to the property names, and you are welcome to write it if you feel like fiddling with it. (NB: That is not an easy task, because the Hibernate <tt>NamingStrategy</tt> converts properties to column names and not the other way around.) </p> 
+        <pre class="wikiPreformatted">
+package com.jonniezg.examples.model;
+
+import com.jonniezg.seam.Unique;
+
+import java.io.Serializable;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+import org.hibernate.validator.Length;
+
+@Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "first_name", "last_name" }), name = "person")
+@Unique( { "firstName", "lastName" })
+public class Person implements Serializable {
+	private Long id;
+	private String firstName;
+	private String lastName;
+
+	@Id
+	@GeneratedValue
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	@Length(max = 50)
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	@Length(max = 50)
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+}
+</pre> 
+        <p class="wikiPara"> After preparing our Entity class by adding the proper annotation, we just have to pimp up the original Seam-gen generated PersonHome class by replacing the EntityManager with our ExtendedEntityManager: </p> 
+        <pre class="wikiPreformatted">
+package com.jonniezg.inventory.action;
+....
+@Name("personHome")
+public class ResourceTypeHome extends ExtendedEntityHome&lt;ResourceType&gt; {
+    ....
+}
+</pre> 
+        <p class="wikiPara"> And that's it! If you want a custom uniqueness-violation message defined per class, you can add an entry to the messages_??.properties: </p> 
+        <pre class="wikiPreformatted">
+Person_constraintViolation=A person with the same name already exists
+</pre> 
+        <p class="wikiPara"> If you don't like the keys being formed this way, you could play around with the getConstraintViolationKey() method, or add a message property to the Unique annotation. </p> 
+        <p class="wikiPara"> One final note: if your constraints contain properties that reference other entities, you <b>must</b> override hashCode() and equals() methods on these entities, implementing a <i class="wikiEmphasis">database identity</i>, that is - check only if the identifiers of the two compared entities of the same type are equal.</p> 
+       </div>
+       <div id="j_id367" class="documentTags undecoratedLink smallFont">
+        <div id="j_id368">
+          Tags:&nbsp;
+         <a href="https://community.jboss.org/tags?recursive=true#/?tags=contexts">contexts</a>&nbsp;|&nbsp;
+         <a href="https://community.jboss.org/tags?recursive=true#/?tags=hibernate">hibernate</a>&nbsp;|&nbsp;
+         <a href="https://community.jboss.org/tags?recursive=true#/?tags=jsf">jsf</a>&nbsp;|&nbsp;
+         <a href="https://community.jboss.org/tags?recursive=true#/?tags=unique">unique</a>&nbsp;|&nbsp;
+         <a href="https://community.jboss.org/tags?recursive=true#/?tags=validation">validation</a>
+        </div>
+       </div>
+       <div id="j_id374" class="documentCreatorHistory undecoratedLink smallFont">
+        <div id="j_id375">
+          Created:&nbsp;11. Aug 2010, 05:10&nbsp;America/New_York&nbsp;(Arsen Torbarina)
+        </div>
+        <div id="j_id383">
+          Last Modified:&nbsp;12. Jan 2013, 08:53&nbsp;America/New_York&nbsp;(Ionut Pop)
+        </div>
+       </div> 
+      </div>
+      <div id="commentDisplayForm">
+       <div id="comments" class="commentsDisplay"></div>
+      </div> 
+     </div> 
+     <div class="clear" style="padding-top:15px;"></div> 
+    </div>
+   </div> 
+  </div> 
+  <div id="footer" class="undecoratedLink"> 
+   <p> © Copyright 2009, Red Hat Middleware, LLC. All rights reserved. JBoss and Seam are registered trademarks and servicemarks of <a href="http://www.redhat.com/">Red Hat, Inc</a>. [<a href="http://www.redhat.com/legal/privacy_statement.html">Privacy Policy</a>]</p> 
+  </div>
+  <div id="status">
+   <span id="globalStatus"><span id="globalStatus.start" style="display: none">
+     <div id="j_id608" class="statusStart">
+      <img src="../themes/sfwkorg/img/statusindicator.gif" height="25" width="20">
+     </div></span><span id="globalStatus.stop">
+     <div id="j_id610" class="statusStop">
+      <img src="../themes/sfwkorg/img/blank.gif" height="25" width="20">
+     </div></span></span>
+  </div>  
+  <!-- Mirrored from 127.0.0.1:64444/Documentation/HandlingUniqueConstraints by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:48:34 GMT --> 
+  <!-- Added by HTTrack -->
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack --> 
+ </body>
+</html>

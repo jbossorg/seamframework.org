@@ -1,0 +1,806 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <!-- Mirrored from 127.0.0.1:64444/Community/SeamInProductionListing2 by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:42:13 GMT -->
+ <!-- Added by HTTrack -->
+ <head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack -->  
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+  <title>Seam Framework - Seam In Production Listing 2</title> 
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/basic_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" rel="stylesheet" type="text/css">
+  <link class="component" href="../a4j/s/3_3_3.CR1org/richfaces/renderkit/html/css/extended_classes.xcss/DATB/eAELXT5DOhSIAQ%21sA18_.css" media="rich-extended-skinning" rel="stylesheet" type="text/css">
+  <script src="../a4j/g/3_3_3.CR1org.ajax4jsf.javascript.AjaxScript" type="text/javascript"></script>
+  <script type="text/javascript">window.RICH_FACES_EXTENDED_SKINNING_ON=true;</script>
+  <script src="../a4j/g/3_3_3.CR1org/richfaces/renderkit/html/scripts/skinning.js" type="text/javascript"></script>
+  <link href="../themes/sfwkorg/css/sfwk.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shCore.css" rel="stylesheet" type="text/css"> 
+  <link href="../themes/sfwkorg/css/shThemeDefault.css" rel="stylesheet" type="text/css"> 
+  <script type="text/javascript" src="../seam/resource/remoting/resource/remote.js"></script> 
+  <script type="text/javascript" src="../seam/resource/remoting/interface1535.js?httpSessionChecker"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jquery.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/jqueryPlugins.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/lacewiki.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shCore.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushBash.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCpp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCSharp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushCss.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDelphi.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushDiff.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushGroovy.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJava.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushJScript.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPhp.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPlain.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushPython.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushRuby.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushScala.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushSql.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushVb.js"></script> 
+  <script type="text/javascript" src="../themes/sfwkorg/js/sh/scripts/shBrushXml.js"></script> 
+  <script type="text/javascript">
+        /* If you really want to load the Flash garbage on every page, go ahead and enable this:
+        SyntaxHighlighter.config.clipboardSwf = '/themes/sfwkorg/js/sh/scripts/clipboard.swf';
+         */
+        SyntaxHighlighter.defaults['gutter'] = false;
+        SyntaxHighlighter.all();
+	</script> 
+  <script type="text/javascript">
+
+        // ###################### Session timeout alert #################################
+
+        var sessionChecker = Seam.Component.getInstance("httpSessionChecker");
+        var timeoutURL = '/Home/JBossSeam';
+        var timeoutMillis = '900'*1000+3000;
+        var sessionTimeoutInterval = null;
+
+        function startSessionTimeoutCheck() {
+            sessionTimeoutInterval = setInterval('sessionChecker.isNewSession(alertTimeout)', timeoutMillis);
+        }
+
+        function stopSessionTimeoutCheck() {
+            if (sessionTimeoutInterval) clearInterval(sessionTimeoutInterval);
+        }
+
+        function resetSessionTimeoutCheck() {
+            if (sessionTimeoutInterval != null) {
+                stopSessionTimeoutCheck();
+                startSessionTimeoutCheck();
+            }
+        }
+
+        function alertTimeout(newSession) {
+            if (newSession) {
+                clearInterval(sessionTimeoutInterval);
+                jQuery(".ajaxSupport")
+                        .removeAttr('onblur')
+                        .removeAttr('onchange')
+                        .removeAttr('onkeyup')
+                        .removeAttr('onclick');
+                jQuery(".sessionEventTrigger").hide();
+                var answer = confirm("Your session has timed out, you will be redirected to the start page.");
+                if (answer) window.location = timeoutURL;
+            }
+        }
+
+        // ###################### Popups #################################
+
+        var fadeInPopupDialog = function(hash) {
+            hash.w.fadeIn('fast',function(){ hash.o.show(); });
+            jQuery(".closeDialog", hash.w).attr("accesskey", "C"); // Dynamically assign accesskey to .closeDialog buttons
+        };
+
+        var fadeOutPopupDialog = function(hash) { hash.w.fadeOut('fast',function(){ hash.o.remove(); }); };
+
+        // ###################### Tabbed Forms #################################
+
+        var formTabErrors = {};
+
+        function formTabRaiseError(tabId, fieldId, message) {
+
+            formTabClearError(tabId, fieldId); // Clear error then re-add
+
+            log("Raise error for tab: '" + tabId + "' field: " + fieldId);
+
+            // Add an error message to the client message box
+            log("Adding error message: " +tabId + fieldId + "ErrorMessage")
+            jQuery("#clientMessageBoxTable").append(
+                '<tr id="' + tabId + fieldId + 'ErrorMessage"><td><img src="/themes/sfwkorg/img/attention.gif" ' +
+                'height="18" width="18" class="clientMessageBoxImage attentionImage"/></td>' +
+                '<td><span id="attentionMessage" class="attentionMessage">'+ message + '</span></td></tr>'
+            );
+            if (formTabErrors[tabId] == null) {
+                formTabErrors[tabId] = 1;
+            } else {
+                formTabErrors[tabId]++;
+            }
+            formTabRenderErrors(tabId);
+        }
+
+        function formTabClearError(tabId, fieldId) {
+            if (document.getElementById(tabId+fieldId+"ErrorMessage") != null) { // This error is displayed
+                log("Clear error for tab: '" + tabId + "' field: " + fieldId);
+                log("Removing error message: " +tabId + fieldId + "ErrorMessage")
+                // Remove the error message on the client message box
+                jQuery("#"+tabId + fieldId + "ErrorMessage").remove();
+
+                formTabErrors[tabId]--;
+                formTabRenderErrors(tabId);
+            }
+        }
+
+        function formTabRenderErrors(tabId) {
+            log("Errors for tab: '" + tabId + "': " + formTabErrors[tabId]);
+
+            if (formTabErrors[tabId] > 0 && document.getElementById(tabId+"InvalidIcon") == null) {
+                log("Showing icon for tab: " + tabId);
+                // Show an icon on the tab and blink it a few times
+                jQuery("#"+tabId)
+                    .prepend('<img id="' + tabId + 'InvalidIcon" ' +
+                            'src="/themes/sfwkorg/img/attention.gif" width="13" height="13" ' +
+                            'alt="!" style="vertical-align:bottom;margin-left:5px;margin-right:5px;"/>');
+                pulsate("#"+tabId);
+            } else if (formTabErrors[tabId] < 1){
+                log("Removing icon of tab: " + tabId);
+                jQuery("#"+tabId + "InvalidIcon").remove();             // Remove the error icon on the tab
+            }
+
+            var tabsHaveErrors = false;
+            for (var tab in formTabErrors) {
+                var numOfErrors = formTabErrors[tab];
+                if (numOfErrors > 0) {
+                    tabsHaveErrors = true;
+                    break;
+                }
+            }
+
+            if (tabsHaveErrors) {
+                log("Hiding save button and showing form message box");
+                jQuery(".saveButton").hide();                       // Hide save button(s)
+                jQuery(".formControls").css("height", "30px");      // Adjust height for missing save button
+                jQuery("#messageBoxContainer").hide();                 // Hide server messages
+                jQuery("#clientMessageBoxContainer").show();           // Show client error messages
+            } else {
+                log("Showing save button and hiding form message box");
+                jQuery(".saveButton").show();                       // Show save button(s)
+                jQuery(".formControls").css("height", "");          // Readjust height for present save button
+                jQuery("#clientMessageBoxContainer").hide();           // Hide client error messages
+            }
+        }
+
+        function formTabClicked() {
+            jQuery("#messageBoxContainer").hide();                 // Hide server messages
+        }
+
+        function log(message) {
+            return; // Remove to enable logging
+            if (!log.window_ || log.window_.closed) {
+                var win = window.open("", null, "width=400,height=200," +
+                                                "scrollbars=yes,resizable=yes,status=no," +
+                                                "location=no,menubar=no,toolbar=no");
+                if (!win) return;
+                var doc = win.document;
+                doc.write("<html><head><title>Debug Log</title></head><body style='font-family: monospace'></body></html>");
+                doc.close();
+                log.window_ = win;
+            }
+            var logLine = log.window_.document.createElement("div");
+            logLine.appendChild(log.window_.document.createTextNode(message));
+            log.window_.document.body.appendChild(logLine);
+        }
+
+        // ###################### Design #################################
+
+        function highlightStars(item, range, end) {
+            for (i = 1; i <= range; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star_grey.gif");
+            }
+            for (i = 1; i <= end; i++) {
+                styleClass = ".item"+item+"-rate"+i;
+                jQuery(styleClass).attr("src", "../themes/sfwkorg/img/star.gif");
+            }
+        }
+
+        function pulsate(query) {
+            var blinkCount = 2*2;
+            do {
+                jQuery(query)['fade'+(blinkCount%2==0?'Out':'In')]('fast');
+            } while (--blinkCount);
+        }
+
+        function clearDocumentBackground() {
+            // Noop for this skin
+        }
+
+        // Wrap boxes with border and shadow
+        function wrapBoxes() {
+            // Noop for this skin
+        }
+
+        function initPage() {
+            checkCookieSupport();
+            wrapBoxes();
+        }
+
+        jQuery(function() {
+            initPage();
+        });
+
+    </script> 
+  <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-25106513-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script> 
+ </head> 
+ <body> 
+  <noscript> 
+   <div class="cookieJavaScriptWarning">
+     Please activate JavaScript in your browser. Without it, you will only be able to browse this website but clicking on any advanced feature (any forms or submit buttons) will not work. 
+   </div> 
+  </noscript>
+  <div id="dialogHelp" class="popupDialog">
+   <span id="dialogHelpPopup" title="dialogHelp"></span>
+   <span id="dialogHelpInit"> <script type="text/javascript">
+            function showHelpPopup(width, height, offsetId) {
+                var offset = jQuery("#"+offsetId).offset();
+                jsf('dialogHelpPopup')
+                    .css({width: width+"px", height: height+"px", top: offset.top-100+"px", left: offset.left-150+"px"})
+                    .jqm({
+                        closeClass: "closeDialog",
+                        overlay: 0
+                    });
+
+                jQuery("#dialogHelpContent").css("width", width-20+"px").css("height", height-75+"px");
+                jQuery("#dialogHelpContent").css("overflow", "auto");
+
+                jsf('dialogHelpPopup').jqmShow();
+            }
+        </script></span> 
+   <script type="text/javascript">jQuery(function() {
+        jsf('dialogHelpPopup').Resizable({
+            minTop: 1,
+            dragHandle: "#dialogHelpHead",
+            handlers: { se: "#dialogHelpResizeHandle" }
+        });
+    });</script> 
+   <div class="popupDialogHead" id="dialogHelpHead">
+    Help
+   </div>
+   <div id="dialogHelpContent" class="popupDialogContent"></div>
+   <div id="dialogHelpControls" class="popupDialogControls">
+    <div id="j_id14" style="padding:5px;">
+     <a href="#" class="buttonNonpersistent closeDialog"><span class="buttonLabel">Close Help</span></a>
+    </div>
+   </div>
+  </div> 
+  <div id="wrapper"> 
+   <div id="header">  
+    <div>
+     <a href="http://seamframework.org/"><img src="../themes/sfwkorg/img/blank.gif" height="98" width="210"></a> 
+    </div> 
+   </div>
+   <div id="body"> 
+    <div id="container"> 
+     <div id="leftColumn">
+      <div id="mainMenu" xmlns="http://www.w3.org/1999/xhtml">
+       <div id="j_id121" class="box">
+        <div class="mainMenuContainer"> 
+         <div class="mainMenuHeader"></div> 
+         <div class="mainMenuBody">
+          <div id="j_id125" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Home.html" class="level1Link">Home</a>
+          </div>
+          <div id="j_id132" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Home/WhySeam.html" class="level2Link">Why Seam?</a>
+          </div>
+          <div id="j_id139" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Seam2.html" class="level1Link">Seam 2</a>
+          </div>
+          <div id="j_id146" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/GettingStarted.html" class="level2Link">Getting Started</a>
+          </div>
+          <div id="j_id153" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Downloads.html" class="level2Link">Downloads</a>
+          </div>
+          <div id="j_id160" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Seam2/Documentation.html" class="level2Link">Documentation</a>
+          </div>
+          <div id="j_id167" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="http://weld.cdi-spec.org/" class="level1Link">Weld</a>
+          </div>
+          <div id="j_id174" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Community.html" class="level1Link">Community</a>
+          </div>
+          <div id="j_id181" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="https://community.jboss.org/" class="level2Link">Forums</a>
+          </div>
+          <div id="j_id188" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="CDIExtensions.html" class="level2Link">CDI Extensions</a>
+          </div>
+          <div id="j_id195" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="Contribute.html" class="level2Link">Contribute</a>
+          </div>
+          <div id="j_id202" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="JIRA.html" class="level2Link">JIRA</a>
+          </div>
+          <div id="j_id209" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="MailingLists.html" class="level2Link">Mailing Lists</a>
+          </div>
+          <div id="j_id216" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="Events.html" class="level2Link">Events</a>
+          </div>
+          <div id="j_id223" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="Links.html" class="level2Link">Links</a>
+          </div>
+          <div id="j_id230" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="SeamInProduction.html" class="level2Link">Seam In Production</a>
+          </div>
+          <div id="j_id237" class="level1">
+           <span class="level1Marker level1MarkerDot">·</span>
+           <span class="level1Marker level1MarkerGreaterThan">&gt;</span>
+           <span class="level1Marker level1MarkerSlash">/</span>
+           <span class="level1Marker level1MarkerSpace">&nbsp;</span>
+           <a href="../Documentation.html" class="level1Link">Documentation</a>
+          </div>
+          <div id="j_id244" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Documentation/FAQs.html" class="level2Link">FAQs</a>
+          </div>
+          <div id="j_id251" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Documentation/KnowledgeBase.html" class="level2Link">Knowledge Base</a>
+          </div>
+          <div id="j_id258" class="level2">
+           <span class="level2Marker level2MarkerDot">·</span>
+           <span class="level2Marker level2MarkerGreaterThan">&gt;</span>
+           <span class="level2Marker level2MarkerSlash">/</span>
+           <span class="level2Marker level2MarkerSpace">&nbsp;</span>
+           <a href="../Documentation/Design.html" class="level2Link">Design</a>
+          </div> 
+         </div> 
+         <div class="mainMenuFooter"></div> 
+        </div>
+       </div> 
+      </div> 
+      <br> 
+      <div style="margin-top: 25px; margin-left: 15px; margin-right: 15px; "> 
+       <h2>Built with Seam</h2> 
+       <p> You can find the full source code for this website in the <a href="/Download.html">Seam package</a> in the directory /examples/wiki. It is licensed under the LGPL. </p> 
+       <div style="text-align:center;">
+        <a href="/Community/GetASeamIcon.html"><img src="../themes/sfwkorg/img/runningon_seamlogo_beige.gif" height="50" width="200"></a> 
+       </div> 
+      </div> 
+     </div> 
+     <div id="rightColumn">
+      <img src="../themes/sfwkorg/img/blank.gif" height="8" width="1">
+      <div id="breadcrumb" class="breadcrumb">
+       <span class="breadcrumbPanel"><a href="../index.html" class="itemLink breadcrumbRoot">Site</a><span class="itemSeparator breadcrumbRoot">·</span><a href="../Community.html" class="itemLink">Community</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="SeamInProduction.html" class="itemLink">Seam In Production</a><span class="itemSeparatorDot itemSeparator">·</span><span class="itemSeparatorGreaterThan itemSeparator">&gt;</span><span class="itemSeparatorSlash itemSeparator">/</span><a href="SeamInProductionListing2.html" class="itemText">Seam In Production Listing 2</a></span>
+      </div>
+      <div id="messageBoxContainer"></div>
+      <div id="clientMessageBoxContainer" style="display:none;"> 
+       <div id="clientMessageBox" class="messageBox"> 
+        <table id="clientMessageBoxTable" class="messageBoxTable" cellpadding="0" cellspacing="0" border="0"></table> 
+        <script type="text/javascript">jQuery(function() {
+                    jQuery("#clientMessageBoxContainer").css("margin-top", "10px").css("margin-bottom", "10px");
+                    pulsate(".clientMessageBoxImage");
+                });</script> 
+       </div>
+      </div> 
+      <div id="documentDisplayContainer" class="box">
+       <div id="documentDisplay" class="documentDisplay">
+        <div id="j_id362"> 
+         <h1 class="documentTitle"><a href="SeamInProductionListing2.html">Seam In Production Listing 2</a> </h1>
+        </div>
+        <p class="wikiPara"> [ <a href="SeamInProductionListing.html" target="" class="regularLink">PAGE 1</a> | PAGE 2 ] </p> 
+        <table style="width: 100%;margin-bottom:10px;margin-left:auto;margin-right:auto;" class="datatable topLeftBottomBorder" border="0" cellspacing="0" cellpadding="5"> 
+         <tbody>
+          <tr class="regularHeader"> 
+           <td class="rightBorder"><b>Product/Project Name</b></td> 
+           <td class="rightBorder"><b>Author(s)/Company</b></td> 
+           <td class="rightBorder"><b>Technology Used</b></td> 
+           <td class="rightBorder"><b>Description</b></td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="http://cashbackservice.co.uk/" target="" class="regularLink">cashback</a></td> 
+           <td class="rightBorder"><a href="http://cashbackservice.co.uk/" target="" class="regularLink">cashback </a></td> 
+           <td class="rightBorder">JBoss AS 4.2.3, Seam 2.2.0, EJB3, JPA, Richfaces, MySQL</td> 
+           <td class="rightBorder">Online cashback shopping portal. It is a cashback portal where users can browse through different UK based retailers and if they shop through this portal, retailer pays us commission which is shared with users. <a href="http://cashbackservice.co.uk/" target="" class="regularLink">cashback</a> website</td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="http://www.freejobagent.com/" target="" class="regularLink">Free Job Agent</a></td> 
+           <td class="rightBorder"><a href="http://www.freejobagent.com/" target="" class="regularLink">Free Job Agent </a></td> 
+           <td class="rightBorder">JBoss AS 4.2.3, Seam 2.1.1, EJB3, Hibernate 3.2, IceFaces 1.7.2, PostgreSQL 8.3</td> 
+           <td class="rightBorder">Post or search for computer programming jobs in North America free for seekers and employers.</td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="http://hoyoba.com/" target="" class="regularLink">Hoyoba Photo Album</a></td> 
+           <td class="rightBorder"><a href="http://hoyoba.com/" target="" class="regularLink">Hoyoba </a></td> 
+           <td class="rightBorder">JBoss AS 4.2.3, Seam 2.2.0, EJB3, RichFaces,MySQL</td> 
+           <td class="rightBorder">You can share your photo with friends and save it as your mobile wallpaper by suitable size.</td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="http://newonlinebible.com/openbible/open-bible" target="" class="regularLink">Online Bible</a></td> 
+           <td class="rightBorder"><a href="http://newonlinebible.com/openbible/bible-feed" target="" class="regularLink">Online Bible</a></td> 
+           <td class="rightBorder">JBoss AS 4.2, Seam 2.x, Hibernate 3.x,, EJB3 RichFaces, Facelets, JMS, MySQL</td> 
+           <td class="rightBorder">The Online Bible in more than 10 languages with explanations and opinions from people all over the world!</td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="http://myasset.no-ip.org/" target="" class="regularLink">MyAssets</a></td> 
+           <td class="rightBorder"><a href="http://myasset.no-ip.org/" target="" class="regularLink">VnL</a></td> 
+           <td class="rightBorder">JBoss AS 4.2, Seam 2.x, Hibernate 3.x,, EJB3 RichFaces, Facelets, JMS, MySQL</td> 
+           <td class="rightBorder">Free on-line personal financial software features include asset and cash flow projection, book keeping, document management, and performance analysis</td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="http://www.justthrive.com/" target="" class="regularLink">Thrive</a></td> 
+           <td class="rightBorder"><a href="http://www.justthrive.com/" target="" class="regularLink">Thrive (Loudwater Labs)</a></td> 
+           <td class="rightBorder">JBoss AS 4.2, Seam 2.x, Hibernate 3.x, RichFaces, Facelets, Apache Axis 1.4 Web Services and PostgreSQL</td> 
+           <td class="rightBorder">Thrive is bringing financial advice to the web. We are helping people in their 20s and 30s build their financial health through organization, advice and planning.</td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="http://www.flyhajj.com/" target="" class="regularLink">FlyHajj and FlyUmrah</a></td> 
+           <td class="rightBorder"><a href="http://www.swiftbsol.com/" target="" class="regularLink">Swiftbsol</a></td> 
+           <td class="rightBorder">JBoss AS 4.2, Seam 2.x, Hibernate 3.x, RichFaces</td> 
+           <td class="rightBorder">Aimed at Muslims of North America and Europe, FlyHajj and FlyUmrah is a leading global online travel company offering hajj and umrah travelers a wide number of packages offered by different travel companies on a single portal. This portal was created to address hajj and umrah travelers need for a comprehensive display of fares, rates, lodging, facilities, share hajj and umrah experiences, learning center and travel agents reviews in a single location. </td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="http://www.coolersoup.com/" target="" class="regularLink">CoolerSoup</a></td> 
+           <td class="rightBorder"><a href="http://www.orbitalpoint.com/" target="" class="regularLink">OrbitalPoint</a></td> 
+           <td class="rightBorder">JBoss AS 4.2, Seam 2.x, Hibernate 3.x, RichFaces, Facelets, MySql</td> 
+           <td class="rightBorder">An Open Bulletin Board for each Community and Person</td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="http://www.cnr.com/" target="" class="regularLink">CNR.com App Store Platform</a></td> 
+           <td class="rightBorder"><a href="http://www.xandros.com/" target="" class="regularLink">Xandros</a></td> 
+           <td class="rightBorder">View tier: JBoss AS 5.1, EJB3, Seam 2.1.x, JPA/Hibernate 3.x, JSF, Facelets, RichFaces</td> 
+           <td class="rightBorder">An App Store platform architecture that supports the concurrent hosting of multiple, single purposed app store instances for a variety of operating systems, application platforms and devices.</td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="http://www.parentsrateall.com/" target="" class="regularLink">ParentsRateAll.com</a></td> 
+           <td class="rightBorder">Hoodbook</td> 
+           <td class="rightBorder">JBoss AS 4.2, Seam 2.0.x, Hibernate 3.x, JSF, Facelets, RichFaces</td> 
+           <td class="rightBorder">Parents post ratings on anything that matters to kids</td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="http://pixarus.com/" target="" class="regularLink">Pixarus.com</a></td> 
+           <td class="rightBorder">Pixarus.com</td> 
+           <td class="rightBorder">JBoss AS 4.2, Seam 2.1.x, Facelets, RichFaces, Red5 and Flex</td> 
+           <td class="rightBorder">Interactive Platform for live streaming videos and micro-bloggings !</td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="https://www.trc.gov.om/portal/sec/portal/default/Research+Directory" target="" class="regularLink">Research Directory, TRC Oman</a></td> 
+           <td class="rightBorder"><a href="http://www.akber.com/" target="" class="regularLink">Akber Choudhry</a></td> 
+           <td class="rightBorder">JBoss AS 4.2, Seam 2.1.1, Facelets, RichFaces, PortletBridge</td> 
+           <td class="rightBorder">Research Institutions and Persons Directory</td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="https://www.trc.gov.om/portal/sec/portal/default/TRESS" target="" class="regularLink">TRESS, TRC Oman</a></td> 
+           <td class="rightBorder"><a href="http://www.akber.com/" target="" class="regularLink">Akber Choudhry</a></td> 
+           <td class="rightBorder">JBoss AS 4.2, Seam 2.1.1, Facelets, RichFaces, PortletBridge</td> 
+           <td class="rightBorder">Research Proposal Submission System</td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="http://cloud42.net/" target="" class="regularLink">Cloud42</a></td> 
+           <td class="rightBorder"><a href="http://www.just-works.de/" target="" class="regularLink">just works! Software</a></td> 
+           <td class="rightBorder">View Tier: JSF 1.2, Seam 2.x, Facelets, JBoss RichFaces 3.x</td> 
+           <td class="rightBorder">A comprehensive management framework (and GUI) for <a href="http://www.vi.net/cloud-hosting/cloud-hosting.php" target="" class="regularLink">cloud hosting</a> Computing with Amazon EC2</td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="http://www.peanutcafe.com/" target="" class="regularLink">peanutcafe.com</a></td> 
+           <td class="rightBorder">Peanutcafe.com</td> 
+           <td class="rightBorder">JBoss AS 4.2, Seam 2.1.x, Facelets, RichFaces, Hibernate 3.x, Flex</td> 
+           <td class="rightBorder">Peanut Café is a new online platform that provides postings and flyers for local communities in categories such as housing, autos, for sale, personals, pets and community activities and events.</td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="https://www.immigrationprocess.ca/" target="" class="regularLink">Immigration Management System (IMS)</a></td> 
+           <td class="rightBorder"><a href="http://www.diligesoft.com/" target="" class="regularLink">Diligent Enterprise Software</a></td> 
+           <td class="rightBorder">Seam 2.x, jBPM, Facelets, RichFaces 3.x</td> 
+           <td class="rightBorder">Provides rich interface, business process management and document management for potential immigrants and Canadian immigration agencies and consultants.</td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="http://www.komunika.eu/" target="" class="regularLink">Polish language school</a></td> 
+           <td class="rightBorder">Komunika.eu</td> 
+           <td class="rightBorder">Java 1.5, JSF (Richfaces), framework Seam, EJB 3.0, Jboss, MySql</td> 
+           <td class="rightBorder">The unique Polish language school. The innovative teaching method of proven effectiveness. One to one courses for private individuals, companies and institutions.</td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="http://aboutmax.at/" target="" class="regularLink">AboutMax.at - an experimental meta-search engine</a></td> 
+           <td class="rightBorder"><a href="http://adaptive.at/" target="" class="regularLink">Adaptive</a></td> 
+           <td class="rightBorder">Seam 2.x, Facelets, RichFaces 3.x, JBoss, MySQL</td> 
+           <td class="rightBorder">An experimental meta-search engine that queries many online sources and aggregates results.</td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="http://www.cabrioportal.com/" target="" class="regularLink">CabrioPortal.com</a></td> 
+           <td class="rightBorder"><a href="http://www.frox.com/" target="" class="regularLink">FROX communication</a></td> 
+           <td class="rightBorder">JBoss AS 4.2.3.GA, JBoss Seam 2.1.x, RichFaces 3.3.x, Hibernate 3.x</td> 
+           <td class="rightBorder">CabrioPortal.com hosts a community of cabriolet enthusiasts including numerous scenic cabriolet routes. Custom tours can be planned by embedding routes and points of interest shared by other members.</td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="http://filesio.net/" target="" class="regularLink">filesio</a></td> 
+           <td class="rightBorder"><a href="http://www.just-works.de/" target="" class="regularLink">just works! Software</a></td> 
+           <td class="rightBorder">View Tier: JSF 1.2, Seam 2.x, Facelets, JBoss RichFaces 3.x</td> 
+           <td class="rightBorder">filesio is a <a href="http://filesio.net/" target="" class="regularLink">professional service for sharing and sending large files</a> as an alternative to FTP. There is a German version available, too. See <a href="http://filesio.de/" target="" class="regularLink">Online Dateiaustausch </a></td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="http://www.klaros-testmanagement.com/" target="" class="regularLink">Klaros-Testmanagement</a></td> 
+           <td class="rightBorder"><a href="http://www.verit.de/" target="" class="regularLink">verit Informationssysteme</a></td> 
+           <td class="rightBorder">JSF 1.2, Seam 2.x, Hibernate 3.x, IceFaces</td> 
+           <td class="rightBorder">Klaros-Testmanagement is an Ajax-based web application for management of the quality assurance process in software development projects, available as a free community edition.</td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="http://e-branchekoden.dk/" target="" class="regularLink">e-branchekoden</a></td> 
+           <td class="rightBorder"><a href="http://mediatorsystems.com/" target="" class="regularLink">Mediator Systems ApS</a></td> 
+           <td class="rightBorder">JBoss AS 4.2.3.GA, JBoss Seam 2.2.0.GA, Facelets 1.1.15.B1, JSF 1.2, RichFaces 3.3.1.GA, EJB3, JPA/Hibernate, Hibernate Search 3.1.1.GA and MySQL DB.</td> 
+           <td class="rightBorder">Electronic self-regulation program for the food industry.</td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="http://www.pocketbudda.com/" target="" class="regularLink">Pocketbudda</a></td> 
+           <td class="rightBorder"><a href="http://www.pocketbudda.com/" target="" class="regularLink">Pocketbudda</a></td> 
+           <td class="rightBorder">JSF 1.2, Seam 2.x, Hibernate 3.x, memcached, Apache, Ubuntu Server, EC2, MySql 5</td> 
+           <td class="rightBorder">Pocketbudda is a social astrology and self-help site that also uses a key-value store built on top of Hibernate called <a href="http://code.google.com/p/schemafree/">Schemafree</a><a href="http://www.platinumdatarecovery.com/">Cheap Data Recovery</a>.</td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="http://www.mavenbyte.com/mavenbid" target="" class="regularLink">Mavenbid</a></td> 
+           <td class="rightBorder"><a href="http://www.mavenbyte.com/mavenbid" target="" class="regularLink">Mavenbid App</a></td> 
+           <td class="rightBorder">JBoss AS 4.2.3.GA, JBoss Seam 2.2.0.GA, Facelets 1.1.15.B1, JSF 1.2, RichFaces 3.3.1.GA, EJB3, JPA/Hibernate and MySQL DB.</td> 
+           <td class="rightBorder">A website specifically meant for freelancers and Service Buyers. </td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="http://eva.ru/" target="" class="regularLink">eva.ru</a></td> 
+           <td class="rightBorder"><a href="http://eva.ru/" target="" class="regularLink">eva.ru</a></td> 
+           <td class="rightBorder">JBoss AS 4.2.3.GA, JBoss Seam 2.2.0.GA, Facelets 1.1.15.B1, JSF 1.2, RichFaces 3.3.1.GA, EJB3, JPA/Hibernate, Velocity, Drools, MySQL5 DB.</td> 
+           <td class="rightBorder">Russian woman's web portal <br>About 5 000 000 pages/day</td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder">Mobile Data Acquisition</td> 
+           <td class="rightBorder"><a href="http://roland-tilgner.de/" target="" class="regularLink">Roland Tilgner KG</a></td> 
+           <td class="rightBorder"> Seam, Hibernate, Oracle Database Lite, Tomcat, JSF, RichFaces, Windows XP Tablet PC Edition, Panasonic Toughbook </td> 
+           <td class="rightBorder">Data acquisition software for mobile devices with full touch screen support. Freely configurable and scalable user interface. Data quality control by real time validation, comparison chart for previous or reference data, complex search queries on local data, data synchronization via Oracle Database Lite. Two possible configurations: As standalone application on the mobile device (Browser, Tomcat Embedded, Oracle Database Lite, <a href="http://www.harddrivesforsale.com/Western-Digital.html">WD20EADS</a>) or as internet web application (Browser, UMTS/WLAN, Application <a href="http://www.uk2.net/vps-cloud-hosting/" target="" class="regularLink">VPS</a> Server, Oracle Database).</td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="http://www.italiancollection.com/" target="" class="regularLink">ItalianCollection</a> <br> <a href="http://www.easytoholiday.it/" target="" class="regularLink">EasyToHoliday</a></td> 
+           <td class="rightBorder"><a href="http://www.2beet.com/" target="" class="regularLink">2Beet</a></td> 
+           <td class="rightBorder"> Seam 2.0.0GA, Hibernate, JSF, RichFaces - deployed on Apache , Tomcat6 , JDK6 , MySQL5.0 </td> 
+           <td class="rightBorder"> Hotel, Bed and Breakfast and Apartments reservation system</td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="http://www.problemator.com/" target="" class="regularLink">problemator.com</a></td> 
+           <td class="rightBorder"><a href="http://www.problemator.com/" target="" class="regularLink">Problemator</a></td> 
+           <td class="rightBorder"> Seam 2.2, Hibernate, JSF/Facelets, Glassfish, Postgresql</td> 
+           <td class="rightBorder"> Warn your friends, family and colleagues of problems that you experience </td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="http://anylayouts.com/" target="" class="regularLink">anylayouts.com</a></td> 
+           <td class="rightBorder"><a href="http://anylayouts.com/" target="" class="regularLink">Any.Layouts</a></td> 
+           <td class="rightBorder">Tomcat 6, JBoss Seam 2.x, RichFaces 3.x, JPA/Hibernate, PostgreSQL 8.</td> 
+           <td class="rightBorder">High quality and free website templates gallery.</td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="http://www.twars.pl/" target="" class="regularLink">www.TWars.pl</a></td> 
+           <td class="rightBorder"><a href="http://www.twars.pl/" target="" class="regularLink">Shersoft</a></td> 
+           <td class="rightBorder">Tomcat 6, JBoss Seam 2.x, RichFaces 3.x, JDBC, PostgreSQL 8.</td> 
+           <td class="rightBorder">Web online strategy game. Settle province, create roman legions and conquer world. Lot of Roman legion units, fleet, unique technology, and fun to play with other players;), tribal wars, plemiona, roman empire</td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="http://www.szulerka.pl/" target="" class="regularLink">www.szulerka.pl</a></td> 
+           <td class="rightBorder"><a href="http://www.szulerka.pl/" target="" class="regularLink">Shersoft</a></td> 
+           <td class="rightBorder">Tomcat 6, JBoss Seam 2.x, RichFaces 3.x, JDBC, PostgreSQL 8.</td> 
+           <td class="rightBorder">Polish online database with workshops, car shops etc.</td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="http://www.skiline.cc/" target="" class="regularLink">www.skiline.cc</a></td> 
+           <td class="rightBorder"><a href="http://www.alturos.com/" target="" class="regularLink">alturos software ag</a></td> 
+           <td class="rightBorder">JBoss Seam 2.2, jBoss 5.1.0, RichFaces 3.x, JDBC, PostgreSQL 8, Lucene</td> 
+           <td class="rightBorder">Get information about your skiing day (altimeters, liftrides etc.), win competitions, ski-community</td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="http://www.snaptale.com/" target="" class="regularLink">www.snaptale.com</a></td> 
+           <td class="rightBorder"><a href="http://www.snaptale.com/" target="" class="regularLink">SnapTale</a></td> 
+           <td class="rightBorder">Tomcat 6, JBoss Seam 2.x, RichFaces 3.x, JDBC, MySQL, Hibernate.</td> 
+           <td class="rightBorder">A social network for photographers, allowing photographers to share photos, get updates from other photographers and get scored and rewarded for their work.</td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="http://www.xibaa.com/" target="" class="regularLink">www.xibaa.com</a></td> 
+           <td class="rightBorder"><a href="http://www.xibaa.com/" target="" class="regularLink">Xibaa.com</a></td> 
+           <td class="rightBorder">Tomcat 6, JBoss Seam 2.x, RichFaces 3.x, MySQL</td> 
+           <td class="rightBorder">This website is mainly designed for travelers and tourists to see and find many aspects of their targeted destination in a simple image format with relevant comments or to utilize the advanced self-thought searching feature in order to find the specific place based on their personalities or desirabilities.</td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="http://www.oenodb.com/" target="" class="regularLink">OenoDb</a></td> 
+           <td class="rightBorder"><a href="http://www.oenodb.com/" target="" class="regularLink">OenoDb</a></td> 
+           <td class="rightBorder">JBoss Seam 2.x, RichFaces 3.x,MySQL, Hibernate.</td> 
+           <td class="rightBorder">A wine encyclopedy</td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="https://certs.godaddy.com/" target="" class="regularLink">certs.godaddy.com</a></td> 
+           <td class="rightBorder"><a href="http://www.godaddy.com/" target="" class="regularLink">GoDaddy</a></td> 
+           <td class="rightBorder">JBoss Seam 2.x, RichFaces 3.x (as far as I can tell)</td> 
+           <td class="rightBorder">I was just using GoDaddy and noticed the .seam extension, looked at the source code and it's full of Seam and RichFaces artifacts! Figured it would be a good idea to list it here.</td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="http://www.cardmobili.com/" target="" class="regularLink">Cardmobili</a></td> 
+           <td class="rightBorder"><a href="http://www.cardmobili.com/" target="" class="regularLink">Cardmobili</a></td> 
+           <td class="rightBorder">JBoss Seam 2.2.0, JBoss AS 5.1.0, RichFaces 3.x, Hibernate/JPA, MySQL, Apache Httpd</td> 
+           <td class="rightBorder">Cardmobili is a 360º platform to manage rewards and membership cards, enabling users to store them in the cloud, while using mobile applications to present them in store, collecting and using the rewards. Cardmobili is linked to merchants’ loyalty management systems, enabling users to access exclusive offers, delivered to their mobile application and web account. Users can also share cards and information with other users and friends in social networks.</td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="http://www.keeyoo.com/" target="" class="regularLink">Keeyoo</a></td> 
+           <td class="rightBorder"><a href="http://www.keeyoo.com/" target="" class="regularLink">Keeyoo</a></td> 
+           <td class="rightBorder">Seam 2, Facelets, Tomcat 6, MySQL database</td> 
+           <td class="rightBorder"> Keeyoo is a free online task management system where you can manage your time effectively. Keeyoo provides a set of tools for managing your tasks, track the progress of your plans, or categorizing your todo list. </td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="http://www.play4now.pl/" target="" class="regularLink">Play4Now</a></td> 
+           <td class="rightBorder"><a href="http://www.play4now.pl/" target="" class="regularLink">Play4Now</a></td> 
+           <td class="rightBorder">Seam 2, Facelets, Tomcat 6, PostgreSQL</td> 
+           <td class="rightBorder"> MMorpg, Online games, games, top list, Top lista gier online, gry online, gry mmorpg, </td> 
+          </tr> 
+          <tr class="rowEvent"> 
+           <td class="rightBorder"><a href="http://www.walterjwhite.com/" target="" class="regularLink">WalterJWhite</a></td> 
+           <td class="rightBorder"><a href="http://www.walterjwhite.com/" target="" class="regularLink">WalterJWhite</a></td> 
+           <td class="rightBorder">Seam 2, Hibernate, Facelets, Jetty 6, MySQL, Richfaces</td> 
+           <td class="rightBorder"> Personal site demoing JBoss Seam. </td> 
+          </tr> 
+          <tr class="rowEvent"> 
+           <td class="rightBorder"><a href="http://idatoday.com/" target="" class="regularLink">idatoday</a></td> 
+           <td class="rightBorder"><a href="http://idatoday.com/" target="" class="regularLink">idatoday.com</a></td> 
+           <td class="rightBorder">Seam 2, Hibernate, MySQL, Richfaces, Jboss AS 6, </td> 
+           <td class="rightBorder"> Last Minute Hotel Booking Portal. Hotels post their free rooms on our site anonymously and are therefore able to offer great rates as their contracts with the existing booking portals are not vialoted. </td> 
+          </tr> 
+          <tr class="rowEvent"> 
+           <td class="rightBorder"><a href="http://www.enov-formation.com/" target="" class="regularLink">Enov Formation</a></td> 
+           <td class="rightBorder"><a href="http://www.enov-formation.com/" target="" class="regularLink">Enov Formation</a></td> 
+           <td class="rightBorder">Seam 2.2, MySQL 5, Richfaces 3.3, Jboss AS 5.1</td> 
+           <td class="rightBorder"> Online formations in management and communication. </td> 
+          </tr> 
+          <tr class="rowEvent"> 
+           <td class="rightBorder"><a href="http://www.oquma.com/en/quality-news-ipad-style-menu-dashboards-reports-and-more.html" target="" class="regularLink">Oquma - Quality Management System</a></td> 
+           <td class="rightBorder"><a href="http://www.oquma.com/" target="" class="regularLink">Oquma</a></td> 
+           <td class="rightBorder">Seam 2.2, Richfaces 3.3, JBpm 3.2, Jackrabbit 1.6, MySQL 5, and Jboss AS 5.1, </td> 
+           <td class="rightBorder"> Oquma is an on line document management service, a business specific service to support Quality Management (ISO 9001). The service is a document management system (DMS SaaS) for standard compliance management. Oquma provides storage, versioning, metadata, security, as well as indexing and retrieval capabilities for a Quality Management System. </td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="http://www.allretrospectives.com/" target="" class="regularLink">All Retrospectives</a></td> 
+           <td class="rightBorder"><a href="http://www.allretrospectives.com/" target="" class="regularLink">All Retrospectives</a></td> 
+           <td class="rightBorder">Seam 2.2, Richfaces 3.3, MySQL 5, and Tomcat 6, JSF 1.2 </td> 
+           <td class="rightBorder"> All Retrospectives is a place where individuals and Teams can document their Retrospectives. Tool aims to help in improving communication in Teams by giving them ability to prepare for a Retrospective. Individuals can take some time to think about past day/week/.. and write dow what needs to be written. </td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="http://www.workashare.com/" target="" class="regularLink">WorkAShare</a></td> 
+           <td class="rightBorder"><a href="http://www.workashare.com/" target="" class="regularLink">WorkAShare</a></td> 
+           <td class="rightBorder">Seam 2.2.1, Richfaces 3.3, MySQL 5, and Tomcat 6, JSF 1.2 </td> 
+           <td class="rightBorder"> Find a good specialist and start up a new business together. This is job board where You offer shares (but not only - You can also post ads with normal job offers). You also can take Your ads with You - by placing a small javascript widget in Your site You can list all Your jobs. And it is free :). </td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="http://www.customdns.ca/" target="" class="regularLink">CustomDNS</a></td> 
+           <td class="rightBorder"><a href="http://www.nicmus.com/" target="" class="regularLink">nicmus</a></td> 
+           <td class="rightBorder">Seam 2.2.0, Richfaces 3.3, MySQL 5, and Jboss 5.1, JSF 1.2 </td> 
+           <td class="rightBorder"> CustomDNS offers full featured DNS hosting with support for all DNS record types supported by PowerDNS. Key features include: RESTful API, multilingual support, URL redirects, e-mail forwarding, validation. Each zone gets thirty days of free hosting. Control panel for CustomDNS released under GPLv3 as JPowerAdmin. </td> 
+          </tr> 
+          <tr class="rowEven"> 
+           <td class="rightBorder"><a href="http://confradar.com/" target="" class="regularLink">ConfRadar</a></td> 
+           <td class="rightBorder"><a href="http://www.agilers.com/" target="" class="regularLink">Agilers</a></td> 
+           <td class="rightBorder">Seam 2.2.0, Richfaces 3.3, MySQL 5, Tomcat 6, JSF 1.2, Groovy and Java</td> 
+           <td class="rightBorder"> Simplest way to find a conference. Created so that we don't miss an interesting event again. </td> 
+          </tr> 
+          <tr class="rowOdd"> 
+           <td class="rightBorder"><a href="http://www.musific.com/" target="" class="regularLink">Musific</a></td> 
+           <td class="rightBorder"><a href="http://www.musific.com/" target="" class="regularLink">Musific</a></td> 
+           <td class="rightBorder">Seam 3.1.0.Beta2/CR1: Solder, Config, Faces, Persistence, Transaction, JMS, Remoting, Security, International, Catch, Servlet, JCR and Mail; PrettyFaces 3.3,0, PrimeFaces 3.0.M3 and JBoss AS 7.0.1</td> 
+           <td class="rightBorder"> Musific is a start-up offering services for artists, venues, and professional intermediaries in the live music industry. Our goal is to drive efficiencies, increase profits for all parties involved in the live music industry, and consequently enable more performances better staged for wider audiences. Our initial tools are e-contracts and spaces for interaction between venues, artists and management. Both artists and venues are able to book performances, negotiate and sign contracts through our solution. </td> 
+          </tr> 
+         </tbody>
+        </table> 
+       </div>
+       <div id="j_id374" class="documentCreatorHistory undecoratedLink smallFont">
+        <div id="j_id375">
+          Created:&nbsp;22. May 2009, 02:27&nbsp;America/New_York&nbsp;(Christian Bauer)
+        </div>
+        <div id="j_id383">
+          Last Modified:&nbsp;21. Sep 2011, 10:58&nbsp;America/New_York&nbsp;(Shane Bryzak)
+        </div>
+       </div> 
+      </div>
+      <div id="commentDisplayForm"></div> 
+     </div> 
+     <div class="clear" style="padding-top:15px;"></div> 
+    </div>
+   </div> 
+  </div> 
+  <div id="footer" class="undecoratedLink"> 
+   <p> © Copyright 2009, Red Hat Middleware, LLC. All rights reserved. JBoss and Seam are registered trademarks and servicemarks of <a href="http://www.redhat.com/">Red Hat, Inc</a>. [<a href="http://www.redhat.com/legal/privacy_statement.html">Privacy Policy</a>]</p> 
+  </div>
+  <div id="status">
+   <span id="globalStatus"><span id="globalStatus.start" style="display: none">
+     <div id="j_id423" class="statusStart">
+      <img src="../themes/sfwkorg/img/statusindicator.gif" height="25" width="20">
+     </div></span><span id="globalStatus.stop">
+     <div id="j_id425" class="statusStop">
+      <img src="../themes/sfwkorg/img/blank.gif" height="25" width="20">
+     </div></span></span>
+  </div>  
+  <!-- Mirrored from 127.0.0.1:64444/Community/SeamInProductionListing2 by HTTrack Website Copier/3.x [XR&CO'2008], Wed, 01 Oct 2014 13:42:21 GMT --> 
+  <!-- Added by HTTrack -->
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+  <!-- /Added by HTTrack --> 
+ </body>
+</html>
